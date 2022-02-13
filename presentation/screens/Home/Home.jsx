@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useRef, useState } from "react";
 import tw from "twrnc";
 import { Icon, Rating } from "react-native-elements";
 import DropdownComponent from "../../components/Dropdown/Dropdown";
@@ -24,8 +24,11 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { useNavigation } from "@react-navigation/native";
 import BottomBar from "../../components/BottomBar/BottomBar";
+import BottomDrawer from "./components/BottomDrawer/BottomDrawer";
+import BottomSheet from "react-native-gesture-bottom-sheet";
 
 const Home = () => {
+  const bottomSheet = useRef();
   let [fontsLoaded, error] = useFonts({
     regular: Nunito_400Regular,
     semiBold: Nunito_600SemiBold,
@@ -59,9 +62,11 @@ const Home = () => {
             <Text style={tw`text-md ml-2`}>When</Text>
           </View>
         </View>
-        <View style={tw`flex items-center flex-row justify-center`}>
-          <DropdownComponent text="hair" style={{ width: "120px" }} />
-          <DropdownComponent text="saloon" />
+        <View style={tw`flex items-center flex-row justify-center my-3`}>
+          {/* <DropdownComponent text="hair" style={{ width: "120px" }} /> */}
+          <BottomDrawer hair="hair" />
+          <BottomDrawer />
+          {/* <DropdownComponent text="saloon" /> */}
         </View>
         <Text style={{ color: "#bdbdbd", fontSize: 16, marginBottom: 10 }}>
           100 results of 455
@@ -75,7 +80,10 @@ const Home = () => {
           )}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <TouchableOpacity style={tw` mb-5`}>
+            <TouchableOpacity
+              style={tw` mb-5`}
+              onPress={() => bottomSheet.current.show()}
+            >
               <View style={{ position: "relative" }}>
                 <Image
                   style={{
@@ -139,6 +147,11 @@ const Home = () => {
             </TouchableOpacity>
           )}
         />
+        <BottomSheet hasDraggableIcon ref={bottomSheet} height={400}>
+          {/* <DateTimePicker /> */}
+          {/* <DatePicker date={date} onDateChange={setDate} /> */}
+          <Text>I am going to be a date picker</Text>
+        </BottomSheet>
       </View>
       <BottomBar />
     </SafeAreaView>
