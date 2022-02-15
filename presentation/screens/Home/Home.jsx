@@ -53,13 +53,13 @@ const Home = () => {
               color="black"
             />
             <View style={tw`ml-3`}>
-              <Text style={tw`text-md font-semibold`}>Gamle Oslo</Text>
-              <Text style={tw`text-md text-gray-600`}>NO</Text>
+              <Text style={tw`text-base font-semibold`}>Gamle Oslo</Text>
+              <Text style={tw`text-base text-gray-600`}>NO</Text>
             </View>
           </View>
           <View style={tw`flex flex-row items-center `}>
             <Icon name="shopping-bag" type="feather" size={24} color="black" />
-            <Text style={tw`text-md ml-2`}>When</Text>
+            <Text style={tw`text-base ml-2`}>When</Text>
           </View>
         </View>
         <View style={tw`flex items-center flex-row justify-center my-3`}>
@@ -103,7 +103,7 @@ const Home = () => {
                       size={24}
                       color="black"
                     />
-                    <Text style={tw`text-black ml-1 text-md`}>
+                    <Text style={tw`text-black ml-1 text-base`}>
                       {item.distance}
                     </Text>
                   </View>
@@ -112,15 +112,15 @@ const Home = () => {
                   <View
                     style={tw`flex flex-row items-center px-2 py-2 justify-center rounded-2xl bg-white m-2`}
                   >
-                    <Text style={tw`text-black  text-md`}>
+                    <Text style={tw`text-black  text-base`}>
                       {item.hair_type}
                     </Text>
                   </View>
                 </View>
               </View>
               <View style={tw`flex items-center flex-row justify-between my-1`}>
-                <Text style={tw`font-bold text-md`}>{item.name}</Text>
-                <Text style={tw`text-md text-gray-400`}>FROM</Text>
+                <Text style={tw`font-bold text-base`}>{item.name}</Text>
+                <Text style={tw`text-base text-gray-400`}>FROM</Text>
               </View>
               <View style={tw`flex items-center flex-row justify-between`}>
                 <View style={tw`flex items-center flex-row `}>
@@ -134,13 +134,13 @@ const Home = () => {
                   <Text style={tw`text-gray-400`}>{item.job}</Text>
                 </View>
                 <View style={tw`flex items-center flex-row `}>
-                  <Text style={tw`text-md text-black mr-2`}>
+                  <Text style={tw`text-base text-black mr-2`}>
                     {item.perHour}
-                    <Text style={tw`text-gray-400 text-md`}>/h</Text>
+                    <Text style={tw`text-gray-400 text-base`}>/h</Text>
                   </Text>
-                  <Text style={tw`text-md text-black`}>
+                  <Text style={tw`text-base text-black`}>
                     {item.perDay}
-                    <Text style={tw`text-gray-400 text-md`}>/day</Text>
+                    <Text style={tw`text-gray-400 text-base`}>/day</Text>
                   </Text>
                 </View>
               </View>
