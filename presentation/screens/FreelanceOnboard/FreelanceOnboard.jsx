@@ -4,6 +4,7 @@ import AppIntroSlider from "react-native-app-intro-slider";
 import tw from "twrnc";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FreelanceBoardScreen from "./components/FreelanceBoardScreen";
+import { useNavigation } from "@react-navigation/native";
 const data = [
   {
     title: "Earn up to $500 per month ",
@@ -33,6 +34,7 @@ const data = [
 
 const FreelanceOnboard = () => {
   const [show, setShow] = useState(false);
+  const navigation = useNavigation()
   const renderItem = ({ item }) => {
     return <FreelanceBoardScreen item={item} />;
   };
@@ -41,7 +43,7 @@ const FreelanceOnboard = () => {
     return <Text style={tw`text-black font-bold mt-4`}>Next</Text>;
   };
   const renderDoneButton = () => {
-    return <Text style={tw`text-black font-bold mt-4`}>Get started</Text>;
+    return <Text style={tw`text-black font-bold mt-4`} onPress={() => navigation.navigate('Tabs')}>Get started</Text>;
   };
 
   useEffect(() => {

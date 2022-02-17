@@ -9,6 +9,15 @@ const ResetPassword = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`p-5 bg-white`}>
+      <View style={tw`flex flex-row justify-start`}>
+        <Icon
+          name="arrow-left"
+          type="feather"
+          size={28}
+          color="black"
+          onPress={() => navigation.goBack()}
+        />
+      </View>
       <TouchableOpacity>
         <View style={tw`h-75 p-5 flex items-center`}>
           <Image
@@ -28,18 +37,20 @@ const ResetPassword = () => {
               leftIcon={
                 <Icon name="lock" type="fontawesome" size={24} color="black" />
               }
+              style={{fontSize:14}}
             />
             <Input
               placeholder="Confirm Password"
               leftIcon={
                 <Icon name="lock" type="fontawesome" size={24} color="black" />
               }
+              style={{fontSize:14, lineHeight: 25}}
             />
           </View>
           <View style={tw`mt-10`}>
             <Button
               title="Reset"
-              onPress={() => navigation.navigate("ResetPassword")}
+              onPress={() => navigation.navigate("HomeTabs")}
             />
           </View>
         </View>
@@ -52,7 +63,7 @@ export default ResetPassword;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: "bold",
     marginLeft: 10,
     marginBottom: 15,

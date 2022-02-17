@@ -17,7 +17,7 @@ const Booking = ({ margin }) => {
         />
         <View style={tw`ml-4 w-60`}>
           <View>
-            <Text style={tw`font-bold text-xl mr-2`}>Theresa Webb</Text>
+            <Text style={tw`font-bold text-base mr-2`}>Theresa Webb</Text>
             <View style={tw`flex flex-row items-center my-1`}>
               <Text style={tw`text-gray-400 mr-2`}>23. des 2021</Text>
               <Icon name="arrow-right" type="feather" size={20} color="gray" />

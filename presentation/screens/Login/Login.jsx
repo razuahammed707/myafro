@@ -2,8 +2,10 @@ import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { Button, Icon, Input } from "react-native-elements";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
+// import SkeletonContent from 'react-native-skeleton-content';
+
 // import {
 //   Nunito_400Regular,
 //   Nunito_600SemiBold,
@@ -24,7 +26,7 @@ const Login = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`p-5 bg-white`}>
-      <TouchableOpacity>
+      <View>
         <View style={tw`h-75 p-5 flex items-center`}>
           <Image
             style={{
@@ -48,22 +50,24 @@ const Login = () => {
                   color="black"
                 />
               }
+              style={{fontSize:14}}
             />
             <Input
               placeholder="Password"
               leftIcon={
                 <Icon name="lock" type="fontawesome" size={24} color="black" />
               }
+              style={{fontSize:14}}
             />
           </View>
           <Text
-            style={tw`text-right text-lg text-gray-400 mt--5 mb-3 `}
+            style={tw`text-right text-sm text-gray-400 mt--5 mb-3 `}
             onPress={() => navigation.navigate("ForgotPassword")}
           >
             Forgot Password?
           </Text>
-          <Button title="Login" />
-          <View style={tw`my-5 flex items-center justify-center p-3`}>
+          <Button title="Login" onPress={() => navigation.navigate('Tabs')} />
+          <View style={tw`my-4 flex items-center justify-center p-3`}>
             <View style={styles.grayBorder} />
             <Text
               style={tw`text-center font-bold text-gray-400 mt--3 bg-white px-2`}
@@ -72,7 +76,7 @@ const Login = () => {
             </Text>
           </View>
           <View
-            style={tw`flex flex-row items-center justify-center p-3 mx-2 mb-5 border-gray-500 border rounded-lg`}
+            style={tw`flex flex-row items-center justify-center p-3 mx-2 mb-5 border-gray-300 border rounded-lg`}
           >
             <Image
               style={{
@@ -82,9 +86,9 @@ const Login = () => {
               }}
               source={require("../../../assets/img/google.png")}
             />
-            <Text style={tw`text-2xl ml-4`}>Login with Google</Text>
+            <Text style={tw`text-base ml-4`}>Login with Google</Text>
           </View>
-          <Text style={tw`text-xl text-gray-400 text-center`}>
+          <Text style={tw`text-sm text-gray-400 text-center`}>
             Don't have account?{" "}
             <Text
               style={tw`font-bold text-black`}
@@ -94,7 +98,7 @@ const Login = () => {
             </Text>
           </Text>
         </View>
-      </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -103,7 +107,7 @@ export default Login;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: "bold",
     marginLeft: 10,
     marginBottom: 15,

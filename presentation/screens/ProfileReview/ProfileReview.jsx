@@ -4,13 +4,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 import { AirbnbRating, Icon } from "react-native-elements";
 import Feedback from "./components/Feedback";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileReview = () => {
+  const navigation = useNavigation()
   return (
-    <SafeAreaView>
-        {/* Top section start */}
+    <SafeAreaView style={tw`mb-20`}>
+      {/* Top section start */}
       <View style={tw`flex flex-row items-center justify-between p-5`}>
-          <Text style={tw`font-bold text-xl`}>Theresa Webb Expert</Text>
+        <View style={tw`flex flex-row`}>
+        <Icon name="arrow-left" type="feather" size={28} color="black" onPress={() => navigation.goBack()}/>
+          <Text style={tw`font-bold text-lg ml-2`}>Theresa Webb Expert</Text>
+        </View>
         <View style={tw`flex flex-row items-center`}>
           <AirbnbRating
             count={5}
@@ -27,7 +32,7 @@ const ProfileReview = () => {
         </View>
       </View>
       {/* Top section end */}
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={tw`flex items-center flex-row justify-center my-6`}>
           <View>
             <Image
@@ -36,7 +41,7 @@ const ProfileReview = () => {
             />
             <View style={tw`mt-3`}>
               <View style={tw`flex flex-row`}>
-                <Text style={tw`font-bold text-xl mr-2`}>Theresa Webb</Text>
+                <Text style={tw`font-bold text-lg mr-2`}>Theresa Webb</Text>
                 <Icon
                   name="verified"
                   type="material"
@@ -57,7 +62,7 @@ const ProfileReview = () => {
                 />
                 <Text style={tw`text-gray-400`}>307</Text>
               </View>
-              <Text style={tw`text-gray-400 text-lg text-center`}>
+              <Text style={tw`text-gray-400 text-base text-center`}>
                 16 Saloons
               </Text>
             </View>
@@ -66,7 +71,7 @@ const ProfileReview = () => {
 
         {/* Profile bio section start here  */}
         <View style={tw`px-5`}>
-          <Text style={tw`text-gray-400 text-lg`}>
+          <Text style={tw`text-gray-400 text-base`}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Orci,
             consequat sem molestie et, montes, pellentesque. Id sit vulputate
             mattis magna pellentesque convallis. Mattis donec elit .
@@ -80,11 +85,11 @@ const ProfileReview = () => {
             <View
               style={tw`flex flex-row justify-between items-center mt-5 border-gray-200 border-b-2 pb-5`}
             >
-              <Text style={tw`text-xl font-normal`}>Professional Owner</Text>
+              <Text style={tw`text-base font-normal`}>Professional Owner</Text>
               <Icon name="alert-circle" type="feather" size={20} color="#000" />
             </View>
             <View style={tw`flex flex-row justify-between items-center mt-5`}>
-              <Text style={tw`text-xl`}>Member Since</Text>
+              <Text style={tw`text-base`}>Member Since</Text>
               <Text style={tw`text-base text-gray-400`}>16/02/2021</Text>
             </View>
           </View>

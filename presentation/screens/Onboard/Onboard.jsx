@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import AppIntroSlider from "react-native-app-intro-slider";
 import BoardScreen from "./BoardScreen";
 import tw from "twrnc";
+import { useNavigation } from "@react-navigation/native";
 const data = [
   {
     title: "Hair One",
@@ -33,6 +34,7 @@ const data = [
 
 const Onboard = () => {
   const [show, setShow] = useState(false);
+  const navigation = useNavigation();
   const renderItem = ({ item }) => {
     return <BoardScreen item={item} />;
   };
@@ -44,7 +46,7 @@ const Onboard = () => {
     return <Text style={tw`text-black font-bold mt-4`}>Next</Text>;
   };
   const renderDoneButton = () => {
-    return <Text style={tw`text-black font-bold mt-4`}>Done</Text>;
+    return <Text style={tw`text-black font-bold mt-4`} onPress={() => navigation.navigate('HomeTabs')}>Done</Text>;
   };
 
   useEffect(() => {

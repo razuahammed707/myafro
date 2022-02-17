@@ -1,17 +1,20 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 import { AirbnbRating, Icon } from "react-native-elements";
 import Services from "./components/Services";
 import SaloonFeatures from "./components/SaloonFeatures";
+import { useNavigation } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const ProfileDetails = () => {
+  const navigation = useNavigation()
   return (
     <SafeAreaView style={tw`p-5`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={tw`flex flex-row flex-start`}>
-          <Icon name="arrow-left" type="feather" size={28} color="black" />
+          <Icon name="arrow-left" type="feather" size={28} color="black" onPress={() => navigation.goBack()}/>
         </View>
         {/* Image section start */}
         <View style={tw`my-5`}>
@@ -26,7 +29,7 @@ const ProfileDetails = () => {
         <View style={tw`flex flex-row justify-between`}>
           <View>
             <View style={tw``}>
-              <Text style={tw`font-bold text-xl`}>Theresa Webb</Text>
+              <Text style={tw`font-bold text-base`}>Leslie Alexander</Text>
               <View style={tw`flex flex-row`}>
                 <AirbnbRating
                   count={5}
@@ -54,24 +57,24 @@ const ProfileDetails = () => {
             </View>
           </View>
           <View>
-            <Text style={tw`font-bold text-xl`}>Kr269</Text>
-            <Text style={tw`text-gray-400`}>For 1 hr</Text>
+            <Text style={tw`font-bold text-lg`}>Kr269</Text>
+            <Text style={tw`text-gray-400 text-sm`}>For 1 hr</Text>
           </View>
         </View>
         {/* Availavility section end */}
 
         {/* Home saloon section start */}
-        <View style={tw`flex flex-row mt-5 border border-gray-200 p-3 h-auto`}>
-          <View style={tw`px-5 py-4 rounded-full bg-black mr-3 h-auto`}>
-            <Icon name="home" type="antdesign" size={28} color="white" />
+        <View style={tw`flex flex-row mt-5 border border-gray-200 rounded-lg p-3 h-auto`}>
+          <View style={tw`mr-3 h-auto`}>
+            <Icon name="home" type="antdesign" size={24} color="white" style={{padding:15, backgroundColor: "black", borderRadius:50}} />
           </View>
-          <View style={tw`w-75`}>
-            <Text style={tw`font-bold text-xl mb-2`}>Home Salon</Text>
-            <Text style={styles.commonText}>
+          <TouchableOpacity style={tw`w-75`} onPress={() => navigation.navigate('Profile')}>
+            <Text style={tw`font-bold text-base mb-1`}>Home Salon</Text>
+            <Text style={tw`text-sm`}>
               Book instantly, even at the last minute. Unlock and lock the car
               using the app. The keys areinside.
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
         {/* Home saloon section end */}
 
@@ -81,9 +84,10 @@ const ProfileDetails = () => {
 
         {/* Owner section start */}
         <View style={tw`mt-5 px-5`}>
-          <Text style={tw`text-xl`}>Owner</Text>
+          <Text style={tw`text-base`}>Owner</Text>
         </View>
-        <View
+        <TouchableOpacity
+         onPress={() => navigation.navigate('ProfileReview')}
           style={tw`py-4 flex flex-row border items-center justify-between border-gray-200 px-5 mt-3`}
         >
           <View style={tw`flex flex-row items-center`}>
@@ -97,7 +101,7 @@ const ProfileDetails = () => {
             />
             <View style={tw`ml-4`}>
               <View style={tw`flex flex-row`}>
-                <Text style={tw`font-bold text-xl mr-2`}>Theresa Webb</Text>
+                <Text style={tw`font-bold text-lg mr-2`}>Theresa Webb</Text>
                 <Icon
                   name="verified"
                   type="material"
@@ -120,8 +124,8 @@ const ProfileDetails = () => {
               </View>
             </View>
           </View>
-          <Icon name="arrow-right" type="feather" size={28} color="black" />
-        </View>
+          <Icon name="arrow-right" type="feather" size={20} color="black" />
+        </TouchableOpacity>
         {/* Owner section end */}
 
         {/* Saloon features section start */}

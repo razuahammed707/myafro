@@ -4,14 +4,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 import { Icon } from "react-native-elements";
 import { accountData1, accountData2 } from "../../../utils/dummyData";
-import BottomBar from "../../components/BottomBar/BottomBar";
+import { useNavigation } from "@react-navigation/native";
+import DateTimePicker from "../Home/components/DateTimePicker/DateTimePicker";
+// import DateTimePicker from "react-native-modal-datetime-picker";
 
 const Account = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`p-5 h-full`}>
+      {/* <DateTimePicker /> */}
       <View>
         <View style={tw`flex flex-row items-center`}>
-          <Icon name="arrow-left" type="feather" size={28} color="black" />
+          <Icon name="arrow-left" type="feather" size={28} color="black" onPress={() => navigation.goBack()} />
           <Text style={tw`font-bold text-xl ml-2`}>Account</Text>
         </View>
         {/* Data one start  */}
@@ -22,7 +26,7 @@ const Account = () => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View
-              style={tw` mb-5 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
+              style={tw` mb-3 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
             >
               <View style={tw`flex flex-row items-center`}>
                 <Icon
@@ -31,7 +35,12 @@ const Account = () => {
                   size={20}
                   color="black"
                 />
-                <Text style={tw`ml-3 text-base`}>{item.name}</Text>
+                <Text
+                  style={tw`ml-3 text-sm`}
+                  onPress={() => navigation.navigate(item.link)}
+                >
+                  {item.name}
+                </Text>
               </View>
               <Icon
                 name="arrow-forward-ios"
@@ -56,7 +65,7 @@ const Account = () => {
               <Text style={tw`font-bold text-xl text-center`}>
                 Own a Saloon
               </Text>
-              <Text style={tw`text-base`}>
+              <Text style={tw`text-sm`}>
                 Earn up to $800 per month by sharing it{" "}
               </Text>
             </View>
@@ -71,7 +80,7 @@ const Account = () => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View
-              style={tw` mb-5 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
+              style={tw` mb-3 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
             >
               <View style={tw`flex flex-row items-center`}>
                 <Icon
@@ -80,7 +89,7 @@ const Account = () => {
                   size={20}
                   color="black"
                 />
-                <Text style={tw`ml-3 text-base`}>{item.name}</Text>
+                <Text style={tw`ml-3 text-sm`}>{item.name}</Text>
               </View>
               <Icon
                 name="arrow-forward-ios"
@@ -93,7 +102,7 @@ const Account = () => {
         />
         {/* Data two end  */}
       </View>
-      <BottomBar />
+      {/* <BottomBar /> */}
     </SafeAreaView>
   );
 };

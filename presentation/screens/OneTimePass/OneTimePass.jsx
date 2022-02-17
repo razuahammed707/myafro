@@ -8,6 +8,15 @@ const OneTimePass = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`p-5 bg-white`}>
+      <View style={tw`flex flex-row justify-start`}>
+        <Icon
+          name="arrow-left"
+          type="feather"
+          size={28}
+          color="black"
+          onPress={() => navigation.goBack()}
+        />
+      </View>
       <View style={tw`h-75 p-5 flex items-center`}>
         <Image
           style={{
@@ -20,7 +29,7 @@ const OneTimePass = () => {
       </View>
       <View style={tw`h-1/1`}>
         <Text style={styles.text}>Enter OTP</Text>
-        <Text style={tw`text-xl text-gray-400 text-left mx-2 mb-10`}>
+        <Text style={tw`text-sm text-gray-400 text-left mx-2 mb-10`}>
           An 4 digit code has been sent to +898989002111
         </Text>
         <View style={tw`flex items-center flex-row justify-around`}>
@@ -38,7 +47,7 @@ const OneTimePass = () => {
           </View>
         </View>
         <View>
-          <Text style={tw`text-lg font-regular text-center mt-5`}>
+          <Text style={tw`text-base font-regular text-center mt-5`}>
             Tap to resend OTP
           </Text>
         </View>
@@ -54,7 +63,7 @@ export default OneTimePass;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: "bold",
     marginLeft: 10,
     marginBottom: 15,
@@ -63,5 +72,5 @@ const styles = StyleSheet.create({
     height: 1,
     width: "20%",
     backgroundColor: "gray",
-  }
+  },
 });

@@ -17,12 +17,12 @@ const BottomDrawer = ({ hair, home }) => {
   return (
     <SafeAreaView style={styles.container}>
       {hair === "hair" ? (
-        <BottomSheet hasDraggableIcon ref={bottomSheet} height={400}>
-          <View style={tw`p-5`}>
-            <View style={{ position: "relative", height: "100%" }}>
+        <BottomSheet hasDraggableIcon ref={bottomSheet} height={450} >
+          {/* <View style={tw`p-5`}> */}
+            <View style={{ position: "relative", height: "100%", padding:20 }}>
               <Text style={tw`font-bold text-2xl`}>Hair Type</Text>
               <View
-                style={tw`flex flex-row flex-wrap items-center justify-around mt-5`}
+                style={tw`flex flex-row flex-wrap items-center justify-evenly mt-5`}
               >
                 <Text
                   style={tw`border border-gray-400 px-2 py-3 rounded-lg mb-3`}
@@ -55,9 +55,9 @@ const BottomDrawer = ({ hair, home }) => {
                   Defined Curls and Side Part
                 </Text>
               </View>
-              <View style={tw`absolute bottom-0 w-100 left--2`}>
+              <View style={tw`absolute bottom-8 w-100 left--2`}>
                 <View
-                  style={tw`flex flex-row items-center justify-center w-100 mb-4`}
+                  style={tw`flex flex-row items-center justify-center w-100`}
                 >
                   <Button
                     buttonStyle={{
@@ -84,27 +84,26 @@ const BottomDrawer = ({ hair, home }) => {
                 </View>
               </View>
             </View>
-          </View>
+          {/* </View> */}
         </BottomSheet>
       ) : (
-        <BottomSheet hasDraggableIcon ref={bottomSheet} height={400}>
-          {/* <DateTimePicker /> */}
-          <View style={tw`p-5`}>
-            <View style={{ position: "relative", height: "100%" }}>
-              <Text style={tw`font-bold text-2xl`}>Home Saloon</Text>
+        <BottomSheet hasDraggableIcon ref={bottomSheet} height={450}>
+            <View style={{ position: "relative", height: "100%", padding:20 }}>
+              <Text style={tw`font-bold text-xl`}>Home Saloon</Text>
               <View
                 style={tw`flex flex-row mt-5 border border-gray-300 p-3 h-auto rounded-lg`}
               >
-                <View style={tw`px-5 py-4 rounded-full bg-black mr-3 h-auto`}>
+                <View style={tw`mr-3 h-auto`}>
                   <Icon
                     name="wheelchair"
                     type="fontisto"
                     size={28}
                     color="white"
+                    style={{paddingHorizontal:15, paddingVertical:12, borderRadius:50, backgroundColor:"black"}}
                   />
                 </View>
                 <View style={tw`w-70`}>
-                  <Text style={tw`font-bold text-xl mb-2`}>Public Salon</Text>
+                  <Text style={tw`font-bold text-lg mb-1`}>Public Salon</Text>
                   <Text style={styles.commonText}>
                     Book instantly, even at the last minute. Unlock and lock the
                     car using the app. The keys areinside.
@@ -114,25 +113,26 @@ const BottomDrawer = ({ hair, home }) => {
               <View
                 style={tw`flex flex-row mt-5 border border-gray-300 p-3 h-auto rounded-lg`}
               >
-                <View style={tw`px-5 py-4 rounded-full bg-black mr-3 h-auto`}>
+                <View style={tw`mr-3 h-auto`}>
                   <Icon
                     name="wheelchair"
                     type="fontisto"
                     size={28}
                     color="white"
+                    style={{paddingHorizontal:15, paddingVertical:12, borderRadius:50, backgroundColor:"black"}}
                   />
                 </View>
                 <View style={tw`w-70`}>
-                  <Text style={tw`font-bold text-xl mb-2`}>Public Salon</Text>
+                  <Text style={tw`font-bold text-lg mb-1`}>Public Salon</Text>
                   <Text style={styles.commonText}>
                     Book instantly, even at the last minute. Unlock and lock the
                     car using the app. The keys areinside.
                   </Text>
                 </View>
               </View>
-              <View style={tw`absolute bottom-0 w-100 left--2`}>
+              <View style={tw`absolute bottom-8 w-100 left--2`}>
                 <View
-                  style={tw`flex flex-row items-center justify-center w-100 mb-4`}
+                  style={tw`flex flex-row items-center justify-center w-100`}
                 >
                   <Button
                     buttonStyle={{
@@ -159,7 +159,6 @@ const BottomDrawer = ({ hair, home }) => {
                 </View>
               </View>
             </View>
-          </View>
         </BottomSheet>
       )}
       <TouchableOpacity

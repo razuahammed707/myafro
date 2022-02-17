@@ -12,6 +12,7 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { NavigationContainer } from "@react-navigation/native";
 import ScreenContainer from "./presentation/components/ScreenContainer/ScreenContainer";
+import Tabs from "./presentation/components/Tabs/Tabs";
 
 export default function App() {
   let [fontsLoaded, error] = useFonts({

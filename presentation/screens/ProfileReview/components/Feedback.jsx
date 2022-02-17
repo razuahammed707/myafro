@@ -20,8 +20,8 @@ const Feedback = () => {
         />
         <View style={tw`ml-4 w-60`}>
           <View>
-            <Text style={tw`font-bold text-xl mr-2`}>Theresa Webb</Text>
-            <Text style={tw`text-gray-400`}>
+            <Text style={tw`font-bold text-lg mr-2`}>Theresa Webb</Text>
+            <Text style={tw`text-gray-400 text-sm`}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Orci,
               consequat sem molestie et, montes, pellentesque. Id.
             </Text>
@@ -41,7 +41,7 @@ const Feedback = () => {
         </View>
       </View>
       <View>
-        <Text style={tw`text-gray-400`}>2 months ago</Text>
+        <Text style={tw`text-gray-400 text-sm`}>2 months ago</Text>
       </View>
     </View>
   </View>

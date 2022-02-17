@@ -9,6 +9,9 @@ const ForgotPassword = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`p-5 bg-white`}>
+      <View style={tw`flex flex-row justify-start`}>
+      <Icon name="arrow-left" type="feather" size={28} color="black" onPress={() => navigation.goBack()}/>
+      </View>
       <TouchableOpacity>
         <View style={tw`h-75 p-5 flex items-center`}>
           <Image
@@ -22,12 +25,12 @@ const ForgotPassword = () => {
         </View>
         <View style={tw`h-1/1`}>
           <Text style={styles.text}>Forgot Password?</Text>
-          <Text style={tw`text-xl text-gray-400 text-left mx-2 mb-10`}>
+          <Text style={tw`text-sm text-gray-400 text-left mx-2 mb-10`}>
             Don’t worry! it happens. Please enter the address associated with
             your account.
           </Text>
           <View style={tw`mb-10`}>
-            <Input placeholder="Email ID / Mobile number" />
+            <Input placeholder="Email ID / Mobile number" style={{fontSize:14}}/>
           </View>
 
           <Button
@@ -44,7 +47,7 @@ export default ForgotPassword;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: "bold",
     marginLeft: 10,
     marginBottom: 15,

@@ -2,16 +2,14 @@ import {
   FlatList,
   Image,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useRef} from "react";
 import tw from "twrnc";
-import { Icon, Rating } from "react-native-elements";
-import DropdownComponent from "../../components/Dropdown/Dropdown";
+import { Icon } from "react-native-elements";
 import { homeData } from "../../../utils/dummyData";
 import { AirbnbRating } from "react-native-ratings";
 import {
@@ -23,11 +21,11 @@ import {
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { useNavigation } from "@react-navigation/native";
-import BottomBar from "../../components/BottomBar/BottomBar";
 import BottomDrawer from "./components/BottomDrawer/BottomDrawer";
 import BottomSheet from "react-native-gesture-bottom-sheet";
 
 const Home = () => {
+  const navigation = useNavigation()
   const bottomSheet = useRef();
   let [fontsLoaded, error] = useFonts({
     regular: Nunito_400Regular,
@@ -49,31 +47,29 @@ const Home = () => {
             <Icon
               name="location-on"
               type="materialicons"
-              size={24}
+              size={20}
               color="black"
             />
             <View style={tw`ml-3`}>
-              <Text style={tw`text-base font-semibold`}>Gamle Oslo</Text>
-              <Text style={tw`text-base text-gray-600`}>NO</Text>
+              <Text style={tw`text-sm font-semibold`}>Gamle Oslo</Text>
+              <Text style={tw`text-sm text-gray-600`}>NO</Text>
             </View>
           </View>
           <View style={tw`flex flex-row items-center `}>
-            <Icon name="shopping-bag" type="feather" size={24} color="black" />
-            <Text style={tw`text-base ml-2`}>When</Text>
+            <Icon name="shopping-bag" type="feather" size={20} color="black" />
+            <Text style={tw`text-sm ml-2`}>When</Text>
           </View>
         </View>
         <View style={tw`flex items-center flex-row justify-center my-3`}>
-          {/* <DropdownComponent text="hair" style={{ width: "120px" }} /> */}
           <BottomDrawer hair="hair" />
           <BottomDrawer />
-          {/* <DropdownComponent text="saloon" /> */}
         </View>
         <Text style={{ color: "#bdbdbd", fontSize: 16, marginBottom: 10 }}>
           100 results of 455
         </Text>
         <FlatList
           data={homeData}
-          style={{ flex: 1, marginBottom: 25 }}
+          style={{ flex: 1 }}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => (
             <View style={(tw`bg-gray-200`, { height: 0.5 })} />
@@ -82,7 +78,8 @@ const Home = () => {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={tw` mb-5`}
-              onPress={() => bottomSheet.current.show()}
+              // onPress={() => bottomSheet.current.show()}
+              onPress={() => navigation.navigate('ProfileDetails')}
             >
               <View style={{ position: "relative" }}>
                 <Image
@@ -103,7 +100,7 @@ const Home = () => {
                       size={24}
                       color="black"
                     />
-                    <Text style={tw`text-black ml-1 text-base`}>
+                    <Text style={tw`text-black ml-1 text-sm`}>
                       {item.distance}
                     </Text>
                   </View>
@@ -112,7 +109,7 @@ const Home = () => {
                   <View
                     style={tw`flex flex-row items-center px-2 py-2 justify-center rounded-2xl bg-white m-2`}
                   >
-                    <Text style={tw`text-black  text-base`}>
+                    <Text style={tw`text-black  text-sm`}>
                       {item.hair_type}
                     </Text>
                   </View>
@@ -120,7 +117,7 @@ const Home = () => {
               </View>
               <View style={tw`flex items-center flex-row justify-between my-1`}>
                 <Text style={tw`font-bold text-base`}>{item.name}</Text>
-                <Text style={tw`text-base text-gray-400`}>FROM</Text>
+                <Text style={tw`text-sm text-gray-400`}>FROM</Text>
               </View>
               <View style={tw`flex items-center flex-row justify-between`}>
                 <View style={tw`flex items-center flex-row `}>
@@ -131,7 +128,7 @@ const Home = () => {
                     size={13}
                     starContainerStyle={{ marginTop: -20, marginRight: 5 }}
                   />
-                  <Text style={tw`text-gray-400`}>{item.job}</Text>
+                  <Text style={tw`text-gray-400 text-sm`}>{item.job}</Text>
                 </View>
                 <View style={tw`flex items-center flex-row `}>
                   <Text style={tw`text-base text-black mr-2`}>
@@ -147,13 +144,22 @@ const Home = () => {
             </TouchableOpacity>
           )}
         />
+        <TouchableOpacity style={tw`absolute bottom-6 right-6`} onPress={() => navigation.navigate('Map')}>
+          <View style={tw`bg-white py-2 px-4 rounded-lg`}>
+            <Icon
+              name="location-on"
+              type="materialicons"
+              size={20}
+              color="black"
+            />
+            <Text style={tw`mt-1`}>Map</Text>
+          </View>
+        </TouchableOpacity>
         <BottomSheet hasDraggableIcon ref={bottomSheet} height={400}>
-          {/* <DateTimePicker /> */}
-          {/* <DatePicker date={date} onDateChange={setDate} /> */}
           <Text>I am going to be a date picker</Text>
         </BottomSheet>
+        
       </View>
-      <BottomBar />
     </SafeAreaView>
   );
 };

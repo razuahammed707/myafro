@@ -12,20 +12,20 @@ const BottomBar = ({ name1, name2, name3 }) => {
     >
       <TouchableOpacity onPress={() => navigation.navigate("Home")}>
         <View>
-          <Icon name="home" type="antdesign" size={25} color="black" />
-          <Text style={tw`text-base`}>{name1 || "Home"}</Text>
+          <Icon name="home" type="antdesign" size={20} color="black" />
+          <Text style={tw`text-sm`}>{name1 || "Home"}</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
         <View style={tw`opacity-15`}>
-          <Icon name="wheelchair" type="fontisto" size={25} color="black" />
-          <Text style={tw`text-base`}>{name2 || "Saloon"}</Text>
+          <Icon name="wheelchair" type="fontisto" size={20} color="black" />
+          <Text style={tw`text-sm`}>{name2 || "Saloon"}</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("Account")}>
         <View style={tw`opacity-15`}>
-          <Icon name="user" type="antdesign" size={28} color="black" />
-          <Text style={tw`text-base`}>{name3 || "Account"}</Text>
+          <Icon name="user" type="antdesign" size={20} color="black" />
+          <Text style={tw`text-sm`}>{name3 || "Account"}</Text>
         </View>
       </TouchableOpacity>
     </View>

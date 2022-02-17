@@ -33,28 +33,31 @@ const Signup = () => {
                   color="black"
                 />
               }
+              style={{fontSize:14}}
             />
             <Input
               placeholder="Full name"
               leftIcon={
                 <Icon name="user" type="antdesign" size={24} color="black" />
               }
+              style={{fontSize:14}}
             />
             <Input
               placeholder="Mobile number"
               leftIcon={
                 <Icon name="phone" type="material" size={24} color="black" />
               }
+              style={{fontSize:14}}
             />
-            <Text style={tw`text-gray-600 text-lg px-2`}>
+            <Text style={tw`text-gray-600 text-sm px-2`}>
               By signing up, you are agree to our{" "}
               <Text style={tw`font-bold text-black`}>
                 Terms and Condition and Privacy Policy
               </Text>
             </Text>
           </View>
-          <Button title="Sign Up" />
-          <Text style={tw`text-xl text-gray-400 text-center mt-5`}>
+          <Button title="Sign Up" onPress={() => navigation.navigate('Onboard')}/>
+          <Text style={tw`text-sm text-gray-400 text-center mt-4`}>
             Joined us before?{" "}
             <Text
               style={tw`font-bold text-black`}
@@ -73,7 +76,7 @@ export default Signup;
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: "bold",
     marginLeft: 10,
     marginBottom: 15,

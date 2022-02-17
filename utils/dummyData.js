@@ -88,6 +88,13 @@ export const accountData1 = [
         icon_type: "ionicon",
         link:"",
     },
+    {
+        id:5,
+        name: "Switch to owner mode",
+        icon_name: "stats-chart",
+        icon_type: "ionicon",
+        link:"FreelanceOnboard",
+    },
 ]
 export const accountData2 = [
     {

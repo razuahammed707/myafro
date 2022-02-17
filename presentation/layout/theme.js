@@ -6,11 +6,12 @@ const theme = {
     },
     buttonStyle: {
       borderRadius: 8,
+      innerHeight: 53,
       backgroundColor: "#282828",
     },
     titleStyle: {
       color: "white",
-      fontSize:25,
+      fontSize:18,
     },
   },
 };

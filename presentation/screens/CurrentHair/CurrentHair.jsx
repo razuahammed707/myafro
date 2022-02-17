@@ -3,11 +3,23 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 import { Button, Icon } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const CurrentHair = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`p-5`}>
-      <Text style={tw`font-bold text-xl`}>Current Hair</Text>
+      <View style={tw`flex flex-row`}>
+        <Icon
+          name="arrow-left"
+          type="feather"
+          size={28}
+          color="black"
+          onPress={() => navigation.goBack()}
+        />
+        <Text style={tw`font-bold text-lg ml-2`}>Current Hair</Text>
+      </View>
       <View style={tw`my-5`}>
         <Image
           style={{ width: "100%" }}
@@ -23,7 +35,7 @@ const CurrentHair = () => {
               width: "87%",
             }}
             type="clear"
-            titleStyle={{ fontSize: 16 }}
+            titleStyle={{ fontSize: 14 }}
           />
           <Button
             title="Decline"
@@ -34,37 +46,40 @@ const CurrentHair = () => {
               width: "87%",
             }}
             type="clear"
-            titleStyle={{ fontSize: 16 }}
+            titleStyle={{ fontSize: 14 }}
           />
         </View>
 
         {/* Message section start */}
-        <View>
-          <Text style={tw`font-bold text-xl mb-5`}>Message</Text>
-          <View style={tw`flex flex-row justify-between`}>
-            <View style={tw`p-5 bg-black rounded-lg`}>
-              <Text style={tw`text-white text-lg w-60`}>
-                Lorem ipsum dolor sit amet, consecte adipiscing elit.
-              </Text>
-            </View>
-            <View>
-              <Image
-                style={{
-                  width: 36,
-                  height: 36,
-                }}
-                source={require("../../../assets/img/profile.png")}
-                resizeMode="contain"
-              />
-            </View>
+        <Text style={tw`font-bold text-lg mb-5`}>Message</Text>
+        <View style={tw`flex flex-row justify-between`}>
+          <View style={tw`p-5 bg-black rounded-lg`}>
+            <Text style={tw`text-white text-lg w-60 text-base`}>
+              Lorem ipsum dolor sit amet, consecte adipiscing elit.
+            </Text>
+          </View>
+          <View>
+            <Image
+              style={{
+                width: 36,
+                height: 36,
+              }}
+              source={require("../../../assets/img/profile.png")}
+              resizeMode="contain"
+            />
           </View>
         </View>
         {/* Message section end */}
 
         {/* Option section start */}
         <View style={tw`flex flex-row items-center justify-between my-5`}>
-        <Text style={tw`font-bold text-xl mb-5`}>Option</Text>
-        <Icon name="arrow-forward-ios" type="material" size={20} color="gray" />
+          <Text style={tw`font-bold text-lg mb-5`}>Option</Text>
+          <Icon
+            name="arrow-forward-ios"
+            type="material"
+            size={20}
+            color="gray"
+          />
         </View>
         {/* Option section end */}
       </View>
