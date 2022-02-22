@@ -3,19 +3,18 @@ import React from "react";
 import tw from "twrnc";
 import { Button, Icon, Input } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native";
 
 const Signup = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`p-5 bg-white`}>
-      <TouchableOpacity>
-        <View style={tw`h-75 p-5 flex items-center`}>
+      <View>
+      <View style={tw`p-5 flex items-center`}>
           <Image
             style={{
-              width: 250,
-              height: 250,
-              resizeMode: "cover",
+              width: 225,
+              height: 212,
+              resizeMode: "contain",
             }}
             source={require("../../../assets/img/signup.png")}
           />
@@ -67,7 +66,7 @@ const Signup = () => {
             </Text>
           </Text>
         </View>
-      </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

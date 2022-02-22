@@ -3,42 +3,44 @@ import React from "react";
 import tw from "twrnc";
 import { Button, Icon, Input } from "react-native-elements";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native";
-// import SkeletonContent from 'react-native-skeleton-content';
 
-// import {
-//   Nunito_400Regular,
-//   Nunito_600SemiBold,
-//   Nunito_700Bold,
-//   Nunito_800ExtraBold,
-// } from "@expo-google-fonts/nunito";
-// import AppLoading from "expo-app-loading";
-// import { useFonts } from "expo-font";
+import {
+  Nunito_400Regular,
+  Nunito_600SemiBold,
+  Nunito_700Bold,
+  Nunito_800ExtraBold,
+  useFonts
+} from "@expo-google-fonts/nunito";
+import AppLoading from "expo-app-loading";
+// import { processFontFamily, useFonts } from "expo-font";
 
 const Login = () => {
-  // let [fontsLoaded] = useFonts({
-  //   Nunito_600SemiBold,
-  // });
+  let [fontsLoaded] = useFonts({
+    Nunito_800ExtraBold,
+    Nunito_400Regular,
+  Nunito_600SemiBold,
+  Nunito_700Bold,
+  });
 
-  // if (!fontsLoaded) {
-  //   return <AppLoading />;
-  // }
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`p-5 bg-white`}>
       <View>
-        <View style={tw`h-75 p-5 flex items-center`}>
+        <View style={tw`p-5 flex items-center`}>
           <Image
             style={{
-              width: 250,
-              height: 250,
-              resizeMode: "cover",
+              width: 225,
+              height: 212,
+              resizeMode: "contain",
             }}
             source={require("../../../assets/img/login.png")}
           />
         </View>
         <View style={tw`h-1/1`}>
-          <Text style={styles.text}>Login</Text>
+          <Text style={{fontFamily: "Nunito_800ExtraBold"}}>Login</Text>
           <View>
             <Input
               placeholder="Email id"
@@ -106,12 +108,12 @@ const Login = () => {
 export default Login;
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginLeft: 10,
-    marginBottom: 15,
-  },
+  // text: {
+  //   fontSize: 18,
+  //   fontWeight: "bold",
+  //   marginLeft: 10,
+  //   marginBottom: 15,
+  // },
   grayBorder: {
     height: 1,
     width: "100%",

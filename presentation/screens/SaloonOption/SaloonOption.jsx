@@ -52,7 +52,7 @@ const SaloonOption = () => {
         {/* Owner section end  */}
 
         {/* Message section start */}
-        <View style={tw`my-8 px-5`}>
+        <View style={tw`my-5 px-5`}>
           <Text style={tw`font-bold text-lg mb-5`}>Message</Text>
           <View style={tw`flex flex-row justify-between`}>
             <View style={tw`p-5 bg-black rounded-lg`}>
@@ -91,7 +91,7 @@ const SaloonOption = () => {
         {/* Option section end */}
 
         {/* Saloon option start */}
-        <View style={tw`my-7 px-5`}>
+        <View style={tw`my-5 px-5`}>
           <Text style={tw`font-bold text-lg`}>Saloon location</Text>
         </View>
         {/* Saloon option end */}

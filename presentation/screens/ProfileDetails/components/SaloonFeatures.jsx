@@ -50,6 +50,7 @@ const SaloonFeatures = () => {
       <View style={tw`mt-10  w-full`}>
         <Button
           title="Book"
+          type="clear"
           titleStyle={{ marginLeft: 10 }}
           icon={
             <Icon name="dry-cleaning" type="material" size={20} color="#fff" />

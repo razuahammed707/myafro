@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useRef} from "react";
+import React, { useRef } from "react";
 import tw from "twrnc";
 import { Icon } from "react-native-elements";
 import { homeData } from "../../../utils/dummyData";
@@ -23,9 +23,10 @@ import AppLoading from "expo-app-loading";
 import { useNavigation } from "@react-navigation/native";
 import BottomDrawer from "./components/BottomDrawer/BottomDrawer";
 import BottomSheet from "react-native-gesture-bottom-sheet";
+import DateTabs from "./components/DateTabs/DateTabs";
 
 const Home = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const bottomSheet = useRef();
   let [fontsLoaded, error] = useFonts({
     regular: Nunito_400Regular,
@@ -55,10 +56,13 @@ const Home = () => {
               <Text style={tw`text-sm text-gray-600`}>NO</Text>
             </View>
           </View>
-          <View style={tw`flex flex-row items-center `}>
+          <TouchableOpacity
+            style={tw`flex flex-row items-center `}
+            onPress={() => bottomSheet.current.show()}
+          >
             <Icon name="shopping-bag" type="feather" size={20} color="black" />
             <Text style={tw`text-sm ml-2`}>When</Text>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={tw`flex items-center flex-row justify-center my-3`}>
           <BottomDrawer hair="hair" />
@@ -67,6 +71,7 @@ const Home = () => {
         <Text style={{ color: "#bdbdbd", fontSize: 16, marginBottom: 10 }}>
           100 results of 455
         </Text>
+        {/* <CirclesLoader /> */}
         <FlatList
           data={homeData}
           style={{ flex: 1 }}
@@ -79,7 +84,7 @@ const Home = () => {
             <TouchableOpacity
               style={tw` mb-5`}
               // onPress={() => bottomSheet.current.show()}
-              onPress={() => navigation.navigate('ProfileDetails')}
+              onPress={() => navigation.navigate("ProfileDetails")}
             >
               <View style={{ position: "relative" }}>
                 <Image
@@ -144,7 +149,10 @@ const Home = () => {
             </TouchableOpacity>
           )}
         />
-        <TouchableOpacity style={tw`absolute bottom-6 right-6`} onPress={() => navigation.navigate('Map')}>
+        <TouchableOpacity
+          style={tw`absolute bottom-6 right-6`}
+          onPress={() => navigation.navigate("Map")}
+        >
           <View style={tw`bg-white py-2 px-4 rounded-lg`}>
             <Icon
               name="location-on"
@@ -156,9 +164,8 @@ const Home = () => {
           </View>
         </TouchableOpacity>
         <BottomSheet hasDraggableIcon ref={bottomSheet} height={400}>
-          <Text>I am going to be a date picker</Text>
+          <DateTabs />
         </BottomSheet>
-        
       </View>
     </SafeAreaView>
   );

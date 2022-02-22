@@ -37,7 +37,7 @@ const DropdownComponent = ({ text }) => {
       }}
       renderLeftIcon={() =>
         text === "saloon" && (
-          <AntDesign style={styles.icon} color="black" name="home" size={20} />
+          <AntDesign style={styles.icon} color="black" name="home" size={15} />
         )
       }
     />
@@ -74,10 +74,10 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     fontSize: 16,
   },
-  iconStyle: {
-    width: 20,
-    height: 20,
-  },
+  // iconStyle: {
+  //   width: 20,
+  //   height: 20,
+  // },
   inputSearchStyle: {
     height: 40,
     fontSize: 16,

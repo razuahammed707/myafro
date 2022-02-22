@@ -6,13 +6,14 @@ import { Icon } from "react-native-elements";
 import { accountData1, accountData2 } from "../../../utils/dummyData";
 import { useNavigation } from "@react-navigation/native";
 import DateTimePicker from "../Home/components/DateTimePicker/DateTimePicker";
+import DateTimePickers from "../Home/components/DateTimePicker/DateTimePicker";
 // import DateTimePicker from "react-native-modal-datetime-picker";
 
 const Account = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`p-5 h-full`}>
-      {/* <DateTimePicker /> */}
+      {/* <DateTimePickers /> */}
       <View>
         <View style={tw`flex flex-row items-center`}>
           <Icon name="arrow-left" type="feather" size={28} color="black" onPress={() => navigation.goBack()} />

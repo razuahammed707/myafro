@@ -9,8 +9,8 @@ const ActiveBookings = () => {
   return (
     <SafeAreaView style={tw`px-5 h-full`}>
       <ScrollView showsVerticalScrollIndicator={false}>
+        {/* <Booking /> */}
         <Booking />
-        <Booking margin="mt-5" />
         <Booking margin="mt-5" />
         <Booking margin="mt-5" />
         <Booking margin="mt-5" />

@@ -12,7 +12,7 @@ const theme = {
     titleStyle: {
       color: "white",
       fontSize:18,
-    },
+    }
   },
 };
 

@@ -20,44 +20,44 @@ const BottomDrawer = ({ hair, home }) => {
         <BottomSheet hasDraggableIcon ref={bottomSheet} height={450} >
           {/* <View style={tw`p-5`}> */}
             <View style={{ position: "relative", height: "100%", padding:20 }}>
-              <Text style={tw`font-bold text-2xl`}>Hair Type</Text>
+              <Text style={tw`font-bold text-base`}>Hair Type</Text>
               <View
-                style={tw`flex flex-row flex-wrap items-center justify-evenly mt-5`}
+                style={tw`flex flex-row flex-wrap items-center  mt-5`}
               >
                 <Text
-                  style={tw`border border-gray-400 px-2 py-3 rounded-lg mb-3`}
+                  style={tw`border border-gray-300 px-2 py-3 mr-1 rounded-lg mb-2`}
                 >
                   Full Afro
                 </Text>
                 <Text
-                  style={tw`border border-gray-400 px-2 py-3 rounded-lg mb-3`}
+                  style={tw`border border-gray-300 px-2 py-3 mr-1 rounded-lg mb-2`}
                 >
                   Technicolor Full Afro
                 </Text>
                 <Text
-                  style={tw`border border-gray-400 px-2 py-3 rounded-lg mb-3`}
+                  style={tw`border border-gray-300 px-2 py-3 mr-1 rounded-lg mb-2`}
                 >
                   Medium ‘Fro
                 </Text>
                 <Text
-                  style={tw`border border-gray-400 px-2 py-3 rounded-lg mb-3`}
+                  style={tw`border border-gray-300 px-2 py-3 mr-1 rounded-lg mb-2`}
                 >
                   Center Part
                 </Text>
                 <Text
-                  style={tw`border border-gray-400 px-2 py-3 rounded-lg mb-4`}
+                  style={tw`border border-gray-300 mr-1 px-2 py-3 rounded-lg mb-2`}
                 >
                   Mini Ponytail Afro Hairstyles
                 </Text>
                 <Text
-                  style={tw`border border-gray-400 px-2 py-3 rounded-lg mb-4`}
+                  style={tw`border border-gray-300 px-2 py-3 rounded-lg mb-4`}
                 >
                   Defined Curls and Side Part
                 </Text>
               </View>
-              <View style={tw`absolute bottom-8 w-100 left--2`}>
+              <View style={tw`absolute bottom-8 w-full left-5 right-0`}>
                 <View
-                  style={tw`flex flex-row items-center justify-center w-100`}
+                  style={tw`flex flex-row items-center justify-center`}
                 >
                   <Button
                     buttonStyle={{
@@ -88,8 +88,8 @@ const BottomDrawer = ({ hair, home }) => {
         </BottomSheet>
       ) : (
         <BottomSheet hasDraggableIcon ref={bottomSheet} height={450}>
-            <View style={{ position: "relative", height: "100%", padding:20 }}>
-              <Text style={tw`font-bold text-xl`}>Home Saloon</Text>
+            <View style={{ position: "relative", height: "100%", padding:20, maxWidth:"100%" }}>
+              <Text style={tw`font-bold text-base`}>Home Saloon</Text>
               <View
                 style={tw`flex flex-row mt-5 border border-gray-300 p-3 h-auto rounded-lg`}
               >
@@ -103,7 +103,7 @@ const BottomDrawer = ({ hair, home }) => {
                   />
                 </View>
                 <View style={tw`w-70`}>
-                  <Text style={tw`font-bold text-lg mb-1`}>Public Salon</Text>
+                  <Text style={tw`font-bold text-sm mb-1`}>Public Salon</Text>
                   <Text style={styles.commonText}>
                     Book instantly, even at the last minute. Unlock and lock the
                     car using the app. The keys areinside.
@@ -123,16 +123,16 @@ const BottomDrawer = ({ hair, home }) => {
                   />
                 </View>
                 <View style={tw`w-70`}>
-                  <Text style={tw`font-bold text-lg mb-1`}>Public Salon</Text>
+                  <Text style={tw`font-bold text-sm mb-1`}>Public Salon</Text>
                   <Text style={styles.commonText}>
                     Book instantly, even at the last minute. Unlock and lock the
                     car using the app. The keys areinside.
                   </Text>
                 </View>
               </View>
-              <View style={tw`absolute bottom-8 w-100 left--2`}>
+              <View style={tw`absolute bottom-8 w-full left-5 right-0`}>
                 <View
-                  style={tw`flex flex-row items-center justify-center w-100`}
+                  style={tw`flex flex-row items-center justify-center`}
                 >
                   <Button
                     buttonStyle={{
@@ -171,13 +171,13 @@ const BottomDrawer = ({ hair, home }) => {
             <Icon
               name="arrow-drop-down"
               type="material"
-              size={24}
+              size={20}
               color="black"
             />
           </>
         ) : (
           <>
-            <Icon name="home" type="antdesign" size={22} color="black" />
+            <Icon name="home" type="antdesign" size={20} style={{marginLeft:8}} color="black" />
             <Text style={styles.text}>Home Saloon</Text>
             <Icon
               name="arrow-drop-down"
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   },
   commonText: {
     color: "#bdbdbd",
-    fontSize: 14,
+    fontSize: 12,
     lineHeight: 20,
   },
 });

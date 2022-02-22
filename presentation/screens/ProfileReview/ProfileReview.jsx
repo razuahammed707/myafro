@@ -7,13 +7,19 @@ import Feedback from "./components/Feedback";
 import { useNavigation } from "@react-navigation/native";
 
 const ProfileReview = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`mb-20`}>
       {/* Top section start */}
       <View style={tw`flex flex-row items-center justify-between p-5`}>
         <View style={tw`flex flex-row`}>
-        <Icon name="arrow-left" type="feather" size={28} color="black" onPress={() => navigation.goBack()}/>
+          <Icon
+            name="arrow-left"
+            type="feather"
+            size={28}
+            color="black"
+            onPress={() => navigation.goBack()}
+          />
           <Text style={tw`font-bold text-lg ml-2`}>Theresa Webb Expert</Text>
         </View>
         <View style={tw`flex flex-row items-center`}>
