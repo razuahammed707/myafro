@@ -17,8 +17,8 @@ app.use(
   })
 );
 
-//base endpoint
-app.use("/api/myafro", routers);
+// base endpoint
+app.use("/api/", routers);
 
 app.use((req, res, next) => next(createError(404)));
 

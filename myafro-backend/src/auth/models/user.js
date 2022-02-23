@@ -20,8 +20,9 @@ const userSchema = Schema(
       trim: true,
       // unique: [true, "The mobile number is already taken"],
     },
-    user_type: {
+    role: {
       type: String,
+      enum: ["user", "hair_dresser"],
       required: true,
       trim: true,
     },
@@ -31,7 +32,7 @@ const userSchema = Schema(
     },
     otp: {
       type: Number,
-      default: null
+      default: null,
     },
     is_verified: {
       type: Boolean,
