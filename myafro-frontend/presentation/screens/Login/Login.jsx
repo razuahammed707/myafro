@@ -122,7 +122,7 @@ const Login = () => {
                   secureTextEntry={showPassword}
                   rightIcon={
                     <Icon
-                      name="eye"
+                      name={showPassword ? 'eye-off' : 'eye'}
                       type="feather"
                       size={20}
                       color="black"
