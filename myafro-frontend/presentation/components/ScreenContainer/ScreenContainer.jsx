@@ -24,12 +24,18 @@ import DateTimePicker from "../../screens/Home/components/DateTimePicker/DateTim
 import Tabs from "../Tabs/Tabs";
 import HomeTabs from "../../screens/Home/components/HomeTabs/HomeTabs";
 import GoogleMap from "../../screens/Map/GoogleMap";
+import CreatePassword from "../../screens/CreatePassword/CreatePassword";
 
 const ScreenContainer = () => {
   const Stack = createNativeStackNavigator();
   return (
     <SafeAreaProvider>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Signup">
+        <Stack.Screen
+          name="CreatePassword"
+          component={CreatePassword}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="HomeTabs"
           component={HomeTabs}

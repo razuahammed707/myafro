@@ -12,6 +12,7 @@ import {
   useFonts
 } from "@expo-google-fonts/nunito";
 import AppLoading from "expo-app-loading";
+import { useState } from "react";
 // import { processFontFamily, useFonts } from "expo-font";
 
 const Login = () => {
@@ -25,6 +26,7 @@ const Login = () => {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+  const [showPassword, setShowPassword] = useState(false)
   const navigation = useNavigation();
   return (
     <SafeAreaView style={tw`p-5 bg-white`}>
@@ -48,7 +50,7 @@ const Login = () => {
                 <Icon
                   name="alternate-email"
                   type="material"
-                  size={24}
+                  size={20}
                   color="black"
                 />
               }
@@ -57,7 +59,7 @@ const Login = () => {
             <Input
               placeholder="Password"
               leftIcon={
-                <Icon name="lock" type="fontawesome" size={24} color="black" />
+                <Icon name="lock" type="fontawesome" size={20} color="black" />
               }
               style={{fontSize:14}}
             />

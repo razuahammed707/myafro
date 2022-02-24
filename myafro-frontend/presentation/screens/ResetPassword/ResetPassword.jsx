@@ -13,7 +13,7 @@ const ResetPassword = () => {
         <Icon
           name="arrow-left"
           type="feather"
-          size={28}
+          size={24}
           color="black"
           onPress={() => navigation.goBack()}
         />
@@ -35,14 +35,14 @@ const ResetPassword = () => {
             <Input
               placeholder="Password"
               leftIcon={
-                <Icon name="lock" type="fontawesome" size={24} color="black" />
+                <Icon name="lock" type="fontawesome" size={20} color="black" />
               }
               style={{fontSize:14}}
             />
             <Input
               placeholder="Confirm Password"
               leftIcon={
-                <Icon name="lock" type="fontawesome" size={24} color="black" />
+                <Icon name="lock" type="fontawesome" size={20} color="black" />
               }
               style={{fontSize:14, lineHeight: 25}}
             />
