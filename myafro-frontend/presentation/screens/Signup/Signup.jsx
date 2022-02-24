@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import ProgressLoader from "rn-progress-loader";
 import { Formik } from "formik";
 import * as yup from "yup";
-import axiosClient from "../../../config/apiCalls";
+import axiosClient from "../../../config/base";
 
 const Signup = () => {
   const [check1, setCheck1] = useState(false);

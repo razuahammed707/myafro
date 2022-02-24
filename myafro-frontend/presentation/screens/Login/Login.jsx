@@ -15,7 +15,7 @@ import {
 } from "@expo-google-fonts/nunito";
 import AppLoading from "expo-app-loading";
 import { useState } from "react";
-import axiosClient from "../../../config/apiCalls";
+import axiosClient from "../../../config/base";
 import Loader from "../../components/Loader/Loader";
 // import { processFontFamily, useFonts } from "expo-font";
 
