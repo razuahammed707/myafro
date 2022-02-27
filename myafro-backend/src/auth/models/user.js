@@ -38,6 +38,7 @@ const userSchema = Schema(
       type: Boolean,
       default: false,
     },
+    profile: { type: String, default: "" },
   },
   {
     timestamp: true,

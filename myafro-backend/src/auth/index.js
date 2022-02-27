@@ -8,10 +8,10 @@ const verifyEmail = require("./controllers/verifyEmail");
 const router = express.Router();
 
 router.post("/signup", signup);
-router.post("/user/verify", verifyEmail);
-router.put("/user/password/:pass_token", createPassword);
-router.post("/user/login", login);
-router.post("/user/forgot", forgotPassword);
-router.put("/user/reset/:pass_token", resetPassword);
+router.post("/verify", verifyEmail);
+router.put("/password/:pass_token", createPassword);
+router.post("/login", login);
+router.post("/forgot", forgotPassword);
+router.put("/reset/:pass_token", resetPassword);
 
 module.exports = router;

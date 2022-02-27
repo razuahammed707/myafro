@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require('path')
 const cors = require("cors");
 const createError = require("http-errors");
 require("dotenv").config("../myafro-backend");
@@ -18,7 +19,8 @@ app.use(
 );
 
 // base endpoint
-app.use("/api/", routers);
+app.use("/api/v1", routers);
+app.use(express.static(path.join(__dirname, "src", "public")));
 
 app.use((req, res, next) => next(createError(404)));
 
