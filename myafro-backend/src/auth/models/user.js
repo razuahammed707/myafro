@@ -18,7 +18,7 @@ const userSchema = Schema(
       type: String,
       required: true,
       trim: true,
-      // unique: [true, "The mobile number is already taken"],
+      unique: [true, "The mobile number is already taken"],
     },
     role: {
       type: String,

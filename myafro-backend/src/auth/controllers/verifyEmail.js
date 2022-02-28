@@ -17,7 +17,7 @@ const verifyEmail = async (req, res, next) => {
     if (!isUserExists) {
       res.status(401).send({
         status: false,
-        message: "Provide valid otp or mobile",
+        message: "Provided OTP is wrong !",
       });
     }
 

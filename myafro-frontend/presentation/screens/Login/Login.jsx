@@ -1,8 +1,9 @@
 import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Button, Icon, Input } from "react-native-elements";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as yup from "yup";
 
@@ -35,16 +36,34 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
+  // storing token to web storage
+  const storeToken = async (token) => {
+    try {
+      await AsyncStorage.setItem("access_token", token);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   // login api call
   const handleLogin = (val) => {
     setLoading(true);
     axiosClient
       .post("/login", JSON.stringify(val))
       .then((res) => {
-        res.status === false ? setLoading(false) : setLoading(false);
+        console.log(res.data);
+        res.data.status === false ? setLoading(false) : setLoading(false);
+        if (res.data.status === true) {
+          storeToken(res.data?.access_token);
+          if(res.data.user?.role === "user"){
+            navigation.navigate("HomeTabs");
+          }else{
+            navigation.navigate("Tabs");
+          }
+        }
         setMessage(res.data.message);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.data));
   };
 
   // validation schema

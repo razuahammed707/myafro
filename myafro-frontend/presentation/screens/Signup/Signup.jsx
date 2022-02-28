@@ -2,6 +2,7 @@ import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { Button, CheckBox, Icon, Input } from "react-native-elements";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { Formik } from "formik";
@@ -25,22 +26,42 @@ const Signup = () => {
     mobile: yup.string().required("Please enter mobile number"),
   });
 
+  // storing data to web storage
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("user_info", jsonValue);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   // sign up api call
-  const handleSignUp = (val) => {
+  const handleSignUp = async (val) => {
     setLoading(true);
     let role = check1 ? "user" : "hair_dresser";
     const values = { ...val, role };
-    axiosClient
+    await axiosClient
       .post("/signup", JSON.stringify(values))
       .then((res) => {
         console.log(res.data);
-        res.status === false ? setLoading(false) : setLoading(false);
+        res.data.status === false ? setLoading(false) : setLoading(false);
+        if (res.data.status === true) {
+          const values = {
+            mobile: res.data.user?.mobile,
+            otp: res.data.user?.otp,
+          };
+          storeData(values);
+          navigation.navigate("OTP");
+        }
         setMessage(res.data.message);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err.response.data);
+        err.response.data && setLoading(false);
+        setMessage(err.response.data.message);
+      });
   };
-
-  console.log(message);
 
   return (
     <Formik
@@ -127,8 +148,12 @@ const Signup = () => {
                   style={{ fontSize: 14 }}
                   containerStyle={{ height: 50 }}
                 />
-                {errors.mobile && touched.mobile && (
-                  <Text style={tw`text-red-600 ml-2`}>{errors.mobile}</Text>
+                {errors.mobile && touched.mobile ? (
+                  <Text style={tw`text-red-600 ml-2`}>{errors.password}</Text>
+                ) : message == "OTP has been sent. Check your email" ? (
+                  <Text style={tw`text-green-600 ml-2`}>{message}</Text>
+                ) : (
+                  <Text style={tw`text-red-600 ml-2`}>{message}</Text>
                 )}
                 <Text style={tw`text-gray-600 text-base font-bold ml-2 mt-2`}>
                   Are you?
