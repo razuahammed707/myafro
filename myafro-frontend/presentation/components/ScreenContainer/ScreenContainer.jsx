@@ -30,7 +30,7 @@ const ScreenContainer = () => {
   const Stack = createNativeStackNavigator();
   return (
     <SafeAreaProvider>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Signup">
         <Stack.Screen
           name="CreatePassword"
           component={CreatePassword}

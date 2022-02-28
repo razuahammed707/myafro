@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: `https://tranquil-fjord-04022.herokuapp.com/api`,
+  baseURL: `https://tranquil-fjord-04022.herokuapp.com/api/v1`,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",

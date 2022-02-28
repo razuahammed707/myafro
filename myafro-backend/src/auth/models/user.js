@@ -41,7 +41,7 @@ const userSchema = Schema(
     profile: { type: String, default: "" },
   },
   {
-    timestamp: true,
+    timestamps: true,
   }
 );
 

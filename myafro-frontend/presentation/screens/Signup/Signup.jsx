@@ -3,16 +3,17 @@ import React from "react";
 import tw from "twrnc";
 import { Button, CheckBox, Icon, Input } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
-import ProgressLoader from "rn-progress-loader";
+import { useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import axiosClient from "../../../config/base";
+import Loader from "../../components/Loader/Loader";
 
 const Signup = () => {
   const [check1, setCheck1] = useState(false);
   const [check2, setCheck2] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
   const formValidationSchema = yup.object().shape({
@@ -26,18 +27,20 @@ const Signup = () => {
 
   // sign up api call
   const handleSignUp = (val) => {
-    let role = check1 ? "user" : "hair dresser";
-    const data = { ...val, role };
-    axiosClient.post("/auth/signup", JSON.stringify(data)).then((res) => {
-      console.log(res);
-    }).catch(err => console.log(err))
+    setLoading(true);
+    let role = check1 ? "user" : "hair_dresser";
+    const values = { ...val, role };
+    axiosClient
+      .post("/signup", JSON.stringify(values))
+      .then((res) => {
+        console.log(res.data);
+        res.status === false ? setLoading(false) : setLoading(false);
+        setMessage(res.data.message);
+      })
+      .catch((err) => console.log(err));
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
+  console.log(message);
 
   return (
     <Formik
@@ -187,15 +190,7 @@ const Signup = () => {
               </Text>
             </View>
           </View>
-          {loading && (
-            <ProgressLoader
-              visible={loading && true}
-              isModal={true}
-              isHUD={true}
-              hudColor={"#000000"}
-              color={"#FFFFFF"}
-            />
-          )}
+          <Loader loading={loading} />
         </SafeAreaView>
       )}
     </Formik>

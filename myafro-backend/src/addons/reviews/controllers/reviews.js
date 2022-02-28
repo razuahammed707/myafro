@@ -18,18 +18,20 @@ const createReview = async (req, res, next) => {
 
 const getReviews = async (req, res, next) => {
   try {
-    const review = await ReviewModel.find({createdAt: -1}).populate("user").populate("salon");
+    const review = await ReviewModel.find({ createdAt: -1 })
+      .populate("user")
+      .populate("salon");
     res.status(200).send({
       status: true,
       message: "All reviews fetched",
       review,
     });
   } catch (error) {
-      next(error)
+    next(error);
   }
 };
 
 module.exports = {
   createReview,
-  getReviews
+  getReviews,
 };

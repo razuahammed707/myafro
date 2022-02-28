@@ -35,11 +35,11 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
 
-  // sign up api call
+  // login api call
   const handleLogin = (val) => {
     setLoading(true);
     axiosClient
-      .post("/auth/user/login", JSON.stringify(val))
+      .post("/login", JSON.stringify(val))
       .then((res) => {
         res.status === false ? setLoading(false) : setLoading(false);
         setMessage(res.data.message);
@@ -63,14 +63,7 @@ const Login = () => {
       onSubmit={(val) => console.log(val)}
       validationSchema={formValidationSchema}
     >
-      {({
-        handleChange,
-        handleBlur,
-        values,
-        touched,
-        errors,
-        isValid,
-      }) => (
+      {({ handleChange, handleBlur, values, touched, errors, isValid }) => (
         <SafeAreaView style={tw`p-5 bg-white`}>
           <View>
             <View style={tw`p-5 flex items-center`}>
@@ -122,7 +115,7 @@ const Login = () => {
                   secureTextEntry={showPassword}
                   rightIcon={
                     <Icon
-                      name={showPassword ? 'eye-off' : 'eye'}
+                      name={showPassword ? "eye-off" : "eye"}
                       type="feather"
                       size={20}
                       color="black"
