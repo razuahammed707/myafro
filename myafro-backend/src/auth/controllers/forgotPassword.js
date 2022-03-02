@@ -42,14 +42,21 @@ const forgotPassword = async (req, res, next) => {
         },
         { new: true }
       );
+      let verify = null
+      if(email){
+        verify = email
+      }
+      if(mobile){
+        verify = mobile
+      }
       res.status(200).send({
         status: true,
         message: "Otp has been sent to your email",
-        otp
+        verify
       });
     } else {
-      res.status(200).send({
-        status: true,
+      res.status(404).send({
+        status: false,
         message: "No records found regarding this email",
       });
     }
