@@ -37,6 +37,11 @@ const CreatePassword = () => {
     }
   };
 
+  // clear async storage
+  async function clearData() {
+    await AsyncStorage.clear();
+  }
+
   useEffect(() => {
     getToken();
   }, []);
@@ -53,6 +58,7 @@ const CreatePassword = () => {
         res.data.status === false ? setLoading(false) : setLoading(false);
         if (res.data.status === true) {
           navigation.navigate("Login");
+          clearData();
         }
         setMessage(res.data.message);
       })
@@ -113,7 +119,9 @@ const CreatePassword = () => {
                   style={{ fontSize: 14 }}
                 />
                 {errors.confirm_password && touched.confirm_password ? (
-                  <Text style={tw`text-red-600 ml-2`}>{errors.confirm_password}</Text>
+                  <Text style={tw`text-red-600 ml-2`}>
+                    {errors.confirm_password}
+                  </Text>
                 ) : message == "user created successfully" ? (
                   <Text style={tw`text-green-600 ml-2`}>{message}</Text>
                 ) : (

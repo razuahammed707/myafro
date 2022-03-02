@@ -26,6 +26,7 @@ const OneTimePass = () => {
   const [OTP, setOTP] = useState({ 0: "", 1: "", 2: "", 3: "" });
   const [mobile, setMobile] = useState("");
   const [loading, setLoading] = useState(false);
+  const [forgotOTP, setForgotOTP] = useState("");
   const [nextInputIndex, setInputIndex] = useState(0);
 
   useEffect(() => {
@@ -76,14 +77,26 @@ const OneTimePass = () => {
     }
   };
 
+  // get forgot otp from web storage
+  const getForgotOTP = async () => {
+    try {
+      const value = await AsyncStorage.getItem("forgot_otp");
+      if (value) {
+        setForgotOTP(value);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
-    getData()
-  }, [])
+    getData();
+    getForgotOTP();
+  }, []);
 
   // submit otp with verify api call
   const submitOTP = () => {
     setLoading(true);
-    getData();
     let inputOTP = "";
     if (isObjectValid(OTP)) {
       Object.values(OTP).forEach((val) => {
@@ -100,7 +113,9 @@ const OneTimePass = () => {
         res.data.status === false ? setLoading(false) : setLoading(false);
         if (res.data.status === true) {
           storeToken(res.data?.pass_token);
-          navigation.navigate("CreatePassword");
+          forgotOTP !== ""
+            ? navigation.navigate("ResetPassword")
+            : navigation.navigate("CreatePassword");
         }
         setMessage(res.data.message);
       })
@@ -156,7 +171,13 @@ const OneTimePass = () => {
             Tap to resend OTP
           </Text>
         </View>
-        {message === "User verified" ? <Text style={tw`text-green-600 ml-2 mt-3 text-center`}>{message}</Text> : <Text style={tw`text-red-600 ml-2 mt-3 text-center`}>{message}</Text>}
+        {message === "User verified" ? (
+          <Text style={tw`text-green-600 ml-2 mt-3 text-center`}>
+            {message}
+          </Text>
+        ) : (
+          <Text style={tw`text-red-600 ml-2 mt-3 text-center`}>{message}</Text>
+        )}
         <View style={tw`mt-2`}>
           <Button title="Submit" onPress={() => submitOTP()} />
         </View>
