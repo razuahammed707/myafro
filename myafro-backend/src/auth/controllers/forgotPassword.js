@@ -20,8 +20,10 @@ transporter.use("compile", hbs(handlebarOptions));
 
 const forgotPassword = async (req, res, next) => {
   try {
-    const { email, mobile } = req.body;
-    const isExist = await UserModel.findOne({$or: [{email: email}, {mobile:mobile}]}).exec();
+    const { credential } = req.body;
+    const isExist = await UserModel.findOne({
+      $or: [{ email: credential }, { mobile: credential }],
+    }).exec();
     if (isExist) {
       const otp = Math.floor(1000 + Math.random() * 9000);
       await transporter.sendMail({
@@ -42,22 +44,15 @@ const forgotPassword = async (req, res, next) => {
         },
         { new: true }
       );
-      let verify = null
-      if(email){
-        verify = email
-      }
-      if(mobile){
-        verify = mobile
-      }
       res.status(200).send({
         status: true,
-        message: "Otp has been sent to your email",
-        verify
+        message: "Otp has been sent to your contact",
+        credential
       });
     } else {
       res.status(404).send({
         status: false,
-        message: "No records found regarding this email",
+        message: "No records found regarding this info",
       });
     }
   } catch (error) {

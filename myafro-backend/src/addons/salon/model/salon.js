@@ -13,12 +13,28 @@ const salonSchema = Schema(
       type: String,
       enum: ["public", "home_salon"],
     },
+    contact:{
+      mobile:String,
+      country:String
+    },
     media: [],
-    rate: { type: Number, required: true },
+    cover: {type:String, default: "imageURL"},
+    price: { type: Number, required: true },
     user: {
       type: mongoose.Types.ObjectId,
       ref: "user",
     },
+    services: [{
+      title:String
+    }],
+    features: {
+      year:String,
+      licence:String,
+      conditon:"String"
+    },
+    optional: {
+      type:String
+    }
   },
   {
     timestamps: true,

@@ -6,10 +6,10 @@ const jwt = require("jsonwebtoken");
 // verify email
 const verifyEmail = async (req, res, next) => {
   try {
-    const { mobile, otp } = req.body;
+    const { credential, otp } = req.body;
 
     const isUserExists = await UserModel.findOneAndUpdate(
-      { mobile, otp },
+      { $or: [{ email: credential }, { mobile: credential }], otp },
       { otp: null, is_verified: true },
       { new: true }
     );
@@ -31,6 +31,7 @@ const verifyEmail = async (req, res, next) => {
       message: "User verified",
       pass_token,
     });
+    
   } catch (error) {
     next(error);
   }
