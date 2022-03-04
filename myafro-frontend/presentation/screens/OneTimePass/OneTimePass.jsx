@@ -24,7 +24,7 @@ const OneTimePass = () => {
   const input = useRef();
   const [message, setMessage] = useState("");
   const [OTP, setOTP] = useState({ 0: "", 1: "", 2: "", 3: "" });
-  const [mobile, setMobile] = useState("");
+  const [crendential, setCredential] = useState("");
   const [loading, setLoading] = useState(false);
   const [forgotOTP, setForgotOTP] = useState("");
   const [nextInputIndex, setInputIndex] = useState(0);
@@ -64,13 +64,11 @@ const OneTimePass = () => {
     }
   };
 
-  // get data from web storage
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("user_info");
-      if (value !== null) {
-        const parsedVal = JSON.parse(value);
-        if (parsedVal.mobile) setMobile(parsedVal.mobile);
+      if (value) {
+        setCredential(value);
       }
     } catch (e) {
       console.log(e);
@@ -80,8 +78,9 @@ const OneTimePass = () => {
   // get forgot otp from web storage
   const getForgotOTP = async () => {
     try {
-      const value = await AsyncStorage.getItem("forgot_otp");
+      const value = await AsyncStorage.getItem("forgot_cred");
       if (value) {
+        setCredential(value);
         setForgotOTP(value);
       }
     } catch (e) {
@@ -104,7 +103,7 @@ const OneTimePass = () => {
       });
     }
     const data = {
-      mobile: mobile,
+      credential: crendential,
       otp: inputOTP,
     };
     axiosClient
@@ -149,7 +148,7 @@ const OneTimePass = () => {
       <View style={tw`h-1/1`}>
         <Text style={styles.text}>Enter OTP</Text>
         <Text style={tw`text-sm text-gray-400 text-left mx-2 mb-10`}>
-          An 4 digit code has been sent to +{mobile}
+          An 4 digit code has been sent to +{crendential}
         </Text>
         <View style={styles.otpContainer}>
           {inputs.map((i, index) => (

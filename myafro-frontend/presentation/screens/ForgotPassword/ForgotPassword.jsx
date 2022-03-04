@@ -15,16 +15,15 @@ const ForgotPassword = () => {
   const [message, setMessage] = useState("");
 
   const formValidationSchema = yup.object().shape({
-    email: yup
+    credential: yup
       .string()
-      .email("Please enter valid email")
-      .required("Email is required"),
+      .required("Email or mobile number is required"),
   });
 
   // storing token to web storage
-  const storeFogotPasswordOTP = async (otp) => {
+  const storeFogotCredentials = async (val) => {
     try {
-      await AsyncStorage.setItem("forgot_otp", otp);
+      await AsyncStorage.setItem("forgot_cred", val);
     } catch (e) {
       console.log(e);
     }
@@ -35,9 +34,10 @@ const ForgotPassword = () => {
     axiosClient
       .post("/forgot", JSON.stringify(val))
       .then((res) => {
+        console.log(res.data)
         res.data.status === false ? setLoading(false) : setLoading(false);
         if (res.data.status === true) {
-          storeFogotPasswordOTP(res.data.otp)
+          storeFogotCredentials(res.data?.credential);
           navigation.navigate("OTP");
         }
         setMessage(res.data.message);
@@ -50,20 +50,12 @@ const ForgotPassword = () => {
   };
   return (
     <Formik
-      initialValues={{ email: "" }}
+      initialValues={{ credential: "" }}
       validateOnMount={true}
       // onSubmit={(val) => console.log(val)}
       validationSchema={formValidationSchema}
     >
-      {({
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        values,
-        touched,
-        errors,
-        isValid,
-      }) => (
+      {({ handleChange, handleBlur, values, touched, errors, isValid }) => (
         <SafeAreaView style={tw`p-5 bg-white`}>
           <View style={tw`flex flex-row justify-start`}>
             <Icon
@@ -92,17 +84,15 @@ const ForgotPassword = () => {
             </Text>
             <View style={tw`mb-10`}>
               <Input
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                value={values.email}
+                onChangeText={handleChange("credential")}
+                onBlur={handleBlur("credential")}
+                value={values.credential}
                 containerStyle={{ height: 60 }}
                 placeholder="Email ID / Mobile number"
                 style={{ fontSize: 14 }}
               />
-              {errors.email && touched.email ? (
-                <Text style={tw`text-red-600 ml-2`}>
-                  {errors.email}
-                </Text>
+              {errors.credential && touched.credential ? (
+                <Text style={tw`text-red-600 ml-2`}>{errors.credential}</Text>
               ) : message == "Otp has been sent to your email" ? (
                 <Text style={tw`text-green-600 ml-2`}>{message}</Text>
               ) : (

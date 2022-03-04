@@ -1,7 +1,7 @@
 import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Icon, Input } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
@@ -14,27 +14,21 @@ import {
   Nunito_800ExtraBold,
   useFonts,
 } from "@expo-google-fonts/nunito";
+import { useSelector, useDispatch } from "react-redux";
 import AppLoading from "expo-app-loading";
 import { useState } from "react";
 import axiosClient from "../../../config/base";
 import Loader from "../../components/Loader/Loader";
+import { authSelector, login } from "../../../redux/slices/login/authSlice";
+import { useEffect } from "react";
 // import { processFontFamily, useFonts } from "expo-font";
 
 const Login = () => {
-  // let [fontsLoaded] = useFonts({
-  //   Nunito_800ExtraBold,
-  //   Nunito_400Regular,
-  //   Nunito_600SemiBold,
-  //   Nunito_700Bold,
-  // });
-
-  // if (!fontsLoaded) {
-  //   return <AppLoading />;
-  // }
   const [showPassword, setShowPassword] = useState(true);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
+  const { message, data, isFetching, isSuccess } = useSelector(authSelector);
 
   // storing token to web storage
   const storeToken = async (token) => {
@@ -47,24 +41,19 @@ const Login = () => {
 
   // login api call
   const handleLogin = (val) => {
-    setLoading(true);
-    axiosClient
-      .post("/login", JSON.stringify(val))
-      .then((res) => {
-        console.log(res.data);
-        res.data.status === false ? setLoading(false) : setLoading(false);
-        if (res.data.status === true) {
-          storeToken(res.data?.access_token);
-          if(res.data.user?.role === "user"){
-            navigation.navigate("HomeTabs");
-          }else{
-            navigation.navigate("Tabs");
-          }
-        }
-        setMessage(res.data.message);
-      })
-      .catch((err) => console.log(err.response.data));
+    dispatch(login(val));
   };
+
+  useEffect(() => {
+    if (data.status === true) {
+      storeToken(data?.access_token);
+      if (data.user?.role === "user") {
+        navigation.navigate("HomeTabs");
+      } else {
+        navigation.navigate("Tabs");
+      }
+    }
+  }, [isSuccess]);
 
   // validation schema
   const formValidationSchema = yup.object().shape({
@@ -198,7 +187,7 @@ const Login = () => {
           </View>
 
           {/* progress loader */}
-          <Loader loading={loading} />
+          <Loader loading={isFetching} />
         </SafeAreaView>
       )}
     </Formik>

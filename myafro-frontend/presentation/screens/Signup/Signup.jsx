@@ -26,11 +26,10 @@ const Signup = () => {
     mobile: yup.string().required("Please enter mobile number"),
   });
 
-  // storing data to web storage
-  const storeData = async (value) => {
+  //store user credentials
+  const storeData = async (cred) => {
     try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem("user_info", jsonValue);
+      await AsyncStorage.setItem("user_info", cred);
     } catch (e) {
       console.log(e);
     }
@@ -47,11 +46,7 @@ const Signup = () => {
         console.log(res.data);
         res.data.status === false ? setLoading(false) : setLoading(false);
         if (res.data.status === true) {
-          const values = {
-            mobile: res.data.user?.mobile,
-            otp: res.data.user?.otp,
-          };
-          storeData(values);
+          storeData(res.data.user?.mobile);
           navigation.navigate("OTP");
         }
         setMessage(res.data.message);

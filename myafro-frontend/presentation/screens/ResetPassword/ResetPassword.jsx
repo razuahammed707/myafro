@@ -1,61 +1,151 @@
 import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import { Formik } from "formik";
+import * as yup from "yup";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import tw from "twrnc";
 import { Button, Icon, Input } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native";
+import Loader from "../../components/Loader/Loader";
+import axiosClient from "../../../config/base";
+import { useEffect } from "react";
 
 const ResetPassword = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  const [token, setToken] = useState(null);
+  const [message, setMessage] = useState("");
+
+  //validation schema
+  const formValidationSchema = yup.object().shape({
+    password: yup.string().required("Password is required"),
+    confirm_password: yup
+      .string()
+      .required("Confirm password is also required")
+      .oneOf([yup.ref("password"), null], "Passwords must match"),
+  });
+
+  // get token from web storage for creating user
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem("pass_token");
+      if (value !== null) {
+        if (value) setToken(value);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // clear async storage
+  async function clearData() {
+    await AsyncStorage.clear();
+  }
+
+  useEffect(() => {
+    getToken();
+  }, []);
+
+  console.log(token);
+
+  // create password for verified user
+  const handlePassword = (val) => {
+    setLoading(true);
+    axiosClient
+      .put(`/reset/${token}`, JSON.stringify(val))
+      .then((res) => {
+        console.log(res.data);
+        res.data.status === false ? setLoading(false) : setLoading(false);
+        if (res.data.status === true) {
+          navigation.navigate("Login");
+          clearData();
+        }
+        setMessage(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        err.response.data && setLoading(false);
+        setMessage(err.response.data.message);
+      });
+  };
   return (
-    <SafeAreaView style={tw`p-5 bg-white`}>
-      <View style={tw`flex flex-row justify-start`}>
-        <Icon
-          name="arrow-left"
-          type="feather"
-          size={24}
-          color="black"
-          onPress={() => navigation.goBack()}
-        />
-      </View>
-      <TouchableOpacity>
-        <View style={tw`h-75 p-5 flex items-center`}>
-          <Image
-            style={{
-              width: 250,
-              height: 250,
-              resizeMode: "cover",
-            }}
-            source={require("../../../assets/img/reset.png")}
-          />
-        </View>
-        <View style={tw`h-1/1`}>
-          <Text style={styles.text}>Reset Password</Text>
+    <Formik
+      initialValues={{ password: "", confirm_password: "" }}
+      validateOnMount={true}
+      onSubmit={(val) => console.log(val)}
+      validationSchema={formValidationSchema}
+    >
+      {({ handleChange, handleBlur, values, touched, errors, isValid }) => (
+        <SafeAreaView style={tw`p-5 bg-white`}>
           <View>
-            <Input
-              placeholder="Password"
-              leftIcon={
-                <Icon name="lock" type="fontawesome" size={20} color="black" />
-              }
-              style={{fontSize:14}}
-            />
-            <Input
-              placeholder="Confirm Password"
-              leftIcon={
-                <Icon name="lock" type="fontawesome" size={20} color="black" />
-              }
-              style={{fontSize:14, lineHeight: 25}}
-            />
+            <View style={tw`p-5 flex items-center`}>
+              <Image
+                style={{
+                  width: 225,
+                  height: 212,
+                  resizeMode: "contain",
+                }}
+                source={require("../../../assets/img/reset.png")}
+              />
+            </View>
+            <View style={tw`h-1/1`}>
+              <Text style={styles.text}>Reset Password</Text>
+              <View style={tw`mb-5`}>
+                <Input
+                  placeholder="New Password"
+                  containerStyle={{ height: 60 }}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  secureTextEntry
+                  value={values.password}
+                  leftIcon={
+                    <Icon name="lock" type="feather" size={20} color="black" />
+                  }
+                  style={{ fontSize: 14 }}
+                />
+                {errors.password && touched.password && (
+                  <Text style={tw`text-red-600 ml-2`}>{errors.password}</Text>
+                )}
+                <Input
+                  placeholder="Confirm New Password"
+                  containerStyle={{ height: 60 }}
+                  onChangeText={handleChange("confirm_password")}
+                  onBlur={handleBlur("confirm_password")}
+                  value={values.confirm_password}
+                  secureTextEntry
+                  leftIcon={
+                    <Icon name="lock" type="feather" size={20} color="black" />
+                  }
+                  style={{ fontSize: 14 }}
+                />
+                {errors.confirm_password && touched.confirm_password ? (
+                  <Text style={tw`text-red-600 ml-2`}>
+                    {errors.confirm_password}
+                  </Text>
+                ) : message == "user created successfully" ? (
+                  <Text style={tw`text-green-600 ml-2`}>{message}</Text>
+                ) : (
+                  <Text style={tw`text-red-600 ml-2`}>{message}</Text>
+                )}
+                <Text style={tw`text-gray-600 text-sm px-2`}>
+                  You are one step away to create your account
+                </Text>
+              </View>
+              <Button
+                title="Reset"
+                disabled={!isValid}
+                onPress={() =>
+                  handlePassword({
+                    password: values.password,
+                  })
+                }
+              />
+            </View>
           </View>
-          <View style={tw`mt-10`}>
-            <Button
-              title="Reset"
-              onPress={() => navigation.navigate("HomeTabs")}
-            />
-          </View>
-        </View>
-      </TouchableOpacity>
-    </SafeAreaView>
+          <Loader loading={loading} />
+        </SafeAreaView>
+      )}
+    </Formik>
   );
 };
 
