@@ -15,17 +15,17 @@ import ScreenContainer from "./presentation/components/ScreenContainer/ScreenCon
 import Tabs from "./presentation/components/Tabs/Tabs";
 
 export default function App() {
-  let [fontsLoaded, error] = useFonts({
-    regular: Nunito_400Regular,
-    semiBold: Nunito_600SemiBold,
-    bold: Nunito_700Bold,
-    extraBold: Nunito_800ExtraBold,
-  });
+  // let [fontsLoaded, error] = useFonts({
+  //   regular: Nunito_400Regular,
+  //   semiBold: Nunito_600SemiBold,
+  //   bold: Nunito_700Bold,
+  //   extraBold: Nunito_800ExtraBold,
+  // });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
-
+  // if (!fontsLoaded) {
+  //   return <AppLoading />;
+  // }
+  // const [isLoggedIn, setLoggedIn] = useState(true)
   return (
     <Provider store={store}>
       <NavigationContainer>

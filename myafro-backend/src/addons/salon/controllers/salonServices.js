@@ -24,46 +24,18 @@ const createSalonServices = async (req, res, next) => {
   }
 };
 
-// const getServices = async (req, res, next) => {
-//   try {
-//     let salonID = req.user.id;
-//     const services = await SalonModel.findById(salonID, {
-//       services,
-//     });
-//     res.status(200).send({
-//       status: true,
-//       message: "Services retrieved successfully",
-//       services,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 const updateSalonServices = async (req, res, next) => {
   try {
     let { salonID, serviceID } = req.params;
-    const salon = await SalonModel.findByIdAndUpdate(
-        { _id: salonID },
-        { services: { _id: serviceID } },
-        {
-          $push: {
-            services: { title: req.body },
-          },
-        },
-        {
-          new: true,
-        }
-      );
-    //   {
-    //     $set: {
-    //       "services.$.title": req.body.title,
-    //     },
-    //   },
-    //   {
-    //     'new': true, 'safe': true, 'upsert': true
-    //   }
-    
+    const salon = await SalonModel.findById(
+      { _id: salonID, "services._id": serviceID },
+
+      { $set: { "services.$.title": "manually" } },
+      {
+        new: true,
+      }
+    );
+    console.log(salon);
     res.send({
       status: true,
       message: "Service updated succesfully",

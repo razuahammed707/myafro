@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const uploadSchema = Schema(
   {
-    profile: String,
+    img_url: String,
   },
   {
     timestamp: true,

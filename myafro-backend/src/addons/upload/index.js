@@ -1,9 +1,9 @@
 const express = require("express");
-const logoUpload = require("../../middlewars/logoUpload");
+const imageUpload = require("../../middlewars/imageUpload");
 const router = express.Router();
 const { uploadImage } = require("./controllers");
 
 //Create an Invoice
-router.post("/", logoUpload, uploadImage);
+router.post("/", imageUpload, uploadImage);
 
 module.exports = router;

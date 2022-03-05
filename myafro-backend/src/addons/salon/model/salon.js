@@ -17,7 +17,9 @@ const salonSchema = Schema(
       mobile:String,
       country:String
     },
-    media: [],
+    media: [{
+      img_url: String
+    }],
     cover: {type:String, default: "imageURL"},
     price: { type: Number, required: true },
     user: {
@@ -29,8 +31,8 @@ const salonSchema = Schema(
     }],
     features: {
       year:String,
-      licence:String,
-      conditon:"String"
+      license:String,
+      condition:String
     },
     optional: {
       type:String

@@ -42,7 +42,6 @@ export const authSlice = createSlice({
       return state;
     },
     [login.rejected]: (state, { payload }) => {
-      console.log("payload", payload);
       state.isFetching = false;
       state.isError = true;
       state.data = payload;

@@ -1,13 +1,13 @@
 const { imageUploader } = require("../utils/fileUpload");
 
-const logoUpload = (req, res, next) => {
+const imageUpload = (req, res, next) => {
   const upload = imageUploader(
     ["image/jpg", "image/jpeg", "image/png"],
     1000000
   );
 
   //call the middleware function
-  upload.single('profile')(req, res, (err) => {
+  upload.single('img_url')(req, res, (err) => {
     if (err) {
       console.log(err)
       res.send({
@@ -20,4 +20,4 @@ const logoUpload = (req, res, next) => {
   });
 };
 
-module.exports = logoUpload;
+module.exports = imageUpload;

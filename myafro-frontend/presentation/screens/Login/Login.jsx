@@ -28,7 +28,7 @@ const Login = () => {
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
-  const { message, data, isFetching, isSuccess } = useSelector(authSelector);
+  const { message, data, isFetching } = useSelector(authSelector);
 
   // storing token to web storage
   const storeToken = async (token) => {
@@ -53,7 +53,7 @@ const Login = () => {
         navigation.navigate("Tabs");
       }
     }
-  }, [isSuccess]);
+  }, [message]);
 
   // validation schema
   const formValidationSchema = yup.object().shape({
