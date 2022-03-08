@@ -22,6 +22,7 @@ import Tabs from "../Tabs/Tabs";
 import HomeTabs from "../../screens/Home/components/HomeTabs/HomeTabs";
 import GoogleMap from "../../screens/Map/GoogleMap";
 import CreatePassword from "../../screens/CreatePassword/CreatePassword";
+import SalonProfile from "../../screens/SalonProfile/SalonProfile";
 
 const ScreenContainer = () => {
   const Stack = createNativeStackNavigator();
@@ -30,21 +31,21 @@ const ScreenContainer = () => {
   // get token to make sure the user is authenticated or not
   const getToken = async () => {
     try {
-      const value = await AsyncStorage.getItem("access_token");
+      const value = await AsyncStorage.getItem("user_info");
       if (value) {
-        setToken(value);
+        const parsedValue = JSON.parse(value)
+        setToken(parsedValue);
       }
     } catch (e) {
       console.log(e);
     }
   };
-
+  
   useEffect(() => {
     getToken();
   }, []);
 
   return (
-    <SafeAreaProvider>
       <Stack.Navigator initialRouteName="Login">
         {token === null ? (
           <>
@@ -122,6 +123,11 @@ const ScreenContainer = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="SalonProfile"
+              component={SalonProfile}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="SaloonLocation"
               component={SaloonLocation}
               options={{ headerShown: false }}
@@ -155,7 +161,6 @@ const ScreenContainer = () => {
           </>
         )}
       </Stack.Navigator>
-    </SafeAreaProvider>
   );
 };
 

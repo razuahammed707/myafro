@@ -2,7 +2,7 @@ const express = require('express');
 const imageUpload = require('../middlewars/imageUpload');
 const { createBooking, getBookings, updateBooking, deleteBooking } = require('./bookings/controllers/bookings');
 const { createReview, getReviews } = require('./reviews/controllers/reviews');
-const { createSalon, getSalons, updateSalon, deleteSalon } = require('./salon/controllers/salon');
+const { createSalon, getSalons, updateSalon, deleteSalon, getSalon } = require('./salon/controllers/salon');
 const { createSalonMedia, deleteSalonMedia } = require('./salon/controllers/salonMedia');
 const {createSalonServices,deleteSalonServices,updateSalonServices, getServices}=require("./salon/controllers/salonServices")
 const router = express.Router()
@@ -10,6 +10,7 @@ const router = express.Router()
 // salon routers
 router.post("/salons", createSalon);
 router.get("/salons", getSalons);
+router.get("/salon", getSalon);
 router.put("/salons/:id", updateSalon);
 router.delete("/salons/:id", deleteSalon);
 

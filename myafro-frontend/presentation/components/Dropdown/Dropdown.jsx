@@ -14,22 +14,30 @@ const data = [
   { label: "Item 8", value: "8" },
 ];
 
+const data2 = [
+  { label: "Bangladesh", value: "1" },
+  { label: "Norway", value: "2" },
+  { label: "China", value: "3" },
+  { label: "Japan", value: "4" },
+  { label: "Switzerland", value: "5" },
+];
+
 const DropdownComponent = ({ text }) => {
   const [value, setValue] = useState(null);
 
   return (
     <Dropdown
-      style={text === "saloon" ? styles.dropdown : styles.dropdownHair}
+      style={styles.dropdown}
       placeholderStyle={styles.placeholderStyle}
       selectedTextStyle={styles.selectedTextStyle}
       inputSearchStyle={styles.inputSearchStyle}
       iconStyle={styles.iconStyle}
-      data={data}
+      data={text === "category" ? data : data2}
       search
       maxHeight={300}
       labelField="label"
       valueField="value"
-      placeholder={text === "hair" ? "Hair type" : "Home Saloon"}
+      placeholder={text === "country" ? "country" : "category"}
       searchPlaceholder="Search..."
       value={value}
       onChange={(item) => {
@@ -48,13 +56,12 @@ export default DropdownComponent;
 
 const styles = StyleSheet.create({
   dropdown: {
-    margin: 16,
-    height: 50,
+    margin: 12,
+    height: 45,
     borderColor: "lightgray",
     borderWidth: 0.5,
-    borderRadius: 20,
-    width: 150,
     padding: 8,
+    borderRadius:8
   },
   dropdownHair: {
     margin: 16,
@@ -70,9 +77,11 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 14,
+    color: "gray"
   },
   selectedTextStyle: {
     fontSize: 16,
+    
   },
   // iconStyle: {
   //   width: 20,

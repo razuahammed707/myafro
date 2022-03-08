@@ -12,7 +12,6 @@ import CreatePassword from "../screens/CreatePassword/CreatePassword";
 const AuthNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
-    <SafeAreaProvider>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"
@@ -45,7 +44,6 @@ const AuthNavigator = () => {
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
-    </SafeAreaProvider>
   );
 };
 

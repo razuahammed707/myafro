@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axiosClient from "../../../config/base";
 
 const initialState = {
@@ -9,9 +10,27 @@ const initialState = {
   data: {},
 };
 
+// storing user info to web storage
+const storeUserInfo = async (value) => {
+  try {
+    const data = JSON.stringify(value);
+    await AsyncStorage.setItem("user_info", data);
+  } catch (e) {
+    // saving error
+    console.log(error);
+  }
+};
+
 export const login = createAsyncThunk("/login", async (user, thunkAPI) => {
   try {
     let response = await axiosClient.post("/login", JSON.stringify(user));
+    if (response.data.status === true) {
+      const userInfo = {
+        access_token: response.data?.access_token,
+        user: response.data?.user,
+      };
+      storeUserInfo(userInfo);
+    }
     return response.data;
   } catch (e) {
     console.log("Error", e.response.data);
@@ -22,7 +41,7 @@ export const login = createAsyncThunk("/login", async (user, thunkAPI) => {
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducer: {
+  reducers: {
     reset: (state) => {
       (state.isFetching = false),
         (state.isSuccess = false),
@@ -38,7 +57,7 @@ export const authSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = true;
       state.data = payload;
-      state.message = payload.message
+      state.message = payload.message;
       return state;
     },
     [login.rejected]: (state, { payload }) => {
@@ -50,6 +69,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { reset } = authSlice.actions;
+export const { reset, getToken } = authSlice.actions;
 export const authSelector = (state) => state.auth;
 export default authSlice.reducer;

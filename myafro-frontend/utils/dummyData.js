@@ -65,7 +65,7 @@ export const accountData1 = [
         name: "Your profile",
         icon_name: "user",
         icon_type: "entypo",
-        link:"",
+        link:"SalonProfile",
     },
     {
         id:2,
@@ -87,13 +87,6 @@ export const accountData1 = [
         icon_name: "stats-chart",
         icon_type: "ionicon",
         link:"",
-    },
-    {
-        id:5,
-        name: "Switch to owner mode",
-        icon_name: "stats-chart",
-        icon_type: "ionicon",
-        link:"FreelanceOnboard",
     },
 ]
 export const accountData2 = [
@@ -124,5 +117,32 @@ export const accountData2 = [
         icon_name: "gift",
         icon_type: "feather",
         link:"",
+    },
+]
+
+export const services = [
+    {
+        id:1,
+        title: "Coffee",
+    },
+    {
+        id:2,
+        title: "Free wifi",
+    },
+    {
+        id:3,
+        title: "Head Massage",
+    },
+    {
+        id:4,
+        title: "Wig",
+    },
+    {
+        id:5,
+        title: "Free parking",
+    },
+    {
+        id:6,
+        title: "Lunch",
     },
 ]

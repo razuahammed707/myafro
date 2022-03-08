@@ -15,11 +15,11 @@ import GoogleMap from "../screens/Map/GoogleMap";
 import Tabs from "../components/Tabs/Tabs";
 import HomeTabs from "../screens/Home/components/HomeTabs/HomeTabs";
 import CurrentHair from "../screens/CurrentHair/CurrentHair";
+import SalonProfile from "../screens/SalonProfile/SalonProfile";
 
 const AppNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
-    <SafeAreaProvider>
       <Stack.Navigator initialRouteName="HomeTabs">
         <Stack.Screen
           name="HomeTabs"
@@ -62,6 +62,11 @@ const AppNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="SalonProfile"
+          component={SalonProfile}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="SaloonLocation"
           component={SaloonLocation}
           options={{ headerShown: false }}
@@ -86,14 +91,7 @@ const AppNavigator = () => {
           component={Onboard}
           options={{ headerShown: false }}
         />
-
-        {/* <Stack.Screen
-          name="DateTime"
-          component={DateTimePicker}
-          options={{ headerShown: false }}
-        /> */}
       </Stack.Navigator>
-    </SafeAreaProvider>
   );
 };
 

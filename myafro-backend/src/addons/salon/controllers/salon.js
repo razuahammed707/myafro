@@ -39,6 +39,19 @@ const getSalons = async (req, res, next) => {
   }
 };
 
+const getSalon = async (req, res, next) => {
+  console.log(req.user.id)
+  try {
+    const salon = await SalonModel.findOne({user: req.user.id}).populate('user', '-password')
+    res.send({
+      status: true,
+      salon,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateSalon = async (req, res, next) => {
   try {
     const salon = await SalonModel.findByIdAndUpdate(
@@ -90,6 +103,7 @@ const deleteSalon = async (req, res, next) => {
 module.exports = {
   createSalon,
   getSalons,
+  getSalon,
   updateSalon,
   deleteSalon,
 };

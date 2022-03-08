@@ -1,48 +1,54 @@
-import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 import { Icon } from "react-native-elements";
-import { accountData1, accountData2 } from "../../../utils/dummyData";
 import { useNavigation } from "@react-navigation/native";
-import DateTimePicker from "../Home/components/DateTimePicker/DateTimePicker";
-import DateTimePickers from "../Home/components/DateTimePicker/DateTimePicker";
-// import DateTimePicker from "react-native-modal-datetime-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { accountData1, accountData2 } from "../../../utils/dummyData";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Account = () => {
   const navigation = useNavigation();
+
+  const logout = async () => {
+    await AsyncStorage.clear();
+    // navigation.navigate("Login");
+  };
+
   return (
     <SafeAreaView style={tw`p-5 h-full`}>
       {/* <DateTimePickers /> */}
-      <View>
-        <View style={tw`flex flex-row items-center`}>
-          <Icon name="arrow-left" type="feather" size={28} color="black" onPress={() => navigation.goBack()} />
-          <Text style={tw`font-bold text-xl ml-2`}>Account</Text>
-        </View>
+      <View style={tw`flex flex-row items-center`}>
+        <Icon
+          name="arrow-left"
+          type="feather"
+          size={28}
+          color="black"
+          onPress={() => navigation.goBack()}
+        />
+        <Text style={tw`font-bold text-xl ml-2`}>Account</Text>
+      </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* Data one start  */}
-        <FlatList
-          data={accountData1}
-          style={{ marginTop: 25 }}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
+        <View style={tw`mt-5`}>
+          {accountData1.map((item) => (
             <View
               style={tw` mb-3 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
+              key={item.id}
             >
-              <View style={tw`flex flex-row items-center`}>
+              <TouchableOpacity
+                style={tw`flex flex-row items-center`}
+                onPress={() => navigation.navigate(item.link)}
+              >
                 <Icon
                   name={item.icon_name}
                   type={item.icon_type}
                   size={20}
                   color="black"
                 />
-                <Text
-                  style={tw`ml-3 text-sm`}
-                  onPress={() => navigation.navigate(item.link)}
-                >
-                  {item.name}
-                </Text>
-              </View>
+                <Text style={tw`ml-3 text-sm`}>{item.name}</Text>
+              </TouchableOpacity>
               <Icon
                 name="arrow-forward-ios"
                 type="material"
@@ -50,8 +56,28 @@ const Account = () => {
                 color="gray"
               />
             </View>
-          )}
-        />
+          ))}
+        </View>
+        <TouchableOpacity
+          style={tw` mb-3 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
+        >
+          <View style={tw`flex flex-row items-center`}>
+            <Icon
+              name="log-out"
+              type="feather"
+              size={20}
+              color="black"
+              onPress={() => navigation.navigate("Tabs")}
+            />
+            <Text style={tw`ml-3 text-sm`}>Switch to user mode</Text>
+          </View>
+          <Icon
+            name="arrow-forward-ios"
+            type="material"
+            size={20}
+            color="gray"
+          />
+        </TouchableOpacity>
         {/* Data one end  */}
 
         {/* Background image section start */}
@@ -75,13 +101,11 @@ const Account = () => {
         {/* Background image section end */}
 
         {/* Data two start  */}
-        <FlatList
-          data={accountData2}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
+        <View>
+          {accountData2.map((item) => (
             <View
               style={tw` mb-3 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
+              key={item.id}
             >
               <View style={tw`flex flex-row items-center`}>
                 <Icon
@@ -99,10 +123,25 @@ const Account = () => {
                 color="gray"
               />
             </View>
-          )}
-        />
+          ))}
+        </View>
+        <TouchableOpacity
+          style={tw` mb-3 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
+          onPress={() => logout()}
+        >
+          <View style={tw`flex flex-row items-center`}>
+            <Icon name="log-out" type="feather" size={20} color="black" />
+            <Text style={tw`ml-3 text-sm`}>Log Out</Text>
+          </View>
+          <Icon
+            name="arrow-forward-ios"
+            type="material"
+            size={20}
+            color="gray"
+          />
+        </TouchableOpacity>
         {/* Data two end  */}
-      </View>
+      </ScrollView>
       {/* <BottomBar /> */}
     </SafeAreaView>
   );

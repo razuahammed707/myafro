@@ -1,27 +1,15 @@
 import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button, Icon, Input } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as yup from "yup";
-
-import {
-  Nunito_400Regular,
-  Nunito_600SemiBold,
-  Nunito_700Bold,
-  Nunito_800ExtraBold,
-  useFonts,
-} from "@expo-google-fonts/nunito";
 import { useSelector, useDispatch } from "react-redux";
-import AppLoading from "expo-app-loading";
 import { useState } from "react";
-import axiosClient from "../../../config/base";
 import Loader from "../../components/Loader/Loader";
 import { authSelector, login } from "../../../redux/slices/login/authSlice";
 import { useEffect } from "react";
-// import { processFontFamily, useFonts } from "expo-font";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(true);
@@ -30,15 +18,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const { message, data, isFetching } = useSelector(authSelector);
 
-  // storing token to web storage
-  const storeToken = async (token) => {
-    try {
-      await AsyncStorage.setItem("access_token", token);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   // login api call
   const handleLogin = (val) => {
     dispatch(login(val));
@@ -46,7 +25,6 @@ const Login = () => {
 
   useEffect(() => {
     if (data.status === true) {
-      storeToken(data?.access_token);
       if (data.user?.role === "user") {
         navigation.navigate("HomeTabs");
       } else {

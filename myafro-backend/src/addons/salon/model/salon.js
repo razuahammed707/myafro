@@ -5,23 +5,24 @@ const salonSchema = Schema(
   {
     name: {
       type: String,
-      required: true,
       trim: true,
     },
-    location: { type: String, required: true, trim: true },
+
+    location: { type: String, trim: true },
     category: {
       type: String,
       enum: ["public", "home_salon"],
     },
     contact:{
       mobile:String,
-      country:String
+      country:String,
+      address: String
     },
     media: [{
       img_url: String
     }],
     cover: {type:String, default: "imageURL"},
-    price: { type: Number, required: true },
+    price: { type: Number},
     user: {
       type: mongoose.Types.ObjectId,
       ref: "user",
