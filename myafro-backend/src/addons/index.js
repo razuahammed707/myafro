@@ -7,17 +7,17 @@ const { createSalonMedia, deleteSalonMedia } = require('./salon/controllers/salo
 const {createSalonServices,deleteSalonServices,updateSalonServices, getServices}=require("./salon/controllers/salonServices")
 const router = express.Router()
 
-// salon routers
-router.post("/salons", createSalon);
-router.get("/salons", getSalons);
-router.get("/salon", getSalon);
-router.put("/salons/:id", updateSalon);
-router.delete("/salons/:id", deleteSalon);
+// // salon routers
+// router.post("/salons", createSalon);
+// router.get("/salons", getSalons);
+// router.get("/salon", getSalon);
+// router.put("/salons/:id", updateSalon);
+// router.delete("/salons/:id", deleteSalon);
 
 // Salon Service 
 router.post("/salons/:salonID/services", createSalonServices);
 router.delete("/salons/:salonID/:serviceID/services",deleteSalonServices);
-router.put("/salons/:salonID/:serviceID/services",updateSalonServices);
+router.put("/salons/:salonID/services/:serviceID",updateSalonServices);
 
 
 // Salon media

@@ -27,15 +27,15 @@ const createSalonServices = async (req, res, next) => {
 const updateSalonServices = async (req, res, next) => {
   try {
     let { salonID, serviceID } = req.params;
-    const salon = await SalonModel.findById(
+    let {title}=req.body
+    const salon = await SalonModel.findOneAndUpdate(
       { _id: salonID, "services._id": serviceID },
 
-      { $set: { "services.$.title": "manually" } },
+      { $set: { "services.$.title": title} },
       {
         new: true,
       }
     );
-    console.log(salon);
     res.send({
       status: true,
       message: "Service updated succesfully",
