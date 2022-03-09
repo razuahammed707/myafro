@@ -34,9 +34,10 @@ const SalonProfile = () => {
   useLayoutEffect(() => {
     getToken();
     if (token !== null) dispatch(getSalon(token));
-  }, [isSuccess]);
+  }, []);
 
-  // console.log(getSalonData)
+  console.log(getSalonData)
+  console.log(isSuccess)
 
   return (
     <>

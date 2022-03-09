@@ -29,20 +29,21 @@ const uploadImage = () => {
         type: "image/jpg",
       });
 
+      console.log(profileImage)
+
       const res = await axios.post(
         "https://tranquil-fjord-04022.herokuapp.com/api/v1/upload",
         formData,
         {
           headers: {
-            Accept: "application/json",
             "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      console.log(res.data);
+      console.log(res);
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   };
 
