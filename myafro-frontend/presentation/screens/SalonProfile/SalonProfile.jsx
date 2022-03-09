@@ -36,9 +36,6 @@ const SalonProfile = () => {
     if (token !== null) dispatch(getSalon(token));
   }, []);
 
-  console.log(getSalonData)
-  console.log(isSuccess)
-
   return (
     <>
       {isSuccess ? (

@@ -32,6 +32,26 @@ export const createSalon = createAsyncThunk(
   }
 );
 
+//create salon api call
+export const updateSalon = createAsyncThunk(
+  "/salons",
+  async (token, values, thunkAPI) => {
+    try {
+      let response = await axiosClient.post(`/salons/${cred }`, JSON.stringify(values), {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(values)
+      // console.log(response.data)
+      return response.data;
+    } catch (e) {
+      console.log("Error", e.response.data);
+      thunkAPI.rejectWithValue(e.response.data);
+    }
+  }
+);
+
 // get salon by user
 export const getSalon = createAsyncThunk("/salon", async (token, thunkAPI) => {
   try {
