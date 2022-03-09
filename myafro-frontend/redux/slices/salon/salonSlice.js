@@ -7,22 +7,21 @@ const initialState = {
   isError: false,
   message: "",
   token: null,
-  getSalonData: {},
-  createdSalon: {},
-  data: {},
+  updateSalonData: {},
+  loggedInUserData: {},
 };
 
 //create salon api call
 export const createSalon = createAsyncThunk(
-  "/salons",
-  async (token, values, thunkAPI) => {
+  "/create/salons",
+  async (assets, thunkAPI) => {
     try {
-      let response = await axiosClient.post("/salons", JSON.stringify(values), {
+      let response = await axiosClient.post("/salons", JSON.stringify(assets.salonData), {
         headers: {
-          authorization: `Bearer ${token}`,
+          authorization: `Bearer ${assets.token}`,
         },
       });
-      console.log(values)
+      console.log(values);
       // console.log(response.data)
       return response.data;
     } catch (e) {
@@ -34,16 +33,20 @@ export const createSalon = createAsyncThunk(
 
 //create salon api call
 export const updateSalon = createAsyncThunk(
-  "/salons",
-  async (token, values, thunkAPI) => {
+  "/update/salons",
+  async (assets, thunkAPI) => {
     try {
-      let response = await axiosClient.post(`/salons/${cred }`, JSON.stringify(values), {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(values)
-      // console.log(response.data)
+      console.log(assets)
+      let response = await axiosClient.put(
+        `/salons/${assets.salonId}`,
+        JSON.stringify(assets.salonData),
+        {
+          headers: {
+            authorization: `Bearer ${assets.token}`,
+          },
+        }
+      );
+      console.log(response.data)
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -51,20 +54,6 @@ export const updateSalon = createAsyncThunk(
     }
   }
 );
-
-// get salon by user
-export const getSalon = createAsyncThunk("/salon", async (token, thunkAPI) => {
-  try {
-    let response = await axiosClient.get("/salon", {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (e) {
-    thunkAPI.rejectWithValue(e.response.data);
-  }
-});
 
 export const salonSlice = createSlice({
   name: "salon",
@@ -77,7 +66,10 @@ export const salonSlice = createSlice({
         (state.message = "");
     },
     getValues: (state, action) => {
-      state.getSalonData = action.payload;
+      state.updateSalonData = action.payload;
+    },
+    getLoggedInUser: (state, action) => {
+      state.loggedInUserData = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -88,7 +80,7 @@ export const salonSlice = createSlice({
       })
       .addCase(createSalon.fulfilled, (state, { payload }) => {
         state.isFetching = false;
-        state.createdSalon = payload
+        state.createdSalon = payload;
         state.isSuccess = true;
         // state.message = payload.message;
         return state;
@@ -96,31 +88,31 @@ export const salonSlice = createSlice({
       .addCase(createSalon.rejected, (state, { payload }) => {
         state.isFetching = false;
         state.isSuccess = false;
-        state.createdSalon = payload
+        state.createdSalon = payload;
         // state.message = payload.message;
         return state;
       })
-      .addCase(getSalon.pending, (state) => {
+      .addCase(updateSalon.pending, (state) => {
         state.isFetching = true;
         return state;
       })
-      .addCase(getSalon.fulfilled, (state, { payload }) => {
+      .addCase(updateSalon.fulfilled, (state, { payload }) => {
         state.isFetching = false;
+        state.updatedSalon = payload;
         state.isSuccess = true;
-        state.data = payload;
-        state.message = payload.message;
+        // state.message = payload.message;
         return state;
       })
-      .addCase(getSalon.rejected, (state, { payload }) => {
+      .addCase(updateSalon.rejected, (state, { payload }) => {
         state.isFetching = false;
         state.isSuccess = false;
-        state.data = payload;
-        state.message = payload.message;
+        state.updatedSalon = payload;
+        // state.message = payload.message;
         return state;
       });
   },
 });
 
-export const { reset, getValues } = salonSlice.actions;
+export const { reset, getValues, getLoggedInUser } = salonSlice.actions;
 export const salonSelector = (state) => state.salon;
 export default salonSlice.reducer;

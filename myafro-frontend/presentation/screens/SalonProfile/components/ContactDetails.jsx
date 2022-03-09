@@ -9,40 +9,41 @@ import {
 } from "../../../../redux/slices/salon/salonSlice";
 
 const ContactDetails = () => {
-  const { data, getSalonData, isFetching } = useSelector(salonSelector);
+  const { loggedInUserData, updateSalonData } = useSelector(salonSelector);
   const dispatch = useDispatch();
 
+  // const {mobile} = loggedInUserData?.user
+
   useEffect(() => {
-    dispatch(getValues({ ...getSalonData }));
+    dispatch(getValues({ ...updateSalonData, contact: {address: "Testing address", country: "BD"} }));
   }, []);
-  
+
+  // console.log(updateSalonData);
   return (
     <>
-      {!isFetching && (
+      <View>
         <View>
-          <View>
-            <Text style={tw`ml-5`}>Mobile</Text>
-            <TextInput
-              style={styles.input}
-              // onChangeText={onChangeNumber}
-              value={data?.salon?.user.mobile}
-              placeholder="Mobile"
-              keyboardType="numeric"
-            />
-          </View>
-          <View>
-            <Text style={tw`ml-5`}>Address</Text>
-            <TextInput
-              style={styles.input}
-              // onChangeText={onChangeNumber}
-              // value={number}
-              placeholder="Address"
-            />
-          </View>
-          <Text style={tw`ml-5`}>Country</Text>
-          <DropdownComponent text="country" />
+          <Text style={tw`ml-5`}>Mobile</Text>
+          <TextInput
+            style={styles.input}
+            // onChangeText={onChangeNumber}
+            value={loggedInUserData?.user?.mobile}
+            placeholder="Mobile"
+            keyboardType="numeric"
+          />
         </View>
-      )}
+        <View>
+          <Text style={tw`ml-5`}>Address</Text>
+          <TextInput
+            style={styles.input}
+            // onChangeText={onChangeNumber}
+            value={loggedInUserData?.salon?.contact?.address}
+            placeholder="Address"
+          />
+        </View>
+        <Text style={tw`ml-5`}>Country</Text>
+        <DropdownComponent text="country" />
+      </View>
     </>
   );
 };

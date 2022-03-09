@@ -6,11 +6,11 @@ import { getValues, salonSelector } from "../../../../redux/slices/salon/salonSl
 import { useDispatch, useSelector } from "react-redux";
 
 const Features = () => {
-  const {getSalonData} = useSelector(salonSelector)
+  const {updateSalonData} = useSelector(salonSelector)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getValues({...getSalonData, country: 5, location: 'dhaka'}))
+    dispatch(getValues({...updateSalonData}))
   }, [])
   return (
     <View style={tw`px-5`}>

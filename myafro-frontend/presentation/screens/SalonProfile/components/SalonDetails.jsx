@@ -13,57 +13,58 @@ const SalonDetails = () => {
   const [price, setPrice] = useState("");
   const [location, setLocation] = useState("");
 
-  const { data, getSalonData, isSuccess } = useSelector(salonSelector);
+  const { loggedInUserData, updateSalonData } =
+    useSelector(salonSelector);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(
       getValues({
-        ...getSalonData,
-        name: name || data?.salon?.name,
-        price: price || data?.salon?.price,
-        location: location || data?.salon?.location,
+        ...updateSalonData,
+        name: name || loggedInUserData?.salon?.name,
+        price: price || loggedInUserData?.salon?.price,
+        location: location || loggedInUserData?.salon?.location,
       })
     );
-  }, [name, price, location]);
+  }, [name, price, location, loggedInUserData]);
 
   return (
     <>
-      {isSuccess && (
+      <View>
         <View>
-          <View>
-            <Text style={tw`ml-5`}>Name</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(newText) => setName(newText)}
-              defaultValue={name || data?.salon?.name}
-              placeholder="Name"
-              keyboardType="default"
-            />
-          </View>
-          <Text style={tw`ml-5`}>Category</Text>
-          <DropdownComponent text="category" />
-          <View>
-            <Text style={tw`ml-5`}>Price</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(newText) => setPrice(newText)}
-              defaultValue={data?.salon?.price.toString() || price.toString()}
-              placeholder="Price"
-              keyboardType="numeric"
-            />
-          </View>
-          <View>
-            <Text style={tw`ml-5`}>Location</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(newText) => setLocation(newText)}
-              defaultValue={data?.salon?.location || location}
-              placeholder="Location"
-            />
-          </View>
+          <Text style={tw`ml-5`}>Name</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(newText) => setName(newText)}
+            defaultValue={name || loggedInUserData?.salon?.name}
+            placeholder="Name"
+            keyboardType="default"
+          />
         </View>
-      )}
+        <Text style={tw`ml-5`}>Category</Text>
+        <DropdownComponent text="category" />
+        <View>
+          <Text style={tw`ml-5`}>Price</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(newText) => setPrice(newText)}
+            defaultValue={
+              loggedInUserData?.salon?.price.toString() || price.toString()
+            }
+            placeholder="Price"
+            keyboardType="numeric"
+          />
+        </View>
+        <View>
+          <Text style={tw`ml-5`}>Location</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(newText) => setLocation(newText)}
+            defaultValue={loggedInUserData?.salon?.location || location}
+            placeholder="Location"
+          />
+        </View>
+      </View>
     </>
   );
 };

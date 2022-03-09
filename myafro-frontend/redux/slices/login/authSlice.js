@@ -27,7 +27,7 @@ export const login = createAsyncThunk("/login", async (user, thunkAPI) => {
     if (response.data.status === true) {
       const userInfo = {
         access_token: response.data?.access_token,
-        user: response.data?.user,
+        user: response.data,
       };
       storeUserInfo(userInfo);
     }
