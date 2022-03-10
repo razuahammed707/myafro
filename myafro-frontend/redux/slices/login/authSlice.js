@@ -13,10 +13,13 @@ const initialState = {
 // storing user info to web storage
 const storeUserInfo = async (value) => {
   try {
-    const data = JSON.stringify(value);
-    await AsyncStorage.setItem("user_info", data);
+    if (value?.user?.user?.role === "hair_dresser") {
+      const salonInfo = JSON.stringify(value?.user?.salon);
+      await AsyncStorage.setItem("salon_info", salonInfo);
+    }
+    const userInfo = JSON.stringify(value);
+    await AsyncStorage.setItem("user_info", userInfo);
   } catch (e) {
-    // saving error
     console.log(error);
   }
 };

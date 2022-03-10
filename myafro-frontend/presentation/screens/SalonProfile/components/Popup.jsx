@@ -2,16 +2,13 @@ import React, { useState } from "react";
 import { Button, Overlay, Icon, Input } from "react-native-elements";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import tw from "twrnc";
+import { useDispatch, useSelector } from "react-redux";
+import { salonSelector } from "../../../../redux/slices/salon/salonSlice";
 
 const Popup = ({visible, toggleOverlay}) => {
-
+  const dispatch = useDispatch();
   return (
     <View>
-      {/* <Button
-        title="Open Overlay"
-        onPress={toggleOverlay}
-        buttonStyle={styles.button}
-      /> */}
       <View
         style={tw`flex flex-row items-center justify-between my-3`}
         

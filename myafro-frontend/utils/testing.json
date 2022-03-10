@@ -1,0 +1,35 @@
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpzZGV2MjFAZ21haWwuY29tIiwiaWQiOiI2MjIzNGZlODEzMTkxNjNkNGQ1MDAwYjciLCJtb2JpbGUiOiIwMTUyMzIxMjIiLCJpYXQiOjE2NDY4OTM0ODd9.skOUdbLd76KbFpQJPjlcteaIV_RrKF3XK6p9Qoj5790",
+  "user": {
+    "status": true,
+    "message": "Login successful",
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpzZGV2MjFAZ21haWwuY29tIiwiaWQiOiI2MjIzNGZlODEzMTkxNjNkNGQ1MDAwYjciLCJtb2JpbGUiOiIwMTUyMzIxMjIiLCJpYXQiOjE2NDY4OTM0ODd9.skOUdbLd76KbFpQJPjlcteaIV_RrKF3XK6p9Qoj5790",
+    "user": {
+      "_id": "62234fe81319163d4d5000b7",
+      "email": "jsdev21@gmail.com",
+      "full_name": "Dev",
+      "mobile": "015232122",
+      "role": "hair_dresser"
+    },
+    "salon": {
+      "contact": { "address": "Testing address", "country": "BD" },
+      "features": {
+        "year": "2010",
+        "license": "0125-542D",
+        "condition": "good"
+      },
+      "_id": "6225e9dffb5cac3fb6dbf168",
+      "name": "Rony Jackson",
+      "location": "Chittagon, GEC",
+      "category": "public",
+      "cover": "imageURL",
+      "price": 154,
+      "user": "62234fe81319163d4d5000b7",
+      "media": [],
+      "services": [],
+      "createdAt": "2022-03-07T11:17:51.866Z",
+      "updatedAt": "2022-03-09T15:45:27.771Z",
+      "__v": 0
+    }
+  }
+}

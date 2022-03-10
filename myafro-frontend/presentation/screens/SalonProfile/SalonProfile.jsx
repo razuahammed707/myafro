@@ -8,6 +8,7 @@ import { Avatar, Icon } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getHairDresser,
   getLoggedInUser,
   salonSelector,
   updateSalon,
@@ -16,20 +17,23 @@ import {
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
 
-  const { loggedInUserData, updateSalonData } = useSelector(salonSelector);
+  const { userData, updateSalonData } = useSelector(salonSelector);
   const dispatch = useDispatch();
 
   const getToken = async () => {
     try {
-      const value = await AsyncStorage.getItem("user_info");
-      if (value) {
-        const parsedValue = JSON.parse(value);
+      const userInfo = await AsyncStorage.getItem("user_info");
+      const salonInfo = await AsyncStorage.getItem("salon_info");
+      if (userInfo && salonInfo) {
+        const parsedToken = JSON.parse(userInfo);
+        const parsedSalonInfo = JSON.parse(salonInfo);
         setSalonAssets({
-          token: parsedValue?.access_token,
-          salonId: parsedValue?.user?.salon?._id,
+          token: parsedToken?.access_token,
+          salonId: parsedSalonInfo?._id,
           salonData: updateSalonData,
         });
-        dispatch(getLoggedInUser(parsedValue?.user));
+        dispatch(getLoggedInUser(parsedToken?.user?.user));
+        dispatch(getHairDresser(parsedSalonInfo));
       }
     } catch (e) {
       console.log(e);
@@ -39,8 +43,7 @@ const SalonProfile = () => {
   useLayoutEffect(() => {
     getToken();
   }, []);
-
-  // console.log(updateSalonData)
+  console.log(updateSalonData);
   return (
     <>
       <SafeAreaView>
@@ -51,14 +54,12 @@ const SalonProfile = () => {
           <Text style={tw`text-base font-bold`}>Profile</Text>
           <Text
             style={tw`text-base font-bold`}
-            onPress={() =>
-              salonAssets.token !== null && dispatch(updateSalon(salonAssets))
-            }
+            onPress={() => dispatch(updateSalon(salonAssets))}
           >
             Save
           </Text>
         </View>
-        <ScrollView style={tw`mb-5 h-full`}>
+        <View style={tw`mb-5 h-full`}>
           <View
             style={{
               padding: 20,
@@ -76,12 +77,14 @@ const SalonProfile = () => {
               <Icon name="edit-2" type="feather" size={16} color="white" />
             </View>
             <View style={tw`ml-4`}>
-              <Text style={tw`text-base font-bold`}>{loggedInUserData?.user?.full_name}</Text>
-              <Text style={tw` text-sm text-gray-500`}>{loggedInUserData?.user?.role}</Text>
+              <Text style={tw`text-base font-bold`}>{userData?.full_name}</Text>
+              <Text style={tw` text-sm text-gray-500`}>{userData?.role}</Text>
             </View>
           </View>
-          <ProfileAccordion />
-        </ScrollView>
+          <ScrollView>
+            <ProfileAccordion />
+          </ScrollView>
+        </View>
       </SafeAreaView>
     </>
   );

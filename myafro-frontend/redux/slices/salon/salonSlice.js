@@ -6,9 +6,18 @@ const initialState = {
   isSuccess: false,
   isError: false,
   message: "",
-  token: null,
   updateSalonData: {},
-  loggedInUserData: {},
+  hairDresserData: {},
+  userData: {},
+};
+
+const replaceSalonInfo = async (value) => {
+  try {
+      const replaceValue = JSON.stringify(value);
+      await AsyncStorage.setItem("salon_info", replaceValue);
+  } catch (e) {
+    console.log(error);
+  }
 };
 
 //create salon api call
@@ -69,7 +78,10 @@ export const salonSlice = createSlice({
       state.updateSalonData = action.payload;
     },
     getLoggedInUser: (state, action) => {
-      state.loggedInUserData = action.payload;
+      state.userData = action.payload;
+    },
+    getHairDresser: (state, action) => {
+      state.hairDresserData = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -113,6 +125,6 @@ export const salonSlice = createSlice({
   },
 });
 
-export const { reset, getValues, getLoggedInUser } = salonSlice.actions;
+export const { reset, getValues, getLoggedInUser, getHairDresser } = salonSlice.actions;
 export const salonSelector = (state) => state.salon;
 export default salonSlice.reducer;

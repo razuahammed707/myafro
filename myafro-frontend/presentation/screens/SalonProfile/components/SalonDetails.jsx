@@ -1,32 +1,32 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import tw from "twrnc";
-import DropdownComponent from "../../../components/Dropdown/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getValues,
   salonSelector,
 } from "../../../../redux/slices/salon/salonSlice";
+import HairTypeDropdown from "./HairTypeDropdown";
+import SalonTypeDropdown from "./SalonTypeDropdown";
 
 const SalonDetails = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [location, setLocation] = useState("");
 
-  const { loggedInUserData, updateSalonData } =
-    useSelector(salonSelector);
+  const { hairDresserData, updateSalonData } = useSelector(salonSelector);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(
       getValues({
         ...updateSalonData,
-        name: name || loggedInUserData?.salon?.name,
-        price: price || loggedInUserData?.salon?.price,
-        location: location || loggedInUserData?.salon?.location,
+        name: name || hairDresserData?.name,
+        price: price || hairDresserData?.price,
+        location: location || hairDresserData?.location,
       })
     );
-  }, [name, price, location, loggedInUserData]);
+  }, [name, price, location, hairDresserData]);
 
   return (
     <>
@@ -36,21 +36,26 @@ const SalonDetails = () => {
           <TextInput
             style={styles.input}
             onChangeText={(newText) => setName(newText)}
-            defaultValue={name || loggedInUserData?.salon?.name}
+            defaultValue={name || hairDresserData?.name}
             placeholder="Name"
             keyboardType="default"
           />
         </View>
-        <Text style={tw`ml-5`}>Category</Text>
-        <DropdownComponent text="category" />
+        <View>
+          <Text style={tw`ml-5`}>Hair type</Text>
+          <HairTypeDropdown />
+        </View>
+        <View>
+          <Text style={tw`ml-5`}>Salon Type</Text>
+          <SalonTypeDropdown />
+        </View>
+
         <View>
           <Text style={tw`ml-5`}>Price</Text>
           <TextInput
             style={styles.input}
             onChangeText={(newText) => setPrice(newText)}
-            defaultValue={
-              loggedInUserData?.salon?.price.toString() || price.toString()
-            }
+            // defaultValue={hairDresserData?.price.toString() || price.toString()}
             placeholder="Price"
             keyboardType="numeric"
           />
@@ -60,7 +65,7 @@ const SalonDetails = () => {
           <TextInput
             style={styles.input}
             onChangeText={(newText) => setLocation(newText)}
-            defaultValue={loggedInUserData?.salon?.location || location}
+            defaultValue={hairDresserData?.location || location}
             placeholder="Location"
           />
         </View>

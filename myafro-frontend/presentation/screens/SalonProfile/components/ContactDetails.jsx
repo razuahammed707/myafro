@@ -1,24 +1,33 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import tw from "twrnc";
-import DropdownComponent from "../../../components/Dropdown/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getValues,
   salonSelector,
 } from "../../../../redux/slices/salon/salonSlice";
+import CountryDropdown from "./CountryDropdown";
 
 const ContactDetails = () => {
-  const { loggedInUserData, updateSalonData } = useSelector(salonSelector);
+  const { hairDresserData, updateSalonData } = useSelector(salonSelector);
+  const [address, setAddress] = useState("");
+  const [mobile, setMobile] = useState("");
   const dispatch = useDispatch();
 
   // const {mobile} = loggedInUserData?.user
 
   useEffect(() => {
-    dispatch(getValues({ ...updateSalonData, contact: {address: "Testing address", country: "BD"} }));
-  }, []);
+    dispatch(
+      getValues({
+        ...updateSalonData,
+        contact: {
+          address: address || hairDresserData?.contact?.address,
+          mobile: mobile || hairDresserData?.contact?.mobile,
+        },
+      })
+    );
+  }, [address, mobile]);
 
-  // console.log(updateSalonData);
   return (
     <>
       <View>
@@ -26,8 +35,8 @@ const ContactDetails = () => {
           <Text style={tw`ml-5`}>Mobile</Text>
           <TextInput
             style={styles.input}
-            // onChangeText={onChangeNumber}
-            value={loggedInUserData?.user?.mobile}
+            onChangeText={(newText) => setMobile(newText)}
+            defaultValue={hairDresserData?.contact?.mobile || mobile}
             placeholder="Mobile"
             keyboardType="numeric"
           />
@@ -36,13 +45,14 @@ const ContactDetails = () => {
           <Text style={tw`ml-5`}>Address</Text>
           <TextInput
             style={styles.input}
-            // onChangeText={onChangeNumber}
-            value={loggedInUserData?.salon?.contact?.address}
+            onChangeText={(newText) => setAddress(newText)}
+            defaultValue={hairDresserData?.contact?.address || address}
             placeholder="Address"
           />
         </View>
         <Text style={tw`ml-5`}>Country</Text>
-        <DropdownComponent text="country" />
+        <CountryDropdown />
+        {/* <DropdownComponent text="country" /> */}
       </View>
     </>
   );
