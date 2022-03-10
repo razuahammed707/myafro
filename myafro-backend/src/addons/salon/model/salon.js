@@ -9,35 +9,40 @@ const salonSchema = Schema(
     },
 
     location: { type: String, trim: true },
-    category: {
+    salon_type: {
       type: String,
-      enum: ["public", "home_salon"],
+      enum: ["public", "home_salon", "both"],
     },
-    contact:{
-      mobile:String,
-      country:String,
-      address: String
+    hair_type: [String],
+    contact: {
+      mobile: String,
+      country: String,
+      address: String,
     },
-    media: [{
-      img_url: String
-    }],
-    cover: {type:String, default: "imageURL"},
-    price: { type: Number},
+    media: [
+      {
+        img_url: String,
+      },
+    ],
+    cover: { type: String, default: "imageURL" },
+    price: { type: Number },
     user: {
       type: mongoose.Types.ObjectId,
       ref: "user",
     },
-    services: [{
-      title:String
-    }],
+    services: [
+      {
+        title: String,
+      },
+    ],
     features: {
-      year:String,
-      license:String,
-      condition:String
+      year: String,
+      license: String,
+      condition: String,
     },
     optional: {
-      type:String
-    }
+      type: String,
+    },
   },
   {
     timestamps: true,

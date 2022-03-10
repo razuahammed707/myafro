@@ -21,6 +21,7 @@ const getSalons = async (req, res, next) => {
 
     const category = req.query.category;
     const location = req.query.location;
+    const hair_type = req.query.hair_type;
 
     if (category) {
       query.category = category;
@@ -28,6 +29,13 @@ const getSalons = async (req, res, next) => {
     if (location) {
       query.location = location;
     }
+    if (hair_type) {
+      query.hair_type = {
+        $in: hair_type.split(","),
+      };
+    }
+
+    console.log(query);
     const salons = await SalonModel.find(query).populate("user", "-password");
 
     res.send({
@@ -40,9 +48,12 @@ const getSalons = async (req, res, next) => {
 };
 
 const getSalon = async (req, res, next) => {
-  console.log(req.user.id)
+  console.log(req.user.id);
   try {
-    const salon = await SalonModel.findOne({user: req.user.id}).populate('user', '-password')
+    const salon = await SalonModel.findOne({ user: req.user.id }).populate(
+      "user",
+      "-password"
+    );
     res.send({
       status: true,
       salon,
@@ -55,11 +66,11 @@ const getSalon = async (req, res, next) => {
 const updateSalon = async (req, res, next) => {
   try {
     const salon = await SalonModel.findByIdAndUpdate(
-      { _id: req.params.id },
-      req.body,
+      req.params.id,
       {
-        new: true,
-      }
+        $set: req.body,
+      },
+      { new: true }
     );
     if (salon) {
       res.status(200).send({
