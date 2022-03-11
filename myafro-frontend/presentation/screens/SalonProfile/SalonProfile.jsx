@@ -13,11 +13,12 @@ import {
   salonSelector,
   updateSalon,
 } from "../../../redux/slices/salon/salonSlice";
+import Loader from "../../components/Loader/Loader";
 
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
 
-  const { userData, updateSalonData } = useSelector(salonSelector);
+  const { userData, updateSalonData, isFetching } = useSelector(salonSelector);
   const dispatch = useDispatch();
 
   const getToken = async () => {
@@ -86,6 +87,8 @@ const SalonProfile = () => {
           </ScrollView>
         </View>
       </SafeAreaView>
+       {/* progress loader */}
+       <Loader loading={isFetching} />
     </>
   );
 };

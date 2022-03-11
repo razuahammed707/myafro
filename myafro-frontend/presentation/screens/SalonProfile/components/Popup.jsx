@@ -1,20 +1,59 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Button, Overlay, Icon, Input } from "react-native-elements";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import tw from "twrnc";
 import { useDispatch, useSelector } from "react-redux";
 import { salonSelector } from "../../../../redux/slices/salon/salonSlice";
+import { createSalonService } from "../../../../redux/slices/salon/serviceSlice";
+import Loader from "../../../components/Loader/Loader";
 
-const Popup = ({visible, toggleOverlay}) => {
+const Popup = ({ visible, toggleOverlay }) => {
+  const [title, setTitle] = useState("");
+  const [salonAssets, setSalonAssets] = useState(null);
+  const { hairDresserData, isFetching } = useSelector(salonSelector);
   const dispatch = useDispatch();
+
+  const getToken = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user_info");
+      if (userInfo) {
+        const parsedToken = JSON.parse(userInfo);
+        setSalonAssets({
+          token: parsedToken?.access_token,
+          serviceData: {
+            title
+          },
+          salonId:"622b5c4f61a35827c55e8772",
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  console.log(title)
+
+  // console.log(hairDresserData?._id)
+
+  useLayoutEffect(() => {
+    getToken();
+  }, []);
+
   return (
     <View>
-      <View
-        style={tw`flex flex-row items-center justify-between my-3`}
-        
-      >
+      <View style={tw`flex flex-row items-center justify-between my-3`}>
         <Text style={tw`text-base font-bold`}>Services</Text>
-        <TouchableOpacity style={tw`flex flex-row items-center`} onPress={toggleOverlay}>
+        <TouchableOpacity
+          style={tw`flex flex-row items-center`}
+          onPress={toggleOverlay}
+        >
           <Icon
             name="plus"
             type="font-awesome"
@@ -24,23 +63,18 @@ const Popup = ({visible, toggleOverlay}) => {
           />
           <Text style="">Add new</Text>
         </TouchableOpacity>
-        
       </View>
       <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
         <Text style={styles.textPrimary}>Add Service</Text>
-        <Input
-          placeholder="Add service"
-          containerStyle={{
-            // height: 50,
-            width: 300,
-            paddingHorizontal: 0,
-            paddingVertical: 0,
-          }}
-          leftIcon={
-            <Icon name="edit-3" type="feather" size={16} color="black" />
-          }
-          style={{ fontSize: 14 }}
-        />
+        <View>
+          <Text style={tw`ml-5`}>Title</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(newText) => setTitle(newText)}
+            defaultValue={title}
+            placeholder="Title"
+          />
+        </View>
         <Button
           icon={
             <Icon
@@ -52,9 +86,13 @@ const Popup = ({visible, toggleOverlay}) => {
             />
           }
           title="Add"
-          onPress={toggleOverlay}
+          onPress={() => {
+            dispatch(createSalonService(salonAssets));
+            toggleOverlay();
+          }}
         />
       </Overlay>
+      <Loader loading={isFetching}/>
     </View>
   );
 };
@@ -72,6 +110,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
     fontSize: 17,
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    width: 300,
+    borderWidth: 1,
+    borderColor: "lightgray",
+    padding: 10,
+    borderRadius: 8,
   },
 });
 

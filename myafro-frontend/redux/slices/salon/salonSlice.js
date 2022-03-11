@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axiosClient from "../../../config/base";
 
 const initialState = {
@@ -16,7 +17,7 @@ const replaceSalonInfo = async (value) => {
       const replaceValue = JSON.stringify(value);
       await AsyncStorage.setItem("salon_info", replaceValue);
   } catch (e) {
-    console.log(error);
+    console.log(e);
   }
 };
 
@@ -32,6 +33,25 @@ export const createSalon = createAsyncThunk(
       });
       console.log(values);
       // console.log(response.data)
+      return response.data;
+    } catch (e) {
+      console.log("Error", e.response.data);
+      thunkAPI.rejectWithValue(e.response.data);
+    }
+  }
+);
+
+//get logged in hair dresser salon api call
+export const getSalon = createAsyncThunk(
+  "/get/salon",
+  async (token, thunkAPI) => {
+    try {
+      let response = await axiosClient.get("/salons", {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data)
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -56,6 +76,9 @@ export const updateSalon = createAsyncThunk(
         }
       );
       console.log(response.data)
+      if (response.data.status === true) {
+        replaceSalonInfo(response.data?.salon);
+      }
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -101,6 +124,24 @@ export const salonSlice = createSlice({
         state.isFetching = false;
         state.isSuccess = false;
         state.createdSalon = payload;
+        // state.message = payload.message;
+        return state;
+      })
+      .addCase(getSalon.pending, (state) => {
+        state.isFetching = true;
+        return state;
+      })
+      .addCase(getSalon.fulfilled, (state, { payload }) => {
+        state.isFetching = false;
+        state.hairDresserData = payload;
+        state.isSuccess = true;
+        // state.message = payload.message;
+        return state;
+      })
+      .addCase(getSalon.rejected, (state, { payload }) => {
+        state.isFetching = false;
+        state.isSuccess = false;
+        state.hairDresserData = payload;
         // state.message = payload.message;
         return state;
       })

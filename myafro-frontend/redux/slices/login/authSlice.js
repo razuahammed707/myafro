@@ -13,7 +13,7 @@ const initialState = {
 // storing user info to web storage
 const storeUserInfo = async (value) => {
   try {
-    if (value?.user?.user?.role === "hair_dresser") {
+    if (value?.user?.user?.role === "hair_dresser" && value?.user?.salon?._id) {
       const salonInfo = JSON.stringify(value?.user?.salon);
       await AsyncStorage.setItem("salon_info", salonInfo);
     }

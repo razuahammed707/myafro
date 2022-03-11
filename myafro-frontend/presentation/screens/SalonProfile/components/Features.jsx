@@ -6,7 +6,7 @@ import { getValues, salonSelector } from "../../../../redux/slices/salon/salonSl
 import { useDispatch, useSelector } from "react-redux";
 
 const Features = () => {
-  const {updateSalonData} = useSelector(salonSelector)
+  const {updateSalonData, hairDresserData} = useSelector(salonSelector)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -24,15 +24,15 @@ const Features = () => {
       >
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
           <Text style={tw`text-base`}>Year</Text>
-          <Text style={tw`text-base`}>2012</Text>
+          <Text style={tw`text-base`}>{hairDresserData?.features?.year || "none"}</Text>
         </View>
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
           <Text style={tw`text-base`}>Condition</Text>
-          <Text style={tw`text-base`}>Perfect</Text>
+          <Text style={tw`text-base`}>{hairDresserData?.features?.condtion || "none"}</Text>
         </View>
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
           <Text style={tw`text-base`}>License</Text>
-          <Text style={tw`text-base`}>2012</Text>
+          <Text style={tw`text-base`}>{hairDresserData?.features?.license || "none"}</Text>
         </View>
       </View>
     </View>

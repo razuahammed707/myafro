@@ -42,12 +42,12 @@ const ProfileAccordion = () => {
       icon_type: "feather",
       content: <Features />,
     },
-    {
-      title: "Optional",
-      icon_name: "smile",
-      icon_type: "feather",
-      content: <SingleInput text="Edit optional" />,
-    },
+    // {
+    //   title: "Optional",
+    //   icon_name: "smile",
+    //   icon_type: "feather",
+    //   content: <SingleInput text="Edit optional" />,
+    // },
   ];
   const [activeSections, setActiveSections] = useState([]);
   const renderHeader = (section) => {

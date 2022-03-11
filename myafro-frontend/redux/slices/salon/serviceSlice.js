@@ -22,8 +22,8 @@ export const createSalonService = createAsyncThunk(
           },
         }
       );
-      console.log(values);
-      // console.log(response.data)
+      console.log(assets);
+      console.log(response.data)
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
