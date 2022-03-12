@@ -11,40 +11,24 @@ import {
 import tw from "twrnc";
 import { useDispatch, useSelector } from "react-redux";
 import { salonSelector } from "../../../../redux/slices/salon/salonSlice";
-import { createSalonService } from "../../../../redux/slices/salon/serviceSlice";
+import {
+  createSalonService,
+  getServiceTitle,
+  serviceSelector,
+} from "../../../../redux/slices/salon/serviceSlice";
 import Loader from "../../../components/Loader/Loader";
+import { authSelector } from "../../../../redux/slices/login/authSlice";
 
 const Popup = ({ visible, toggleOverlay }) => {
-  const [title, setTitle] = useState("");
-  const [salonAssets, setSalonAssets] = useState(null);
   const { hairDresserData, isFetching } = useSelector(salonSelector);
+  const { token } = useSelector(authSelector);
+  const { serviceTitle } = useSelector(serviceSelector);
   const dispatch = useDispatch();
-
-  const getToken = async () => {
-    try {
-      const userInfo = await AsyncStorage.getItem("user_info");
-      if (userInfo) {
-        const parsedToken = JSON.parse(userInfo);
-        setSalonAssets({
-          token: parsedToken?.access_token,
-          serviceData: {
-            title
-          },
-          salonId:"622b5c4f61a35827c55e8772",
-        });
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  console.log(title)
-
-  // console.log(hairDresserData?._id)
-
+  
+  console.log(token);
   useLayoutEffect(() => {
-    getToken();
-  }, []);
+    dispatch(getServiceTitle({ title: title }));
+  }, [title]);
 
   return (
     <View>
@@ -87,12 +71,18 @@ const Popup = ({ visible, toggleOverlay }) => {
           }
           title="Add"
           onPress={() => {
-            dispatch(createSalonService(salonAssets));
+            dispatch(
+              createSalonService({
+                token: token,
+                serviceData: serviceTitle,
+                salonId: hairDresserData?._id,
+              })
+            );
             toggleOverlay();
           }}
         />
       </Overlay>
-      <Loader loading={isFetching}/>
+      <Loader loading={isFetching} />
     </View>
   );
 };

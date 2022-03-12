@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { getValues, salonSelector } from "../../../../redux/slices/salon/salonSlice";
+import {
+  getValues,
+  salonSelector,
+} from "../../../../redux/slices/salon/salonSlice";
 
 const data = [
   { label: "Public", value: "public" },
@@ -14,12 +17,16 @@ const SalonTypeDropdown = () => {
   const [value, setValue] = useState(null);
   const { updateSalonData, hairDresserData } = useSelector(salonSelector);
 
-  const dispatch = useDispatch()
-  ;
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getValues({ ...updateSalonData, salon_type: value ||  hairDresserData?.salon_type}));
+    dispatch(
+      getValues({
+        ...updateSalonData,
+        salon_type: value || hairDresserData?.salon_type,
+      })
+    );
   }, [value]);
-  
+
   return (
     <Dropdown
       style={styles.dropdown}
@@ -56,7 +63,7 @@ const styles = StyleSheet.create({
     borderColor: "lightgray",
     borderWidth: 0.5,
     padding: 8,
-    borderRadius:8,
+    borderRadius: 8,
   },
   dropdownHair: {
     margin: 16,
@@ -72,11 +79,11 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 14,
-    color: "gray"
+    color: "gray",
   },
   selectedTextStyle: {
     fontSize: 14,
-    color:"gray"
+    color: "gray",
   },
   // iconStyle: {
   //   width: 20,
@@ -84,6 +91,6 @@ const styles = StyleSheet.create({
   // },
   inputSearchStyle: {
     height: 40,
-    fontSize: 16
+    fontSize: 16,
   },
 });

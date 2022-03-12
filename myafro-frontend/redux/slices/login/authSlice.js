@@ -7,6 +7,7 @@ const initialState = {
   isSuccess: false,
   isError: false,
   message: "",
+  token: null,
   data: {},
 };
 
@@ -51,6 +52,9 @@ export const authSlice = createSlice({
         (state.isError = false),
         (state.message = "");
     },
+    getTokenValue: (state, {payload}) => {
+      state.token=payload
+    }
   },
   extraReducers: {
     [login.pending]: (state) => {
@@ -72,6 +76,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { reset, getToken } = authSlice.actions;
+export const { reset, getTokenValue } = authSlice.actions;
 export const authSelector = (state) => state.auth;
 export default authSlice.reducer;

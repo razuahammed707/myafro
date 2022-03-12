@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axiosClient from "../../../config/base";
 
 const initialState = {
@@ -12,15 +11,6 @@ const initialState = {
   userData: {},
 };
 
-const replaceSalonInfo = async (value) => {
-  try {
-      const replaceValue = JSON.stringify(value);
-      await AsyncStorage.setItem("salon_info", replaceValue);
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 //create salon api call
 export const createSalon = createAsyncThunk(
   "/create/salons",
@@ -31,8 +21,6 @@ export const createSalon = createAsyncThunk(
           authorization: `Bearer ${assets.token}`,
         },
       });
-      console.log(values);
-      // console.log(response.data)
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -51,8 +39,8 @@ export const getSalon = createAsyncThunk(
           authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data)
-      return response.data;
+      console.log(response?.data?.salons[0])
+      return response?.data?.salons[0];
     } catch (e) {
       console.log("Error", e.response.data);
       thunkAPI.rejectWithValue(e.response.data);
@@ -75,10 +63,6 @@ export const updateSalon = createAsyncThunk(
           },
         }
       );
-      console.log(response.data)
-      if (response.data.status === true) {
-        replaceSalonInfo(response.data?.salon);
-      }
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -103,9 +87,9 @@ export const salonSlice = createSlice({
     getLoggedInUser: (state, action) => {
       state.userData = action.payload;
     },
-    getHairDresser: (state, action) => {
-      state.hairDresserData = action.payload;
-    },
+    // getHairDresser: (state, action) => {
+    //   state.hairDresserData = action.payload;
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -166,6 +150,6 @@ export const salonSlice = createSlice({
   },
 });
 
-export const { reset, getValues, getLoggedInUser, getHairDresser } = salonSlice.actions;
+export const { reset, getValues, getLoggedInUser } = salonSlice.actions;
 export const salonSelector = (state) => state.salon;
 export default salonSlice.reducer;

@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import tw from "twrnc";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProfileAccordion from "./components/ProfileAccordion";
@@ -8,43 +8,50 @@ import { Avatar, Icon } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getHairDresser,
   getLoggedInUser,
+  getSalon,
   salonSelector,
   updateSalon,
 } from "../../../redux/slices/salon/salonSlice";
 import Loader from "../../components/Loader/Loader";
+import { getTokenValue } from "../../../redux/slices/login/authSlice";
+import { serviceSelector } from "../../../redux/slices/salon/serviceSlice";
 
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
 
-  const { userData, updateSalonData, isFetching } = useSelector(salonSelector);
+  const { userData, updateSalonData, hairDresserData, isFetching, isSuccess } = useSelector(salonSelector);
+  const { isFetchingService, isSuccessService } = useSelector(serviceSelector);
   const dispatch = useDispatch();
 
   const getToken = async () => {
     try {
       const userInfo = await AsyncStorage.getItem("user_info");
-      const salonInfo = await AsyncStorage.getItem("salon_info");
-      if (userInfo && salonInfo) {
+      if (userInfo) {
         const parsedToken = JSON.parse(userInfo);
-        const parsedSalonInfo = JSON.parse(salonInfo);
         setSalonAssets({
           token: parsedToken?.access_token,
-          salonId: parsedSalonInfo?._id,
+          salonId: hairDresserData?._id,
           salonData: updateSalonData,
         });
         dispatch(getLoggedInUser(parsedToken?.user?.user));
-        dispatch(getHairDresser(parsedSalonInfo));
+        dispatch(getTokenValue(parsedToken?.access_token));
       }
     } catch (e) {
       console.log(e);
     }
   };
 
+  console.log(hairDresserData)
+
   useLayoutEffect(() => {
     getToken();
   }, []);
-  console.log(updateSalonData);
+
+  useEffect(() => {
+    salonAssets.token && dispatch(getSalon(salonAssets?.token))
+  }, [isSuccess, isFetchingService])
+
   return (
     <>
       <SafeAreaView>
