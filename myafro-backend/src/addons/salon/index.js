@@ -9,7 +9,7 @@ const router = express.Router()
 // salon routers
 router.post("/", createSalon);
 router.get("/", getSalons);
-router.get("/:salonId", getSalon);
+router.get("/unique", getSalon);
 router.put("/:id", updateSalon);
 router.delete("/:id", deleteSalon);
 

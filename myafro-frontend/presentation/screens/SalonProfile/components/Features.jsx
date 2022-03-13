@@ -28,7 +28,7 @@ const Features = () => {
         </View>
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
           <Text style={tw`text-base`}>Condition</Text>
-          <Text style={tw`text-base`}>{hairDresserData?.features?.condtion || "none"}</Text>
+          <Text style={tw`text-base`}>{hairDresserData?.features?.condition || "none"}</Text>
         </View>
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
           <Text style={tw`text-base`}>License</Text>

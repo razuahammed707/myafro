@@ -43,7 +43,7 @@ const HairTypeDropdown = () => {
     dispatch(
       getValues({
         ...updateSalonData,
-        hair_type: selectedItems || hairDresserData?.hair_type,
+        hair_type: selectedItems[0] ? selectedItems : hairDresserData?.hair_type 
       })
     );
   }, [selectedItems]);
@@ -51,15 +51,16 @@ const HairTypeDropdown = () => {
   const onSelectedItemsChange = (selectedItems) => {
     setSelectedItems(selectedItems);
   };
+
   return (
     <>
       <MultiSelect
         styleMainWrapper={{ paddingHorizontal: 20, marginVertical: 10 }}
         styleListContainer={{ paddingBottom: 20 }}
-        items={items}
-        uniqueKey="id"
+        items={items || hairDresserData?.hair_type}
+        uniqueKey={"id" || "_id"}
         onSelectedItemsChange={onSelectedItemsChange}
-        selectedItems={selectedItems}
+        selectedItems={selectedItems[0] ? selectedItems : hairDresserData?.hair_type }
         selectText="Pick Items"
         styleInputGroup={{ padding: 10 }}
         searchInputPlaceholderText="Search Items..."
@@ -70,7 +71,7 @@ const HairTypeDropdown = () => {
         selectedItemTextColor="#888"
         selectedItemIconColor="#34cc64"
         itemTextColor="#000"
-        displayKey="name"
+        displayKey={"name" || "title"}
         searchInputStyle={{ color: "#222" }}
         submitButtonColor="#222"
         submitButtonText="Submit"

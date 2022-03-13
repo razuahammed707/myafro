@@ -11,7 +11,7 @@ const salonSchema = Schema(
     location: { type: String, trim: true },
     salon_type: {
       type: String,
-      enum: ["public", "home_salon", "both"],
+      enum: ["Public", "Home Salon", "Both"],
     },
     hair_type: [String],
     contact: {

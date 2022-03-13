@@ -33,6 +33,7 @@ export const createSalon = createAsyncThunk(
 export const getSalon = createAsyncThunk(
   "/get/salon",
   async (token, thunkAPI) => {
+  
     try {
       let response = await axiosClient.get("/salons", {
         headers: {
@@ -53,16 +54,19 @@ export const updateSalon = createAsyncThunk(
   "/update/salons",
   async (assets, thunkAPI) => {
     try {
-      console.log(assets)
+      // const state = thunkAPI.getState()
+      // console.log(state)
+      console.log(initialState)
       let response = await axiosClient.put(
-        `/salons/${assets.salonId}`,
-        JSON.stringify(assets.salonData),
+        `/salons/${assets?.salonId}`,
+        JSON.stringify(initialState.updateSalonData),
         {
           headers: {
-            authorization: `Bearer ${assets.token}`,
+            authorization: `Bearer ${assets?.token}`,
           },
         }
-      );
+      ); 
+      console.log(response.data)
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -135,15 +139,14 @@ export const salonSlice = createSlice({
       })
       .addCase(updateSalon.fulfilled, (state, { payload }) => {
         state.isFetching = false;
-        state.updatedSalon = payload;
         state.isSuccess = true;
+        state.updateSalonData = {}
         // state.message = payload.message;
         return state;
       })
       .addCase(updateSalon.rejected, (state, { payload }) => {
         state.isFetching = false;
         state.isSuccess = false;
-        state.updatedSalon = payload;
         // state.message = payload.message;
         return state;
       });

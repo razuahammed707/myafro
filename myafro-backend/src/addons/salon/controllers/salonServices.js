@@ -64,7 +64,7 @@ const deleteSalonServices = async (req, res, next) => {
 
     res.send({
       status: true,
-      message: "Salon created succesfully",
+      message: "Salon deleted succesfully",
       salon,
     });
   } catch (error) {

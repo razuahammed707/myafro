@@ -23,22 +23,20 @@ const uploadImage = () => {
   const uploadProfileImage = async () => {
     try {
       const formData = new FormData();
-      formData.append("profile", {
-        name: new Date() + "_profile",
-        uri: profileImage,
-        type: "image/jpg",
-      });
+      formData.append(
+        "profile",
+        JSON.stringify({
+          name: new Date() + "_profile",
+          uri: profileImage,
+          type: "image/jpg",
+        })
+      );
 
-      console.log(profileImage)
+      console.log(profileImage);
 
       const res = await axios.post(
         "https://tranquil-fjord-04022.herokuapp.com/api/v1/upload",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        formData
       );
 
       console.log(res);

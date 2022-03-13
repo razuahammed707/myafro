@@ -7,10 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import tw from "twrnc";
 import { Icon } from "react-native-elements";
-import { homeData } from "../../../utils/dummyData";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { homeData, services } from "../../../utils/dummyData";
 import { AirbnbRating } from "react-native-ratings";
 import {
   Nunito_400Regular,
@@ -24,20 +25,55 @@ import { useNavigation } from "@react-navigation/native";
 import BottomDrawer from "./components/BottomDrawer/BottomDrawer";
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import DateTabs from "./components/DateTabs/DateTabs";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getSalons,
+  getSingleSalonInfo,
+  userHomeSelector,
+} from "../../../redux/slices/user/userHomeSlice";
+import { authSelector } from "../../../redux/slices/login/authSlice";
+import Loader from "../../components/Loader/Loader";
 
 const Home = () => {
   const navigation = useNavigation();
   const bottomSheet = useRef();
-  let [fontsLoaded, error] = useFonts({
-    regular: Nunito_400Regular,
-    semiBold: Nunito_600SemiBold,
-    bold: Nunito_700Bold,
-    extraBold: Nunito_800ExtraBold,
-  });
+  // let [fontsLoaded, error] = useFonts({
+  //   regular: Nunito_400Regular,
+  //   semiBold: Nunito_600SemiBold,
+  //   bold: Nunito_700Bold,
+  //   extraBold: Nunito_800ExtraBold,
+  // });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  // if (!fontsLoaded) {
+  //   return <AppLoading />;
+  // }
+  const [assets, setAssets] = useState(null);
+  const { salons, queries, isSuccess, isFetching } =
+    useSelector(userHomeSelector);
+  const dispatch = useDispatch();
+
+  const getToken = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user_info");
+      if (userInfo) {
+        const parsedToken = JSON.parse(userInfo);
+        setAssets({
+          token: parsedToken?.access_token,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useLayoutEffect(() => {
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    assets !== null && dispatch(getSalons(assets));
+  }, [assets, queries]);
+
   return (
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`h-1/1 p-5`}>
@@ -72,83 +108,109 @@ const Home = () => {
           100 results of 455
         </Text>
         {/* <CirclesLoader /> */}
-        <FlatList
-          data={homeData}
-          style={{ flex: 1 }}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => (
-            <View style={(tw`bg-gray-200`, { height: 0.5 })} />
-          )}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={tw` mb-5`}
-              // onPress={() => bottomSheet.current.show()}
-              onPress={() => navigation.navigate("ProfileDetails")}
-            >
-              <View style={{ position: "relative" }}>
+        {isSuccess ? (
+          <>
+            {salons.length > 0 ? (
+              <FlatList
+                data={salons}
+                style={{ flex: 1 }}
+                showsVerticalScrollIndicator={false}
+                ItemSeparatorComponent={() => (
+                  <View style={(tw`bg-gray-200`, { height: 0.5 })} />
+                )}
+                keyExtractor={(item) => item?._id}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={tw` mb-5`}
+                    // onPress={() => bottomSheet.current.show()}
+                    onPress={() => {
+                      dispatch(getSingleSalonInfo(item._id));
+                      navigation.navigate("ProfileDetails");
+                    }}
+                  >
+                    <View style={{ position: "relative" }}>
+                      <Image
+                        style={{
+                          width: "100%",
+                          height: 190,
+                          resizeMode: "cover",
+                        }}
+                        source={{ uri: item?.media[0]?.img_url }}
+                      />
+                      <View style={tw`flex flex-row absolute top-0 left-1`}>
+                        <View
+                          style={tw`flex flex-row items-center px-2 py-1 rounded-2xl bg-white m-2`}
+                        >
+                          <Icon
+                            name="location-on"
+                            type="materialicons"
+                            size={24}
+                            color="black"
+                          />
+                          <Text style={tw`text-black ml-1 text-sm`}>240m</Text>
+                        </View>
+                      </View>
+                      <View style={tw`flex flex-row absolute top-0 right-1`}>
+                        <View
+                          style={tw`flex flex-row items-center px-2 py-2 justify-center rounded-2xl bg-white m-2`}
+                        >
+                          <Text style={tw`text-black  text-sm`}>
+                            {item?.salon_type}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View
+                      style={tw`flex items-center flex-row justify-between my-1`}
+                    >
+                      <Text style={tw`font-bold text-base`}>{item?.name}</Text>
+                      <Text style={tw`text-sm text-gray-400`}>FROM</Text>
+                    </View>
+                    <View
+                      style={tw`flex items-center flex-row justify-between`}
+                    >
+                      <View style={tw`flex items-center flex-row `}>
+                        <AirbnbRating
+                          count={5}
+                          reviewSize={0}
+                          defaultRating={5}
+                          size={13}
+                          starContainerStyle={{
+                            marginTop: -20,
+                            marginRight: 5,
+                          }}
+                        />
+                        <Text style={tw`text-gray-400 text-sm`}>
+                          {item.job}
+                        </Text>
+                      </View>
+                      <View style={tw`flex items-center flex-row `}>
+                        <Text style={tw`text-base text-black mr-2`}>
+                          {item?.price}
+                          <Text style={tw`text-gray-400 text-base`}>/h</Text>
+                        </Text>
+                        <Text style={tw`text-base text-black`}>
+                          {item?.price}
+                          <Text style={tw`text-gray-400 text-base`}>/day</Text>
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />
+            ) : (
+              <View style={tw`flex flex-row items-center justify-center`}>
                 <Image
-                  style={{
-                    width: "100%",
-                    height: 190,
-                    resizeMode: "cover",
-                  }}
-                  source={item.img}
+                  source={require("../../../assets/img/noData.png")}
+                  height={100}
+                  resizeMode="contain"
                 />
-                <View style={tw`flex flex-row absolute top-0 left-1`}>
-                  <View
-                    style={tw`flex flex-row items-center px-2 py-1 rounded-2xl bg-white m-2`}
-                  >
-                    <Icon
-                      name="location-on"
-                      type="materialicons"
-                      size={24}
-                      color="black"
-                    />
-                    <Text style={tw`text-black ml-1 text-sm`}>
-                      {item.distance}
-                    </Text>
-                  </View>
-                </View>
-                <View style={tw`flex flex-row absolute top-0 right-1`}>
-                  <View
-                    style={tw`flex flex-row items-center px-2 py-2 justify-center rounded-2xl bg-white m-2`}
-                  >
-                    <Text style={tw`text-black  text-sm`}>
-                      {item.hair_type}
-                    </Text>
-                  </View>
-                </View>
               </View>
-              <View style={tw`flex items-center flex-row justify-between my-1`}>
-                <Text style={tw`font-bold text-base`}>{item.name}</Text>
-                <Text style={tw`text-sm text-gray-400`}>FROM</Text>
-              </View>
-              <View style={tw`flex items-center flex-row justify-between`}>
-                <View style={tw`flex items-center flex-row `}>
-                  <AirbnbRating
-                    count={5}
-                    reviewSize={0}
-                    defaultRating={5}
-                    size={13}
-                    starContainerStyle={{ marginTop: -20, marginRight: 5 }}
-                  />
-                  <Text style={tw`text-gray-400 text-sm`}>{item.job}</Text>
-                </View>
-                <View style={tw`flex items-center flex-row `}>
-                  <Text style={tw`text-base text-black mr-2`}>
-                    {item.perHour}
-                    <Text style={tw`text-gray-400 text-base`}>/h</Text>
-                  </Text>
-                  <Text style={tw`text-base text-black`}>
-                    {item.perDay}
-                    <Text style={tw`text-gray-400 text-base`}>/day</Text>
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
+            )}
+          </>
+        ) : (
+          <Loader loading={isFetching} />
+        )}
         <TouchableOpacity
           style={tw`absolute bottom-6 right-6`}
           onPress={() => navigation.navigate("Map")}

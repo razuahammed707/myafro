@@ -33,134 +33,134 @@ const ScreenContainer = () => {
     try {
       const value = await AsyncStorage.getItem("user_info");
       if (value) {
-        const parsedValue = JSON.parse(value)
+        const parsedValue = JSON.parse(value);
         setToken(parsedValue);
       }
     } catch (e) {
       console.log(e);
     }
   };
-  
+
   useEffect(() => {
     getToken();
   }, []);
 
   return (
-      <Stack.Navigator initialRouteName="Login">
-        {token === null ? (
-          <>
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="OTP"
-              component={OneTimePass}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ForgotPassword"
-              component={ForgotPassword}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ResetPassword"
-              component={ResetPassword}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Signup"
-              component={Signup}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="CreatePassword"
-              component={CreatePassword}
-              options={{ headerShown: false }}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen
-              name="HomeTabs"
-              component={HomeTabs}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Tabs"
-              component={Tabs}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Map"
-              component={GoogleMap}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Request"
-              component={Request}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Bookings"
-              component={Bookings}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="FreelanceOnboard"
-              component={FreelanceOnboard}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ProfileReview"
-              component={ProfileReview}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="SaloonOption"
-              component={SaloonOption}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="SalonProfile"
-              component={SalonProfile}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="SaloonLocation"
-              component={SaloonLocation}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="CurrentHair"
-              component={CurrentHair}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ProfileDetails"
-              component={ProfileDetails}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Profile"
-              component={Profile}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Onboard"
-              component={Onboard}
-              options={{ headerShown: false }}
-            />
+    <Stack.Navigator initialRouteName="Login">
+      {token === null ? (
+        <>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="OTP"
+            component={OneTimePass}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPassword}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ResetPassword"
+            component={ResetPassword}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Signup"
+            component={Signup}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CreatePassword"
+            component={CreatePassword}
+            options={{ headerShown: false }}
+          />
+        </>
+      ) : (
+        <>
+          <Stack.Screen
+            name="HomeTabs"
+            component={HomeTabs}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Tabs"
+            component={Tabs}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Map"
+            component={GoogleMap}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Request"
+            component={Request}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Bookings"
+            component={Bookings}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="FreelanceOnboard"
+            component={FreelanceOnboard}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ProfileReview"
+            component={ProfileReview}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SaloonOption"
+            component={SaloonOption}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SalonProfile"
+            component={SalonProfile}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SaloonLocation"
+            component={SaloonLocation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CurrentHair"
+            component={CurrentHair}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ProfileDetails"
+            component={ProfileDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Onboard"
+            component={Onboard}
+            options={{ headerShown: false }}
+          />
 
-            <Stack.Screen
-              name="DateTime"
-              component={DateTimePicker}
-              options={{ headerShown: false }}
-            />
-          </>
-        )}
-      </Stack.Navigator>
+          <Stack.Screen
+            name="DateTime"
+            component={DateTimePicker}
+            options={{ headerShown: false }}
+          />
+        </>
+      )}
+    </Stack.Navigator>
   );
 };
 

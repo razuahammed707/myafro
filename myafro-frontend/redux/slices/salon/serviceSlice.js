@@ -6,7 +6,8 @@ const initialState = {
   isSuccessService: false,
   isError: false,
   message: "",
-  serviceTitle: ""
+  serviceTitle: "",
+  fetchedSingleTitle: {},
 };
 
 //create service api call
@@ -14,6 +15,8 @@ export const createSalonService = createAsyncThunk(
   "/create/service",
   async (assets, thunkAPI) => {
     try {
+      // const state = thunkAPI.getState()
+      // console.log(state)
       let response = await axiosClient.post(
         `/salons/${assets.salonId}/services`,
         JSON.stringify(assets.serviceData),
@@ -23,8 +26,7 @@ export const createSalonService = createAsyncThunk(
           },
         }
       );
-      console.log(assets);
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -38,7 +40,6 @@ export const updateSalonService = createAsyncThunk(
   "/update/service",
   async (assets, thunkAPI) => {
     try {
-      console.log(assets);
       let response = await axiosClient.put(
         `/salons/${assets.salonId}/services/${assets.serviceId}`,
         JSON.stringify(assets.serviceData),
@@ -83,9 +84,12 @@ export const serviceSlice = createSlice({
   name: "salonService",
   initialState,
   reducers: {
-    getServiceTitle: (state, {payload}) => {
-     state.serviceTitle = payload
-    }
+    getServiceTitle: (state, { payload }) => {
+      state.serviceTitle = payload;
+    },
+    fetchedSingleService: (state, { payload }) => {
+      state.fetchedSingleTitle = payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -146,6 +150,6 @@ export const serviceSlice = createSlice({
   },
 });
 
-export const { getServiceTitle } = salonService.actions;
+export const { getServiceTitle, fetchedSingleService } = serviceSlice.actions;
 export const serviceSelector = (state) => state.salonService;
 export default serviceSlice.reducer;

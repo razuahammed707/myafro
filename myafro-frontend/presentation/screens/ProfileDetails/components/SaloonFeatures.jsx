@@ -3,7 +3,7 @@ import React from "react";
 import tw from "twrnc";
 import { Button, Icon } from "react-native-elements";
 
-const SaloonFeatures = () => {
+const SaloonFeatures = ({features}) => {
   return (
     <View style={tw`my-5`}>
       <Text style={tw`font-bold text-lg`}>Saloon Features</Text>
@@ -16,19 +16,15 @@ const SaloonFeatures = () => {
       >
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
           <Text style={tw`text-lg`}>Year</Text>
-          <Text style={tw`text-lg`}>2012</Text>
+          <Text style={tw`text-lg`}>{features?.year}</Text>
         </View>
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
           <Text style={tw`text-lg`}>Condition</Text>
-          <Text style={tw`text-lg`}>2012</Text>
+          <Text style={tw`text-lg`}>{features?.condition}</Text>
         </View>
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
-          <Text style={tw`text-lg`}>Description</Text>
-          <Text style={tw`text-lg`}>Perfect</Text>
-        </View>
-        <View style={tw`flex flex-row justify-between items-center mt-5`}>
-          <Text style={tw`text-lg`}>Location</Text>
-          <Text style={tw`text-lg`}>2012</Text>
+          <Text style={tw`text-lg`}>License</Text>
+          <Text style={tw`text-lg`}>{features?.license}</Text>
         </View>
       </View>
       {/* Option section start */}

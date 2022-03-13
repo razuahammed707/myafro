@@ -127,7 +127,10 @@ const Account = () => {
         </View>
         <TouchableOpacity
           style={tw` mb-3 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
-          onPress={() => logout()}
+          onPress={() => {
+            logout()
+            navigation.navigate("Login")
+          }}
         >
           <View style={tw`flex flex-row items-center`}>
             <Icon name="log-out" type="feather" size={20} color="black" />

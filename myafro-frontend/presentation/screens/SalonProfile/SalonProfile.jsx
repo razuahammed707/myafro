@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import tw from "twrnc";
@@ -16,12 +16,14 @@ import {
 import Loader from "../../components/Loader/Loader";
 import { getTokenValue } from "../../../redux/slices/login/authSlice";
 import { serviceSelector } from "../../../redux/slices/salon/serviceSlice";
+import { useNavigation } from "@react-navigation/native";
 
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
-
-  const { userData, updateSalonData, hairDresserData, isFetching, isSuccess } = useSelector(salonSelector);
-  const { isFetchingService, isSuccessService } = useSelector(serviceSelector);
+  const navigation = useNavigation();
+  const { userData, updateSalonData, hairDresserData, isFetching, isSuccess } =
+    useSelector(salonSelector);
+  const { isFetchingService } = useSelector(serviceSelector);
   const dispatch = useDispatch();
 
   const getToken = async () => {
@@ -32,7 +34,7 @@ const SalonProfile = () => {
         setSalonAssets({
           token: parsedToken?.access_token,
           salonId: hairDresserData?._id,
-          salonData: updateSalonData,
+          salonData: { ...updateSalonData },
         });
         dispatch(getLoggedInUser(parsedToken?.user?.user));
         dispatch(getTokenValue(parsedToken?.access_token));
@@ -42,15 +44,13 @@ const SalonProfile = () => {
     }
   };
 
-  console.log(hairDresserData)
-
   useLayoutEffect(() => {
     getToken();
   }, []);
 
   useEffect(() => {
-    salonAssets.token && dispatch(getSalon(salonAssets?.token))
-  }, [isSuccess, isFetchingService])
+    salonAssets.token && dispatch(getSalon(salonAssets?.token));
+  }, [isSuccess, isFetchingService, salonAssets.token]);
 
   return (
     <>
@@ -58,7 +58,10 @@ const SalonProfile = () => {
         <View
           style={tw`flex flex-row items-center justify-between px-5 py-4 border-b border-gray-200`}
         >
-          <Text style={tw`text-base font-bold`}>Cancel</Text>
+          <TouchableOpacity style={tw`flex flex-row items-center`} onPress={() => navigation.goBack()}>
+          <Icon name="cross" type="entypo" size={20} color="black" />
+            <Text style={tw`text-base font-bold`}>Cancel</Text>
+          </TouchableOpacity>
           <Text style={tw`text-base font-bold`}>Profile</Text>
           <Text
             style={tw`text-base font-bold`}
@@ -94,8 +97,8 @@ const SalonProfile = () => {
           </ScrollView>
         </View>
       </SafeAreaView>
-       {/* progress loader */}
-       <Loader loading={isFetching} />
+      {/* progress loader */}
+      <Loader loading={isFetching} />
     </>
   );
 };

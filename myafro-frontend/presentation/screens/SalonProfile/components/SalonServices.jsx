@@ -5,7 +5,7 @@ import Popup from "./Popup";
 import { Icon } from "react-native-elements";
 import { salonSelector } from "../../../../redux/slices/salon/salonSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteSalonService } from "../../../../redux/slices/salon/serviceSlice";
+import { deleteSalonService, fetchedSingleService } from "../../../../redux/slices/salon/serviceSlice";
 import { authSelector } from "../../../../redux/slices/login/authSlice";
 const SalonServices = () => {
   const [visible, setVisible] = useState(false);
@@ -15,6 +15,12 @@ const SalonServices = () => {
 
   const toggleOverlay = () => {
     setVisible(!visible);
+  };
+
+  //  fetch single service
+  const handleSingleService = (id) => {
+    const serviceID = hairDresserData?.services?.find((item) => item._id === id);
+   dispatch(fetchedSingleService(serviceID))
   };
 
 
@@ -35,7 +41,10 @@ const SalonServices = () => {
                 color="black"
                 size={16}
                 iconStyle={{ marginRight: 10 }}
-                onPress={() => toggleOverlay()}
+                onPress={() => {
+                  handleSingleService(item._id)
+                  toggleOverlay()
+                }}
               />
               <Icon
                 name="trash-2"

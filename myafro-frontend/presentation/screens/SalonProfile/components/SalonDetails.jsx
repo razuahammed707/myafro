@@ -55,7 +55,7 @@ const SalonDetails = () => {
           <TextInput
             style={styles.input}
             onChangeText={(newText) => setPrice(newText)}
-            // defaultValue={hairDresserData?.price.toString() || price.toString()}
+            defaultValue={hairDresserData?.price?.toString() || price.toString()}
             placeholder="Price"
             keyboardType="numeric"
           />

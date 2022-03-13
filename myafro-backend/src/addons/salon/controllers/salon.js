@@ -19,12 +19,12 @@ const getSalons = async (req, res, next) => {
   try {
     let query = {};
 
-    const category = req.query.category;
+    const salon_type = req.query.salon_type;
     const location = req.query.location;
     const hair_type = req.query.hair_type;
 
-    if (category) {
-      query.category = category;
+    if (salon_type) {
+      query.salon_type = salon_type;
     }
     if (location) {
       query.location = location;
