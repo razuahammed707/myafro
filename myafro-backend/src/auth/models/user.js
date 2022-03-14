@@ -20,6 +20,10 @@ const userSchema = Schema(
       trim: true,
       unique: [true, "The mobile number is already taken"],
     },
+    address: {
+      type: String,
+      trim: true,
+    },
     role: {
       type: String,
       enum: ["user", "hair_dresser"],

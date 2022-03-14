@@ -28,7 +28,11 @@ const Login = () => {
       if (data.user?.role === "user") {
         navigation.navigate("HomeTabs");
       } else {
-        navigation.navigate("Tabs");
+        if (data?.salon?._id) {
+          navigation.navigate("Tabs");
+        } else {
+          navigation.navigate("FreelanceOnboard");
+        }
       }
     }
   }, [message]);

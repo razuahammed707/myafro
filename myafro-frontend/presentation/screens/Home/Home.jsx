@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getSalons,
   getSingleSalonInfo,
+  getUserHomeAPIQueries,
   userHomeSelector,
 } from "../../../redux/slices/user/userHomeSlice";
 import { authSelector } from "../../../redux/slices/login/authSlice";
@@ -47,7 +48,7 @@ const Home = () => {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    dispatch(getSalons(assets))
+    // dispatch(getSalons(assets))
     wait(2000).then(() => setRefreshing(false));
 
   }, []);
@@ -124,7 +125,7 @@ const Home = () => {
         {/* <CirclesLoader /> */}
         {isSuccess ? (
           <>
-            {salons.length > 0 ? (
+            {salons?.length > 0 ? (
               <FlatList
                 data={salons}
                 style={{ flex: 1 }}
@@ -208,10 +209,6 @@ const Home = () => {
                         <Text style={tw`text-base text-black mr-2`}>
                           {item?.price}
                           <Text style={tw`text-gray-400 text-base`}>/h</Text>
-                        </Text>
-                        <Text style={tw`text-base text-black`}>
-                          {item?.price}
-                          <Text style={tw`text-gray-400 text-base`}>/day</Text>
                         </Text>
                       </View>
                     </View>

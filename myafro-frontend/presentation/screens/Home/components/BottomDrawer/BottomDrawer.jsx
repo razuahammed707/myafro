@@ -77,7 +77,7 @@ const BottomDrawer = ({ hair, home }) => {
             <Text style={tw`font-bold text-base`}>Home Saloon</Text>
             <TouchableOpacity
               onPress={() => setSalonType("Public")}
-              style={tw`border-[${salonType === 'Public' ? 'gray-800' : 'gray-300' }] flex flex-row mt-5 border border-gray-300 p-3 h-auto rounded-lg`}
+              style={tw`[${salonType === 'Public' ? 'border-black' : 'border-gray-50' }] flex flex-row mt-5 border border-gray-300 p-3 h-auto rounded-lg`}
             >
               <View style={tw`mr-3 h-auto`}>
                 <Icon
