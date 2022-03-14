@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -34,9 +35,22 @@ import {
 import { authSelector } from "../../../redux/slices/login/authSlice";
 import Loader from "../../components/Loader/Loader";
 
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 const Home = () => {
   const navigation = useNavigation();
   const bottomSheet = useRef();
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(getSalons(assets))
+    wait(2000).then(() => setRefreshing(false));
+
+  }, []);
   // let [fontsLoaded, error] = useFonts({
   //   regular: Nunito_400Regular,
   //   semiBold: Nunito_600SemiBold,
@@ -115,6 +129,12 @@ const Home = () => {
                 data={salons}
                 style={{ flex: 1 }}
                 showsVerticalScrollIndicator={false}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
                 ItemSeparatorComponent={() => (
                   <View style={(tw`bg-gray-200`, { height: 0.5 })} />
                 )}
