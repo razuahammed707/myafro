@@ -27,7 +27,8 @@ const Login = () => {
     if (data.status === true) {
       if (data.user?.role === "user") {
         navigation.navigate("HomeTabs");
-      } else {
+      }
+      if (data?.user?.role === "hair_dresser") {
         if (data?.salon?._id) {
           navigation.navigate("Tabs");
         } else {

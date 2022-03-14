@@ -39,9 +39,9 @@ const SalonTypeDropdown = () => {
       maxHeight={300}
       labelField="label"
       valueField="value"
-      placeholder="Hair type"
+      placeholder="Salon type"
       searchPlaceholder="Search..."
-      value={value}
+      value={hairDresserData?.salon_type || value}
       onChange={(item) => {
         setValue(item.value);
       }}

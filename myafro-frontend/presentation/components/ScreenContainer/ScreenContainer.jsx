@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -24,30 +24,31 @@ import GoogleMap from "../../screens/Map/GoogleMap";
 import CreatePassword from "../../screens/CreatePassword/CreatePassword";
 import SalonProfile from "../../screens/SalonProfile/SalonProfile";
 import UserProfile from "../../screens/UserProfile/UserProfile";
+import { useDispatch } from "react-redux";
+import { getTokenValue } from "../../../redux/slices/login/authSlice";
 
 const ScreenContainer = () => {
   const Stack = createNativeStackNavigator();
-  const [token, setToken] = useState(null);
-
+  const dispatch = useDispatch()
   // get token to make sure the user is authenticated or not
   const getToken = async () => {
     try {
-      const value = await AsyncStorage.getItem("user_info");
-      if (value) {
-        const parsedValue = JSON.parse(value);
-        setToken(parsedValue);
+      const userInfo = await AsyncStorage.getItem("user_info");
+      if (userInfo) {
+        const parsedToken = JSON.parse(userInfo);
+       dispatch(getTokenValue(parsedToken?.access_token))
       }
     } catch (e) {
       console.log(e);
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getToken();
   }, []);
 
   return (
-    <Stack.Navigator initialRouteName="UserProfile">
+    <Stack.Navigator initialRouteName="Account">
       <Stack.Screen
         name="Login"
         component={Login}

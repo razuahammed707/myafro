@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 import { Icon } from "react-native-elements";
@@ -10,6 +10,24 @@ import { ScrollView } from "react-native-gesture-handler";
 
 const Account = () => {
   const navigation = useNavigation();
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const getToken = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user_info");
+      if (userInfo) {
+        const parsedValue = JSON.parse(userInfo);
+        setLoggedInUser(parsedValue?.user);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
+
+  console.log(loggedInUser);
 
   const logout = async () => {
     await AsyncStorage.clear();
@@ -39,7 +57,14 @@ const Account = () => {
             >
               <TouchableOpacity
                 style={tw`flex flex-row items-center`}
-                onPress={() => navigation.navigate(item.link)}
+                onPress={() =>
+                  navigation.navigate(
+                    item.link === "SalonProfile" &&
+                      loggedInUser?.user?.role === "user"
+                      ? "UserProfile"
+                      : "SalonProfile"
+                  )
+                }
               >
                 <Icon
                   name={item.icon_name}
@@ -128,8 +153,8 @@ const Account = () => {
         <TouchableOpacity
           style={tw` mb-3 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
           onPress={() => {
-            logout()
-            navigation.navigate("Login")
+            logout();
+            navigation.navigate("Login");
           }}
         >
           <View style={tw`flex flex-row items-center`}>

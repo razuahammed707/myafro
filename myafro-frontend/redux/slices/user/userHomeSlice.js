@@ -15,7 +15,6 @@ export const getSalons = createAsyncThunk(
   "/get/salons",
   async (assets, thunkAPI) => {
     const { userHome } = thunkAPI.getState();
-    console.log(userHome.queries);
     try {
       let response = await axiosClient.get(
         `/salons?location=&salon_type=${

@@ -21,7 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
   const navigation = useNavigation();
-  const { userData, updateSalonData, hairDresserData, isFetching, isSuccess } =
+  const { userData, hairDresserData, isFetching, isSuccess } =
     useSelector(salonSelector);
   const { isFetchingService } = useSelector(serviceSelector);
   const dispatch = useDispatch();
@@ -33,8 +33,7 @@ const SalonProfile = () => {
         const parsedToken = JSON.parse(userInfo);
         setSalonAssets({
           token: parsedToken?.access_token,
-          salonId: hairDresserData?._id,
-          salonData: { ...updateSalonData },
+          salonId: hairDresserData?._id
         });
         dispatch(getLoggedInUser(parsedToken?.user?.user));
         dispatch(getTokenValue(parsedToken?.access_token));

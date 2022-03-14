@@ -16,11 +16,15 @@ export const createSalon = createAsyncThunk(
   "/create/salons",
   async (assets, thunkAPI) => {
     try {
-      let response = await axiosClient.post("/salons", JSON.stringify(assets.salonData), {
-        headers: {
-          authorization: `Bearer ${assets.token}`,
-        },
-      });
+      let response = await axiosClient.post(
+        "/salons",
+        JSON.stringify(assets.salonData),
+        {
+          headers: {
+            authorization: `Bearer ${assets.token}`,
+          },
+        }
+      );
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -33,14 +37,13 @@ export const createSalon = createAsyncThunk(
 export const getSalon = createAsyncThunk(
   "/get/salon",
   async (token, thunkAPI) => {
-  
     try {
       let response = await axiosClient.get("/salons", {
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
-      console.log(response?.data?.salons[0])
+      console.log(response?.data?.salons[0]);
       return response?.data?.salons[0];
     } catch (e) {
       console.log("Error", e.response.data);
@@ -54,19 +57,17 @@ export const updateSalon = createAsyncThunk(
   "/update/salons",
   async (assets, thunkAPI) => {
     try {
-      // const state = thunkAPI.getState()
-      // console.log(state)
-      console.log(initialState)
+      const { salon } = thunkAPI.getState();
       let response = await axiosClient.put(
         `/salons/${assets?.salonId}`,
-        JSON.stringify(initialState.updateSalonData),
+        JSON.stringify(salon.updateSalonData),
         {
           headers: {
             authorization: `Bearer ${assets?.token}`,
           },
         }
-      ); 
-      console.log(response.data)
+      );
+      console.log(response.data);
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -140,7 +141,7 @@ export const salonSlice = createSlice({
       .addCase(updateSalon.fulfilled, (state, { payload }) => {
         state.isFetching = false;
         state.isSuccess = true;
-        state.updateSalonData = {}
+        state.updateSalonData = {};
         // state.message = payload.message;
         return state;
       })

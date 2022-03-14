@@ -57,7 +57,7 @@ const Popup = ({ visible, toggleOverlay }) => {
           <TextInput
             style={styles.input}
             onChangeText={(newText) => setTitle(newText)}
-            defaultValue={title || fetchedSingleTitle?.title}
+            defaultValue={fetchedSingleTitle?.title || title }
             placeholder="Title"
           />
         </View>
@@ -107,6 +107,7 @@ const Popup = ({ visible, toggleOverlay }) => {
                   salonId: hairDresserData?._id,
                 })
               );
+              setTitle({title: ""})
               toggleOverlay();
             }}
           />
