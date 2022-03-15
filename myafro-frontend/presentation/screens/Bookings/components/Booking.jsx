@@ -2,8 +2,12 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
 import tw from 'twrnc'
+import { useSelector } from "react-redux";
+import { bookingSelector } from "../../../../redux/slices/booking/bookingSlice";
 
 const Booking = ({ margin }) => {
+  const {bookings} = useSelector(bookingSelector)
+  console.log(bookings)
   return (
     <View style={tw` flex flex-row items-center justify-between ${margin}`}>
       <View style={tw`flex flex-row items-center`}>

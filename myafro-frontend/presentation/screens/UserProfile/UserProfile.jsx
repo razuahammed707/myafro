@@ -19,6 +19,7 @@ import {
   userProfileSelector,
 } from "../../../redux/slices/user/userProfileSlice";
 import Loader from "../../components/Loader/Loader";
+import BookingHistory from "./BookingHistory";
 
 const UserProfile = () => {
   const navigation = useNavigation();
@@ -108,6 +109,7 @@ const UserProfile = () => {
               </View>
             </View>
             <View>
+              <Text style={tw`font-bold text-base px-5 mb-3`}>Personal Details</Text>
               <View>
                 <Text style={tw`ml-5`}>Full name</Text>
                 <TextInput
@@ -152,6 +154,7 @@ const UserProfile = () => {
                 />
               </View>
             </View>
+            <BookingHistory />
           </View>
         </View>
         <Loader loading={isFetching} />

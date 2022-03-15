@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { Button, Icon } from "react-native-elements";
+import ResponsePopup from "../../../components/ResponsePopup/ResponsePopup";
 
 const SaloonFeatures = ({features}) => {
   return (
@@ -43,17 +44,7 @@ const SaloonFeatures = ({features}) => {
         </View>
       </View>
       {/* Option section end */}
-      <View style={tw`mt-10  w-full`}>
-        <Button
-          title="Book"
-          type="clear"
-          titleStyle={{ marginLeft: 10 }}
-          icon={
-            <Icon name="dry-cleaning" type="material" size={20} color="#fff" />
-          }
-          iconPosition="left"
-        />
-      </View>
+     <ResponsePopup />
     </View>
   );
 };

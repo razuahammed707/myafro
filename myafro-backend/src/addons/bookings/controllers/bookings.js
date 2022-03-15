@@ -19,8 +19,9 @@ const createBooking = async (req, res, next) => {
 
 const getBookings = async (req, res, next) => {
   try {
-    const booking = await BookingModel.find()
-      .populate("user", "_id full_name email")
+    console.log(req.user);
+    const booking = await BookingModel.find({ salon: req.user.salon })
+      .populate("user", "_id full_name email profile mobile")
       .populate("salon", "_id name location");
     res.send({
       status: true,

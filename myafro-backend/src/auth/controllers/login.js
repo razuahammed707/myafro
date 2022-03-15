@@ -23,6 +23,7 @@ const login = async (req, res, next) => {
             email: user.email,
             id: user._id,
             mobile: user.mobile,
+            salon: salon?._id
           },
           process.env.JWT_SECRET
         );

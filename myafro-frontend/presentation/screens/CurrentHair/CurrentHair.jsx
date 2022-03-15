@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
@@ -8,6 +8,30 @@ import { ScrollView } from "react-native-gesture-handler";
 
 const CurrentHair = () => {
   const navigation = useNavigation();
+
+  const showConfirmDialog = () => {
+    return Alert.alert(
+      "Are your sure?",
+      "Do you want to decline the request?",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+            console.log('Request declined')
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+        },
+      ]
+    );
+  };
+
+  
+
   return (
     <SafeAreaView style={tw`p-5`}>
       <View style={tw`flex flex-row`}>
@@ -47,6 +71,7 @@ const CurrentHair = () => {
             }}
             type="clear"
             titleStyle={{ fontSize: 14 }}
+            onPress={() => showConfirmDialog()}
           />
         </View>
 
@@ -89,4 +114,19 @@ const CurrentHair = () => {
 
 export default CurrentHair;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  box: {
+    width: 300,
+    height: 300,
+    backgroundColor: "red",
+    marginBottom: 30,
+  },
+  text: {
+    fontSize: 30,
+  },
+});
