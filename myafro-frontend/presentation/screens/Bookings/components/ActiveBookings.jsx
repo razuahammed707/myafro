@@ -11,22 +11,6 @@ const ActiveBookings = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* <Booking /> */}
         <Booking />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
-        <Booking margin="mt-5" />
       </ScrollView>
     </SafeAreaView>
   );
