@@ -1,4 +1,4 @@
-const ReviewModel = require("../models/reviews");
+const ReviewModel = require("../models/review");
 
 const createReview = async (req, res, next) => {
   try {
@@ -18,9 +18,9 @@ const createReview = async (req, res, next) => {
 
 const getReviews = async (req, res, next) => {
   try {
-    const review = await ReviewModel.find({ createdAt: -1 })
-      .populate("user")
-      .populate("salon");
+    const review = await ReviewModel.find({ salon: req.params.salonId }).sort({createdAt: -1})
+      .populate("user","_id full_name email profile mobile role")
+      .populate("salon","_id name location description user");
     res.status(200).send({
       status: true,
       message: "All reviews fetched",

@@ -1,4 +1,4 @@
- const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const bookingSchema = Schema(
@@ -16,6 +16,17 @@ const bookingSchema = Schema(
       enum: ["pending", "booked", "cancel", "complete"],
       default: "pending",
     },
+    current_hair: [
+      {
+        img_url: String,
+      },
+    ],
+    messages: [
+      {
+        user_type: String,
+        message: String,
+      },
+    ],
     salon: {
       type: mongoose.Types.ObjectId,
       ref: "salon",

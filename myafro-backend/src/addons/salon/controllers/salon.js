@@ -1,4 +1,5 @@
 const SalonModel = require("../model/salon");
+const ReviewModel = require("../../reviews/models/review");
 const createSalon = async (req, res, next) => {
   try {
     const salon = await SalonModel.create({
@@ -35,8 +36,9 @@ const getSalons = async (req, res, next) => {
       };
     }
 
-    console.log(query);
-    const salons = await SalonModel.find(query).populate("user", "-password");
+    const salons = await SalonModel.find(query)
+      .sort({ createdAt: -1 })
+      .populate("user", "-password").populate('review');
 
     res.send({
       status: true,
@@ -48,15 +50,18 @@ const getSalons = async (req, res, next) => {
 };
 
 const getSalon = async (req, res, next) => {
-  console.log(req.user.id);
   try {
     const salon = await SalonModel.findOne({ user: req.user.id }).populate(
       "user",
       "-password"
-    );
+    ).populate("review");
+    // const review = await ReviewModel.find({ salon: req.user.salon })
+    //   .sort({ createdAt: -1 })
+    //   .populate("user", "-password -otp -is_verified");
     res.send({
       status: true,
       salon,
+      // review,
     });
   } catch (error) {
     next(error);

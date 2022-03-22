@@ -21,12 +21,27 @@ const getBookings = async (req, res, next) => {
   try {
     console.log(req.user);
     const booking = await BookingModel.find({ salon: req.user.salon })
-      .populate("user", "_id full_name email profile mobile")
+      .populate("user", "_id full_name email profile mobile role")
       .populate("salon", "_id name location");
     res.send({
       status: true,
       message: "All booking fetched successfully",
       booking,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getBookingsByUser = async (req, res, next) => {
+  try {
+    const bookings = await BookingModel.find({ user: req.user.id })
+      .populate("user", "_id full_name email profile mobile role")
+      .populate("salon", "_id name location price salon_type ");
+    res.status(200).send({
+      status: true,
+      message: "Bookings are fetched",
+      bookings,
     });
   } catch (error) {
     next(error);
@@ -83,6 +98,7 @@ const deleteBooking = async (req, res, next) => {
 module.exports = {
   createBooking,
   getBookings,
+  getBookingsByUser,
   updateBooking,
   deleteBooking,
 };

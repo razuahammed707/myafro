@@ -7,7 +7,10 @@ const salonSchema = Schema(
       type: String,
       trim: true,
     },
-
+    description: {
+      type: String,
+      trim: true,
+    },
     location: { type: String, trim: true },
     salon_type: {
       type: String,
@@ -30,11 +33,16 @@ const salonSchema = Schema(
       type: mongoose.Types.ObjectId,
       ref: "user",
     },
+    review: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "review",
+    },
     services: [
       {
         title: String,
       },
     ],
+
     features: {
       year: String,
       license: String,
