@@ -10,11 +10,14 @@ import {
   getCreateBookingData,
 } from "../../../redux/slices/booking/bookingSlice";
 import { userHomeSelector } from "../../../redux/slices/user/userHomeSlice";
+import Loader from "../Loader/Loader";
+import ReviewPopup from "../../screens/Bookings/userComponents/ReviewPopup";
 
-const ResponsePopup = () => {
+const ResponsePopup = ({ bookingInfo }) => {
   const [visible, setVisible] = useState(false);
   const [assets, setAssets] = useState(null);
-  const { isSuccess, createBookingData } = useSelector(bookingSelector);
+  const { isSuccess, createBookingData, isFetching } =
+    useSelector(bookingSelector);
   const { singleSalonId } = useSelector(userHomeSelector);
   const dispatch = useDispatch();
 
@@ -50,33 +53,55 @@ const ResponsePopup = () => {
       })
     );
   }, [singleSalonId]);
+
   return (
     <View>
       <View style={tw`flex flex-row items-center justify-between my-3`}>
         <TouchableOpacity style={tw`flex flex-row items-center`}>
           <View style={tw`mt-10  w-full`}>
-            <Button
-              title="Book now"
-              type="clear"
-              titleStyle={{ marginLeft: 10 }}
-              icon={
-                <Icon
-                  name="dry-cleaning"
-                  type="material"
-                  size={20}
-                  color="#fff"
-                />
-              }
-              iconPosition="left"
-              onPress={() => {
-                dispatch(createBooking(assets));
-                toggleOverlay();
-              }}
-            />
+            {bookingInfo === undefined && bookingInfo !== "booked" && bookingInfo !== "pending" ? (
+              <Button
+                title="Confirm Booking"
+                type="clear"
+                titleStyle={{ marginLeft: 10 }}
+                icon={
+                  <Icon
+                    name="dry-cleaning"
+                    type="material"
+                    size={20}
+                    color="#fff"
+                  />
+                }
+                iconPosition="left"
+                onPress={() => {
+                  dispatch(createBooking(assets));
+                  toggleOverlay();
+                }}
+              />
+            ) : bookingInfo === "pending" ? (
+              <Button
+                title="Cancel Booking"
+                type="clear"
+                buttonStyle={{
+                  backgroundColor: "#444",
+                }}
+                titleStyle={{ marginLeft: 10 }}
+                icon={
+                  <Icon name="trash" type="feather" size={20} color="#fff" />
+                }
+                iconPosition="left"
+                onPress={() => {
+                  // dispatch(createBooking(assets));
+                  toggleOverlay();
+                }}
+              />
+            ) : bookingInfo === "booked" && bookingInfo !== undefined && (
+               <ReviewPopup authToken={assets}/>
+            )}
           </View>
         </TouchableOpacity>
       </View>
-      {isSuccess && (
+      {isSuccess && !isFetching && (
         <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
           <View style={styles.container}>
             <Text style={styles.textPrimary}>Booking is placed successful</Text>
@@ -84,6 +109,7 @@ const ResponsePopup = () => {
           </View>
         </Overlay>
       )}
+      <Loader loading={isFetching} />
     </View>
   );
 };

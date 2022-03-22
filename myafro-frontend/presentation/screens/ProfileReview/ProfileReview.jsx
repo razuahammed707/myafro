@@ -1,17 +1,51 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AirbnbRating, Icon } from "react-native-elements";
 import Feedback from "./components/Feedback";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { getReviews, reviewSelector } from "../../../redux/slices/reviews/reviewSlice";
+import Loader from "../../components/Loader/Loader";
 
 const ProfileReview = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const {salonInfoForReview, reviews, isSuccess, isFetching} = useSelector(reviewSelector)
+  const [assets, setAssets] = useState(null)
+
+  const getToken = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user_info");
+      if (userInfo) {
+        const parsedToken = JSON.parse(userInfo);
+        setAssets({
+          salonId: salonInfoForReview?.salonId,
+          token: parsedToken?.access_token
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    assets?.token && dispatch(getReviews(assets))
+  }, [])
+
+  const totalRatings = reviews?.reduce((acc, current) => acc + current.rating, 0)
+  console.log(totalRatings)
   return (
     <SafeAreaView style={tw`mb-20`}>
-      {/* Top section start */}
-      <View style={tw`flex flex-row items-center justify-between p-5`}>
+    {assets?.token ? <>
+        {/* Top section start */}
+        <View style={tw`flex flex-row items-center justify-between p-5`}>
         <View style={tw`flex flex-row`}>
           <Icon
             name="arrow-left"
@@ -20,7 +54,7 @@ const ProfileReview = () => {
             color="black"
             onPress={() => navigation.goBack()}
           />
-          <Text style={tw`font-bold text-lg ml-2`}>Theresa Webb Expert</Text>
+          <Text style={tw`font-bold text-lg ml-2`}>{salonInfoForReview?.user?.full_name}</Text>
         </View>
         <View style={tw`flex flex-row items-center`}>
           <AirbnbRating
@@ -34,20 +68,23 @@ const ProfileReview = () => {
               marginRight: 5,
             }}
           />
-          <Text style={tw`text-gray-400`}>307</Text>
+          <Text style={tw`text-gray-400`}>{totalRatings}</Text>
         </View>
       </View>
       {/* Top section end */}
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={tw`flex items-center flex-row justify-center my-6`}>
           <View>
-            <Image
+            {salonInfoForReview?.user?.profile === "" ? <Image
               source={require("../../../assets/img/profilelg.png")}
               resizeMode="cover"
-            />
+            /> :  <Image
+            resizeMode="cover"
+            source={{ uri: salonInfoForReview?.user?.profile }}
+          />}
             <View style={tw`mt-3`}>
               <View style={tw`flex flex-row`}>
-                <Text style={tw`font-bold text-lg mr-2`}>Theresa Webb</Text>
+                <Text style={tw`font-bold text-lg mr-2`}>{salonInfoForReview?.user?.full_name}</Text>
                 <Icon
                   name="verified"
                   type="material"
@@ -66,7 +103,7 @@ const ProfileReview = () => {
                     marginRight: 5,
                   }}
                 />
-                <Text style={tw`text-gray-400`}>307</Text>
+                <Text style={tw`text-gray-400`}>{totalRatings}</Text>
               </View>
               <Text style={tw`text-gray-400 text-base text-center`}>
                 16 Saloons
@@ -78,9 +115,7 @@ const ProfileReview = () => {
         {/* Profile bio section start here  */}
         <View style={tw`px-5`}>
           <Text style={tw`text-gray-400 text-base`}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Orci,
-            consequat sem molestie et, montes, pellentesque. Id sit vulputate
-            mattis magna pellentesque convallis. Mattis donec elit .
+            {reviews[0]?.salon?.description}
           </Text>
         </View>
         {/* Profile bio section end here  */}
@@ -103,14 +138,10 @@ const ProfileReview = () => {
         {/* Account creation info end here */}
 
         {/* Profile details section start */}
-        <Feedback />
-        <Feedback />
-        <Feedback />
-        <Feedback />
-        <Feedback />
-        <Feedback />
+        <Feedback reviews={reviews}/>
         {/* Profile details section end */}
       </ScrollView>
+    </> : <Loader loading={isFetching}/>}
     </SafeAreaView>
   );
 };

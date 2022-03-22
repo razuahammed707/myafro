@@ -7,10 +7,13 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { accountData1, accountData2 } from "../../../utils/dummyData";
 import { ScrollView } from "react-native-gesture-handler";
+import { reset } from "../../../redux/slices/login/authSlice";
+import { useDispatch } from "react-redux";
 
 const Account = () => {
   const navigation = useNavigation();
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const dispatch = useDispatch()
   const getToken = async () => {
     try {
       const userInfo = await AsyncStorage.getItem("user_info");
@@ -31,6 +34,7 @@ const Account = () => {
 
   const logout = async () => {
     await AsyncStorage.clear();
+    dispatch(reset()) 
     // navigation.navigate("Login");
   };
 

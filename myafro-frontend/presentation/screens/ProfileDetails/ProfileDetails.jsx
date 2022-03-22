@@ -14,13 +14,15 @@ import Services from "./components/Services";
 import SaloonFeatures from "./components/SaloonFeatures";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userHomeSelector } from "../../../redux/slices/user/userHomeSlice";
 import MediaCarousel from "./components/MediaCarousel";
+import { getSalonInfoForReview } from "../../../redux/slices/reviews/reviewSlice";
 
 const ProfileDetails = () => {
   const navigation = useNavigation();
   const [singleSalon, setSingleSalon] = useState(null);
+  const dispatch = useDispatch()
   const { salons, singleSalonId } = useSelector(userHomeSelector);
 
   const getSingleSalon = (id) => {
@@ -32,7 +34,9 @@ const ProfileDetails = () => {
     getSingleSalon(singleSalonId);
   }, [singleSalonId]);
 
-  console.log(singleSalon);
+  useEffect(() => {
+    dispatch(getSalonInfoForReview({user:singleSalon?.user, salonId: singleSalon?._id}))
+  }, [singleSalon])
 
   return (
     <SafeAreaView style={tw`p-5`}>

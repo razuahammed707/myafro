@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import tw from "twrnc";
 import { Button, Icon } from "react-native-elements";
 import ResponsePopup from "../../../components/ResponsePopup/ResponsePopup";
 
-const SaloonFeatures = ({features}) => {
+const SaloonFeatures = ({ features }) => {
+  const navigation = useNavigation()
   return (
     <View style={tw`my-5`}>
       <Text style={tw`font-bold text-lg`}>Saloon Features</Text>
@@ -44,7 +46,19 @@ const SaloonFeatures = ({features}) => {
         </View>
       </View>
       {/* Option section end */}
-     <ResponsePopup />
+      {/* <ResponsePopup /> */}
+      <View style={tw`mt-10  w-full`}>
+        <Button
+          title="Book"
+          type="clear"
+          titleStyle={{ marginLeft: 10 }}
+          icon={
+            <Icon name="dry-cleaning" type="material" size={20} color="#fff" />
+          }
+          iconPosition="left"
+          onPress={() => navigation.navigate('BookingConfirmation')}
+        />
+      </View>
     </View>
   );
 };

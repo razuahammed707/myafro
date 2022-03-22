@@ -51,6 +51,7 @@ export const authSlice = createSlice({
         (state.isSuccess = false),
         (state.isError = false),
         (state.message = "");
+        (state.data) = {}
     },
     getTokenValue: (state, {payload}) => {
       state.token=payload

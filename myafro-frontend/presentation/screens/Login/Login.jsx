@@ -136,7 +136,7 @@ const Login = () => {
                   handleLogin(values);
                 }}
               />
-              <View style={tw`my-4 flex items-center justify-center p-3`}>
+              {/* <View style={tw`my-4 flex items-center justify-center p-3`}>
                 <View style={styles.grayBorder} />
                 <Text
                   style={tw`text-center font-bold text-gray-400 mt--3 bg-white px-2`}
@@ -156,7 +156,7 @@ const Login = () => {
                   source={require("../../../assets/img/google.png")}
                 />
                 <Text style={tw`text-base ml-4`}>Login with Google</Text>
-              </View>
+              </View> */}
               <Text style={tw`text-sm text-gray-400 text-center`}>
                 Don't have account?{" "}
                 <Text

@@ -8,6 +8,8 @@ import Onboard from "../../../Onboard/Onboard";
 import ProfileReview from "../../../ProfileReview/ProfileReview";
 import Account from "../../../Account/Account";
 import { ActivityIndicator, Text } from "react-native";
+import Bookings from "../../../Bookings/Bookings";
+import UserBookings from "../../../Bookings/UserBookings";
 
 const HomeTabs = () => {
   const [show, setShow] = useState(false);
@@ -43,10 +45,10 @@ const HomeTabs = () => {
             }}
           />
           <Tab.Screen
-            name="Saloon"
-            component={ProfileReview}
+            name="UserBookings"
+            component={UserBookings}
             options={{
-              tabBarLabel: "Saloon",
+              tabBarLabel: "Bookings",
               tabBarIcon: ({ color, size }) => (
                 <Icon
                   name="wheelchair"

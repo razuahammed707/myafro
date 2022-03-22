@@ -26,6 +26,7 @@ import SalonProfile from "../../screens/SalonProfile/SalonProfile";
 import UserProfile from "../../screens/UserProfile/UserProfile";
 import { useDispatch } from "react-redux";
 import { getTokenValue } from "../../../redux/slices/login/authSlice";
+import BookingConfirmation from "../../screens/BookingConfirmation/BookingConfirmation";
 
 const ScreenContainer = () => {
   const Stack = createNativeStackNavigator();
@@ -108,6 +109,11 @@ const ScreenContainer = () => {
       <Stack.Screen
         name="Bookings"
         component={Bookings}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="BookingConfirmation"
+        component={BookingConfirmation}
         options={{ headerShown: false }}
       />
       <Stack.Screen

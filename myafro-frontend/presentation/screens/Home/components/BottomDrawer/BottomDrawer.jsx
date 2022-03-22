@@ -127,7 +127,7 @@ const BottomDrawer = ({ hair, home }) => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => setSalonType("Both")}
               style={tw`flex flex-row mt-5 border border-gray-300 p-3 h-auto rounded-lg`}
             >
@@ -152,7 +152,7 @@ const BottomDrawer = ({ hair, home }) => {
                   car using the app. The keys areinside.
                 </Text>
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <View style={tw`absolute bottom-8 w-full left-5 right-0`}>
               <View style={tw`flex flex-row items-center justify-center`}>
                 <Button
