@@ -10,9 +10,11 @@ const initialState = {
   bookings: [],
   getUpdateBookingData: {},
   singleBooking: {},
+  singleBookedSalon: {},
   getMessagesData: [],
   userBookings: [],
   createBookingData: {},
+  createdBooking: {}
 };
 
 export const createBooking = createAsyncThunk(
@@ -154,6 +156,9 @@ export const bookingSlice = createSlice({
     getSingleBooking: (state, { payload }) => {
       state.singleBooking = payload;
     },
+    getSingleBookedSalon: (state, { payload }) => {
+      state.singleBookedSalon= payload
+    },
     getUpdateBookingData: (state, { payload }) => {
       state.getUpdateBookingData = payload;
     },
@@ -167,6 +172,7 @@ export const bookingSlice = createSlice({
       .addCase(createBooking.fulfilled, (state, { payload }) => {
         state.isFetching = false;
         state.isSuccess = true;
+        state.createdBooking = payload;
         // state.message = payload.message;
         return state;
       })
@@ -272,6 +278,7 @@ export const {
   getMessageToSend,
   getSingleBooking,
   getUpdateBookingData,
+  getSingleBookedSalon
 } = bookingSlice.actions;
 export const bookingSelector = (state) => state.booking;
 export default bookingSlice.reducer;

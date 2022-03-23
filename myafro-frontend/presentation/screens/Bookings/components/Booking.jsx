@@ -17,7 +17,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 const Booking = ({ margin, previous }) => {
-  const { bookings } = useSelector(bookingSelector);
+  const { bookings, isSuccess } = useSelector(bookingSelector);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const getBooking = (id) => {
@@ -25,12 +25,16 @@ const Booking = ({ margin, previous }) => {
     console.log(uniqueBooking);
     dispatch(getSingleBooking(uniqueBooking));
   };
+
   return (
     <View style={tw` flex flex-row items-center justify-between ${margin}`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {previous === "previous"
-          ? bookings
-              ?.filter((book) => book.status !== "pending" && book.status !== "booked") 
+          ? isSuccess && bookings?.length > 0 &&
+            bookings
+              ?.filter(
+                (book) => book?.status !== "pending" && book.status !== "booked"
+              )
               .map((booking) => (
                 <TouchableOpacity
                   onPress={() => {
@@ -96,8 +100,9 @@ const Booking = ({ margin, previous }) => {
                   </View>
                 </TouchableOpacity>
               ))
-          : bookings
-              ?.filter((book) => book.status === "booked")
+          : bookings.length > 0 &&
+            bookings
+              ?.filter((book) => book?.status === "booked")
               .map((booking) => (
                 <TouchableOpacity
                   onPress={() => {

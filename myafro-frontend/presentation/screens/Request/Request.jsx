@@ -48,7 +48,7 @@ const Request = () => {
     assets !== null && dispatch(getBookings(assets));
   }, [assets]);
 
-  console.log(singleBooking);
+  console.log("nice");
   return (
     <SafeAreaView style={tw`p-5 h-full`}>
       <View style={tw`flex flex-row`}>
@@ -62,7 +62,7 @@ const Request = () => {
         <Text style={tw`font-bold text-lg ml-2`}>Request Screen</Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {isSuccess && bookings?.length > 0 ? (
+        {isSuccess ? (
           bookings
             ?.filter((book) => book.status === "pending")
             .map((booking) => (
@@ -128,21 +128,22 @@ const Request = () => {
                     color="gray"
                   />
                 </View>
-                {booking?.status !== "pending" && (
-                  <View style={tw`flex flex-row justify-center w-full`}>
-                    <Image
-                      source={require("../../../assets/img/notFound.png")}
-                      height={100}
-                      resizeMode="cover"
-                    />
-                  </View>
-                )}
               </TouchableOpacity>
             ))
         ) : (
           <Loader loading={isFetching} />
         )}
       </ScrollView>
+      <View style={tw`h-1/2 flex flex-row justify-center`}>
+        {/* <Image
+                      source={require("../../../assets/img/notFound.png")}
+                      height={100}
+                      resizeMode="cover"
+                    /> */}
+        <Text style={tw`text-xl text-gray-800`}>
+          No booking request found !
+        </Text>
+      </View>
     </SafeAreaView>
   );
 };

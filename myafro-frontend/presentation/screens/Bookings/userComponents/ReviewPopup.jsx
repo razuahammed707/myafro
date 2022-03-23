@@ -14,6 +14,7 @@ import {
   reviewSelector,
 } from "../../../../redux/slices/reviews/reviewSlice";
 import { AirbnbRating } from "react-native-ratings";
+import { getUpdateBookingData, updateBooking } from "../../../../redux/slices/booking/bookingSlice";
 
 const ReviewPopup = ({ authToken }) => {
   const [comment, setComment] = useState("");
@@ -28,6 +29,7 @@ const ReviewPopup = ({ authToken }) => {
   const ratingCompleted = (rating) => {
     setRating(rating);
   };
+  
 
   useEffect(() => {
     dispatch(
@@ -96,7 +98,16 @@ console.log(createReviewData, authToken)
             />
           }
           title="Submit"
-          onPress={() => dispatch(createReview(authToken))}
+          onPress={() => {
+            dispatch(createReview(authToken))
+            dispatch(
+              getUpdateBookingData({
+                status: "complete"
+              })
+            );
+            dispatch(updateBooking(authToken))
+            toggleOverlay();
+          }}
         />
       </Overlay>
       {/* <Loader loading={isFetching} /> */}

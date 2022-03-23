@@ -20,8 +20,8 @@ const CurrentHair = () => {
   const dispatch = useDispatch();
   const { bookings, singleBooking, sendMessage } = useSelector(bookingSelector);
   const [assets, setAssets] = useState(null);
-  const [isBooked, setIsBooked] = useState(false);
-  const [isCanceled, setIsCanceled] = useState(false);
+  // const [isBooked, setIsBooked] = useState(false);
+  // const [isCanceled, setIsCanceled] = useState(false);
   const [createMessage, setCreateMessage] = useState("");
 
   const getToken = async () => {
@@ -43,13 +43,13 @@ const CurrentHair = () => {
     getToken();
   }, []);
 
-  useEffect(() => {
-    dispatch(
-      getUpdateBookingData({
-        status: (isBooked && "booked") || (isCanceled && "cancel"),
-      })
-    );
-  }, [isBooked, isCanceled]);
+  // useEffect(() => {
+  //   dispatch(
+  //     getUpdateBookingData({
+  //       status: (isBooked && "booked") || (isCanceled && "cancel"),
+  //     })
+  //   );
+  // }, [isBooked, isCanceled]);
 
   // console.log(singleBooking)
   const showConfirmDialog = () => {
@@ -61,9 +61,7 @@ const CurrentHair = () => {
         {
           text: "Yes",
           onPress: () => {
-            if (isCanceled) {
-              dispatch(updateBooking(assets));
-            }
+            dispatch(updateBooking(assets));
           },
         },
         // The "No" button
@@ -80,7 +78,7 @@ const CurrentHair = () => {
     dispatch(
       getMessageToSend({
         ...sendMessage,
-        user_type: uniqueBooking?.role,
+        user_type: "hair_dresser",
         message: createMessage,
       })
     );
@@ -90,7 +88,7 @@ const CurrentHair = () => {
     // });
   }, [createMessage]);
 
-  console.log(assets);
+  console.log(singleBooking)
 
   return (
     <SafeAreaView style={tw`p-5`}>
@@ -113,9 +111,18 @@ const CurrentHair = () => {
           <View style={tw`my-5`}>
             {singleBooking?.status === "cancel" ? (
               <View style={tw`flex flex-row justify-center`}>
-                <Text style={tw`text-xl text-red-800`}>The booking is canceled</Text>
+                <Text style={tw`text-xl text-red-800`}>
+                  The booking is canceled
+                </Text>
               </View>
-            ) : (
+            ) : singleBooking?.status === "booked" ? (
+              <View style={tw`flex flex-row justify-center`}>
+                <Text style={tw`text-xl text-green-800`}>Already Booked</Text>
+              </View>
+            ) : singleBooking?.status === "complete" ? (
+              <View style={tw`flex flex-row justify-center`}>
+                <Text style={tw`text-xl text-green-800`}>The booking is completed</Text>
+              </View>):(
               <View style={tw`flex flex-row items-center justify-between`}>
                 <Button
                   title="Accept"
@@ -128,10 +135,16 @@ const CurrentHair = () => {
                   type="clear"
                   titleStyle={{ fontSize: 14 }}
                   onPress={() => {
-                    setIsBooked(true);
-                    if (isBooked) {
-                      dispatch(updateBooking(assets));
-                    }
+                    // setIsBooked(true);
+                    // if (isBooked) {
+                    //   dispatch(updateBooking(assets));
+                    // }
+                    dispatch(
+                      getUpdateBookingData({
+                        status: "booked",
+                      })
+                    );
+                    dispatch(updateBooking(assets));
                   }}
                 />
                 <Button
@@ -146,7 +159,11 @@ const CurrentHair = () => {
                   titleStyle={{ fontSize: 14 }}
                   onPress={() => {
                     showConfirmDialog();
-                    setIsCanceled(true);
+                    dispatch(
+                      getUpdateBookingData({
+                        status: "cancel"
+                      })
+                    );
                   }}
                 />
               </View>
@@ -204,43 +221,49 @@ const CurrentHair = () => {
             </View>
           )}
 
-          <Text style={tw`font-bold text-lg mb-3 mt-6 `}>Write Message</Text>
-          <View
-            style={{
-              backgroundColor: "lightgray",
-              borderBottomColor: "#000000",
-            }}
-          >
-            <TextInput
-              style={styles.input}
-              placeholder="Type a message"
-              multiline={true}
-              onChangeText={(text) => setCreateMessage(text)}
-              numberOfLines={4}
-            />
-          </View>
-          <View style={tw`mt-2 flex flex-row justify-end`}>
-            <Button
-              title="Send"
-              buttonStyle={{
-                paddingHorizontal: 20,
-                paddingVertical: 16,
-              }}
-              type="clear"
-              icon={
-                <Icon
-                  name="send"
-                  type="feather"
-                  size={20}
-                  color="#fff"
-                  style={tw`mr-2`}
+          {singleBooking?.status !== "cancel" && singleBooking?.status !== "complete" && (
+            <>
+              <Text style={tw`font-bold text-lg mb-3 mt-6 `}>
+                Write Message
+              </Text>
+              <View
+                style={{
+                  backgroundColor: "lightgray",
+                  borderBottomColor: "#000000",
+                }}
+              >
+                <TextInput
+                  style={styles.input}
+                  placeholder="Type a message"
+                  multiline={true}
+                  onChangeText={(text) => setCreateMessage(text)}
+                  numberOfLines={4}
                 />
-              }
-              iconPosition="left"
-              titleStyle={{ fontSize: 14 }}
-              onPress={() => dispatch(createMessageToSend(assets))}
-            />
-          </View>
+              </View>
+              <View style={tw`mt-2 flex flex-row justify-end`}>
+                <Button
+                  title="Send"
+                  buttonStyle={{
+                    paddingHorizontal: 20,
+                    paddingVertical: 16,
+                  }}
+                  type="clear"
+                  icon={
+                    <Icon
+                      name="send"
+                      type="feather"
+                      size={20}
+                      color="#fff"
+                      style={tw`mr-2`}
+                    />
+                  }
+                  iconPosition="left"
+                  titleStyle={{ fontSize: 14 }}
+                  onPress={() => dispatch(createMessageToSend(assets))}
+                />
+              </View>
+            </>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

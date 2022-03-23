@@ -38,6 +38,8 @@ const ProfileDetails = () => {
     dispatch(getSalonInfoForReview({user:singleSalon?.user, salonId: singleSalon?._id}))
   }, [singleSalon])
 
+  console.log(singleSalon)
+
   return (
     <SafeAreaView style={tw`p-5`}>
       {singleSalon !== null ? (

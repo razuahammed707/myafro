@@ -10,7 +10,7 @@ const Active = () => {
     <SafeAreaView style={tw`px-5 h-full`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* <Booking /> */}
-        <UserBooking />
+        <UserBooking booked="booked"/>
       </ScrollView>
     </SafeAreaView>
   );

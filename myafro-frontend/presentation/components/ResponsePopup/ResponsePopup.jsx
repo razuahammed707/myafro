@@ -1,22 +1,24 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Button, Overlay, Icon, Input } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import tw from "twrnc";
 import { useDispatch, useSelector } from "react-redux";
 import {
   bookingSelector,
   createBooking,
   getCreateBookingData,
+  getUpdateBookingData,
+  updateBooking,
 } from "../../../redux/slices/booking/bookingSlice";
 import { userHomeSelector } from "../../../redux/slices/user/userHomeSlice";
 import Loader from "../Loader/Loader";
 import ReviewPopup from "../../screens/Bookings/userComponents/ReviewPopup";
 
-const ResponsePopup = ({ bookingInfo }) => {
+const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
   const [visible, setVisible] = useState(false);
   const [assets, setAssets] = useState(null);
-  const { isSuccess, createBookingData, isFetching } =
+  const { isSuccess, createBookingData, createdBooking, isFetching } =
     useSelector(bookingSelector);
   const { singleSalonId } = useSelector(userHomeSelector);
   const dispatch = useDispatch();
@@ -25,6 +27,29 @@ const ResponsePopup = ({ bookingInfo }) => {
     setVisible(!visible);
   };
 
+  const showConfirmDialog = () => {
+    return Alert.alert(
+      "Are your sure?",
+      "Do you want to cancel the booking request?",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+            dispatch(updateBooking(assets));
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+          onPress: () => {},
+        },
+      ]
+    );
+  };
+
+  console.log(bookingInfo)
   const getToken = async () => {
     try {
       const userInfo = await AsyncStorage.getItem("user_info");
@@ -32,6 +57,7 @@ const ResponsePopup = ({ bookingInfo }) => {
         const parsedToken = JSON.parse(userInfo);
         setAssets({
           token: parsedToken?.access_token,
+          bookingId: bookingInfo?._id
         });
       }
     } catch (e) {
@@ -54,31 +80,20 @@ const ResponsePopup = ({ bookingInfo }) => {
     );
   }, [singleSalonId]);
 
+  // useEffect(() => {
+  //   dispatch(
+  //     getUpdateBookingData({
+  //       status: isCanceled && "cancel",
+  //     })
+  //   );
+  // }, [isCanceled]);
+
   return (
     <View>
       <View style={tw`flex flex-row items-center justify-between my-3`}>
         <TouchableOpacity style={tw`flex flex-row items-center`}>
           <View style={tw`mt-10  w-full`}>
-            {bookingInfo === undefined && bookingInfo !== "booked" && bookingInfo !== "pending" ? (
-              <Button
-                title="Confirm Booking"
-                type="clear"
-                titleStyle={{ marginLeft: 10 }}
-                icon={
-                  <Icon
-                    name="dry-cleaning"
-                    type="material"
-                    size={20}
-                    color="#fff"
-                  />
-                }
-                iconPosition="left"
-                onPress={() => {
-                  dispatch(createBooking(assets));
-                  toggleOverlay();
-                }}
-              />
-            ) : bookingInfo === "pending" ? (
+            {bookingInfo?.status === "pending" ? (
               <Button
                 title="Cancel Booking"
                 type="clear"
@@ -91,12 +106,34 @@ const ResponsePopup = ({ bookingInfo }) => {
                 }
                 iconPosition="left"
                 onPress={() => {
-                  // dispatch(createBooking(assets));
-                  toggleOverlay();
+                  showConfirmDialog();
+                  dispatch(
+                    getUpdateBookingData({
+                      status: "cancel"
+                    })
+                  );
+                  }}
+              />
+            ) : bookingConfirmation === "confirmation" ? (
+              <Button
+                title="Confirm Booking"
+                type="clear"
+                buttonStyle={{
+                  backgroundColor: "#444",
+                }}
+                titleStyle={{ marginLeft: 10 }}
+                icon={
+                  <Icon name="trash" type="feather" size={20} color="#fff" />
+                }
+                iconPosition="left"
+                onPress={() => {
+                  dispatch(createBooking(assets));
+                  toggleOverlay()
                 }}
               />
-            ) : bookingInfo === "booked" && bookingInfo !== undefined && (
-               <ReviewPopup authToken={assets}/>
+            ) : (
+              bookingInfo?.status === "booked" &&
+              bookingInfo?.status !== undefined && <ReviewPopup authToken={assets} />
             )}
           </View>
         </TouchableOpacity>

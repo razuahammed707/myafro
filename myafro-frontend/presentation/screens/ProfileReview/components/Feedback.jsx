@@ -9,6 +9,7 @@ const Feedback = ({ reviews }) => {
     <View style={tw`flex justify-between mb-5`}>
       {reviews.length > 0 && reviews?.map((review) => (
         <View
+        key={review?._id}
           style={tw`py-4 flex flex-row justify-between border-gray-200 border-t-2 px-5`}
         >
           <View style={tw`flex flex-row`}>

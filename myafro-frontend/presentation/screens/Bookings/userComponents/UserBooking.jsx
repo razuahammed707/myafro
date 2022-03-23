@@ -12,12 +12,16 @@ import tw from "twrnc";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { bookingSelector, getBookingsByUser } from "../../../../redux/slices/booking/bookingSlice";
+import {
+  bookingSelector,
+  getBookingsByUser,
+  getSingleBookedSalon,
+} from "../../../../redux/slices/booking/bookingSlice";
 import Loader from "../../../components/Loader/Loader";
 
-const UserBooking = ({ margin, previous, pending }) => {
+const UserBooking = ({ margin, previous, pending, booked }) => {
   const { userBookings, isSuccess, isFetching } = useSelector(bookingSelector);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const [assets, setAssets] = useState(null);
 
@@ -42,201 +46,222 @@ const UserBooking = ({ margin, previous, pending }) => {
   useEffect(() => {
     assets !== null && dispatch(getBookingsByUser(assets));
   }, [assets]);
+
   return (
     <View style={tw` flex flex-row items-center justify-between ${margin}`}>
-      {isSuccess && userBookings.length > 0 ? <ScrollView showsVerticalScrollIndicator={false}>
-        {previous === "previous"
-          ? userBookings.filter((book) => book.status !== "pending" && book.status !=="booked")
-              .map((booking) => (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("BookingConfirmation")}
-                  style={tw` mt-3 flex flex-row items-center justify-between `}
-                  key={booking._id}
-                >
-                  <View style={tw`flex flex-row items-center`}>
-                    {booking?.user?.profile === "" ? (
-                      <Image
-                        style={{
-                          width: 36,
-                          height: 36,
-                        }}
-                        source={require("../../../../assets/img/profile.png")}
-                        resizeMode="contain"
-                      />
-                    ) : (
-                      <Image
-                        style={{
-                          width: 36,
-                          height: 36,
-                        }}
-                        source={{ uri: booking?.user?.profile }}
-                        resizeMode="contain"
-                      />
-                    )}
-                    <View style={tw`ml-4`}>
-                      <View>
-                        <Text style={tw`font-bold text-lg mr-2`}>
-                          {booking?.salon?.name}
-                        </Text>
-                        <View style={tw`flex flex-row items-center my-1`}>
-                          <Text style={tw`text-gray-400 mr-2 text-sm`}>
-                            {booking?.starting_time}
+      {isSuccess ? (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {previous === "previous"
+            ? userBookings
+                .filter(
+                  (book) =>
+                    book.status === "complete" || book.status === "cancel"
+                )
+                .map((booking) => (
+                  <TouchableOpacity
+                  onPress={() =>{
+                    dispatch(getSingleBookedSalon(booking))
+                    navigation.navigate("BookedSalon")
+                  }}
+                    style={tw` mt-3 flex flex-row items-center justify-between `}
+                    key={booking._id}
+                  >
+                    <View style={tw`flex flex-row items-center`}>
+                      {booking?.user?.profile === "" ? (
+                        <Image
+                          style={{
+                            width: 36,
+                            height: 36,
+                          }}
+                          source={require("../../../../assets/img/profile.png")}
+                          resizeMode="contain"
+                        />
+                      ) : (
+                        <Image
+                          style={{
+                            width: 36,
+                            height: 36,
+                          }}
+                          source={{ uri: booking?.user?.profile }}
+                          resizeMode="contain"
+                        />
+                      )}
+                      <View style={tw`ml-4`}>
+                        <View>
+                          <Text style={tw`font-bold text-lg mr-2`}>
+                            {booking?.salon?.name}
                           </Text>
-                          <Icon
-                            name="arrow-right"
-                            type="feather"
-                            size={20}
-                            color="gray"
-                          />
-                          <Text style={tw`text-gray-400 ml-2 text-sm`}>
-                            {booking?.ending_time}
-                          </Text>
+                          <View style={tw`flex flex-row items-center my-1`}>
+                            <Text style={tw`text-gray-400 mr-2 text-sm`}>
+                              {booking?.starting_time}
+                            </Text>
+                            <Icon
+                              name="arrow-right"
+                              type="feather"
+                              size={20}
+                              color="gray"
+                            />
+                            <Text style={tw`text-gray-400 ml-2 text-sm`}>
+                              {booking?.ending_time}
+                            </Text>
+                          </View>
+                        </View>
+                        <View style={tw`flex flex-row text-sm`}>
+                          <Text>Lorem ipsum dolor sit.</Text>
                         </View>
                       </View>
-                      <View style={tw`flex flex-row text-sm`}>
-                        <Text>Lorem ipsum dolor sit.</Text>
-                      </View>
                     </View>
-                  </View>
 
-                  <View>
-                    <Icon
-                      name="arrow-forward-ios"
-                      type="material"
-                      size={20}
-                      color="gray"
-                    />
-                  </View>
-                </TouchableOpacity>
-              ))
-          : pending === "pending"
-          ? userBookings?.filter((book) => book.status === "pending")
-              .map((booking) => (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("BookingConfirmation")}
-                  style={tw` mt-3 flex flex-row items-center justify-between `}
-                  key={booking._id}
-                >
-                  <View style={tw`flex flex-row items-center`}>
-                    {booking?.user?.profile === "" ? (
-                      <Image
-                        style={{
-                          width: 36,
-                          height: 36,
-                        }}
-                        source={require("../../../../assets/img/profile.png")}
-                        resizeMode="contain"
+                    <View>
+                      <Icon
+                        name="arrow-forward-ios"
+                        type="material"
+                        size={20}
+                        color="gray"
                       />
-                    ) : (
-                      <Image
-                        style={{
-                          width: 36,
-                          height: 36,
-                        }}
-                        source={{ uri: booking?.user?.profile }}
-                        resizeMode="contain"
-                      />
-                    )}
-                    <View style={tw`ml-4`}>
-                      <View>
-                        <Text style={tw`font-bold text-lg mr-2`}>
-                          {booking?.salon?.name}
-                        </Text>
-                        <View style={tw`flex flex-row items-center my-1`}>
-                          <Text style={tw`text-gray-400 mr-2 text-sm`}>
-                            {booking?.starting_time}
+                    </View>
+                  </TouchableOpacity>
+                ))
+            : pending === "pending"
+            ? userBookings
+                ?.filter((book) => book.status === "pending")
+                .map((booking) => (
+                  <TouchableOpacity
+                  onPress={() =>{
+                    dispatch(getSingleBookedSalon(booking))
+                    navigation.navigate("BookedSalon")
+                  }}
+                    style={tw` mt-3 flex flex-row items-center justify-between `}
+                    key={booking._id}
+                  >
+                    <View style={tw`flex flex-row items-center`}>
+                      {booking?.user?.profile === "" ? (
+                        <Image
+                          style={{
+                            width: 36,
+                            height: 36,
+                          }}
+                          source={require("../../../../assets/img/profile.png")}
+                          resizeMode="contain"
+                        />
+                      ) : (
+                        <Image
+                          style={{
+                            width: 36,
+                            height: 36,
+                          }}
+                          source={{ uri: booking?.user?.profile }}
+                          resizeMode="contain"
+                        />
+                      )}
+                      <View style={tw`ml-4`}>
+                        <View>
+                          <Text style={tw`font-bold text-lg mr-2`}>
+                            {booking?.salon?.name}
                           </Text>
-                          <Icon
-                            name="arrow-right"
-                            type="feather"
-                            size={20}
-                            color="gray"
-                          />
-                          <Text style={tw`text-gray-400 ml-2 text-sm`}>
-                            {booking?.ending_time}
-                          </Text>
+                          <View style={tw`flex flex-row items-center my-1`}>
+                            <Text style={tw`text-gray-400 mr-2 text-sm`}>
+                              {booking?.starting_time}
+                            </Text>
+                            <Icon
+                              name="arrow-right"
+                              type="feather"
+                              size={20}
+                              color="gray"
+                            />
+                            <Text style={tw`text-gray-400 ml-2 text-sm`}>
+                              {booking?.ending_time}
+                            </Text>
+                          </View>
+                        </View>
+                        <View style={tw`flex flex-row text-sm`}>
+                          <Text>Lorem ipsum dolor sit.</Text>
                         </View>
                       </View>
-                      <View style={tw`flex flex-row text-sm`}>
-                        <Text>Lorem ipsum dolor sit.</Text>
-                      </View>
                     </View>
-                  </View>
 
-                  <View>
-                    <Icon
-                      name="arrow-forward-ios"
-                      type="material"
-                      size={20}
-                      color="gray"
-                    />
-                  </View>
-                </TouchableOpacity>
-              ))
-          : userBookings?.filter((book) => book.status === "booked")
-              .map((booking) => (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("BookingConfirmation")}
-                  style={tw` mt-3 flex flex-row items-center justify-between `}
-                  key={booking._id}
-                >
-                  <View style={tw`flex flex-row items-center`}>
-                    {booking?.user?.profile === "" ? (
-                      <Image
-                        style={{
-                          width: 36,
-                          height: 36,
-                        }}
-                        source={require("../../../../assets/img/profile.png")}
-                        resizeMode="contain"
+                    <View>
+                      <Icon
+                        name="arrow-forward-ios"
+                        type="material"
+                        size={20}
+                        color="gray"
                       />
-                    ) : (
-                      <Image
-                        style={{
-                          width: 36,
-                          height: 36,
-                        }}
-                        source={{ uri: booking?.user?.profile }}
-                        resizeMode="contain"
-                      />
-                    )}
-                    <View style={tw`ml-4`}>
-                      <View>
-                        <Text style={tw`font-bold text-lg mr-2`}>
-                          {booking?.salon?.name}
-                        </Text>
-                        <View style={tw`flex flex-row items-center my-1`}>
-                          <Text style={tw`text-gray-400 mr-2 text-sm`}>
-                            {booking?.starting_time}
+                    </View>
+                  </TouchableOpacity>
+                ))
+            : booked === "booked" &&
+              userBookings
+                ?.filter((book) => book.status === "booked")
+                .map((booking) => (
+                  <TouchableOpacity
+                    onPress={() =>{
+                      dispatch(getSingleBookedSalon(booking))
+                      navigation.navigate("BookedSalon")
+                    }}
+                    style={tw` mt-3 flex flex-row items-center justify-between `}
+                    key={booking._id}
+                  >
+                    <View style={tw`flex flex-row items-center`}>
+                      {booking?.user?.profile === "" ? (
+                        <Image
+                          style={{
+                            width: 36,
+                            height: 36,
+                          }}
+                          source={require("../../../../assets/img/profile.png")}
+                          resizeMode="contain"
+                        />
+                      ) : (
+                        <Image
+                          style={{
+                            width: 36,
+                            height: 36,
+                          }}
+                          source={{ uri: booking?.user?.profile }}
+                          resizeMode="contain"
+                        />
+                      )}
+                      <View style={tw`ml-4`}>
+                        <View>
+                          <Text style={tw`font-bold text-lg mr-2`}>
+                            {booking?.salon?.name}
                           </Text>
-                          <Icon
-                            name="arrow-right"
-                            type="feather"
-                            size={20}
-                            color="gray"
-                          />
-                          <Text style={tw`text-gray-400 ml-2 text-sm`}>
-                            {booking?.ending_time}
-                          </Text>
+                          <View style={tw`flex flex-row items-center my-1`}>
+                            <Text style={tw`text-gray-400 mr-2 text-sm`}>
+                              {booking?.starting_time}
+                            </Text>
+                            <Icon
+                              name="arrow-right"
+                              type="feather"
+                              size={20}
+                              color="gray"
+                            />
+                            <Text style={tw`text-gray-400 ml-2 text-sm`}>
+                              {booking?.ending_time}
+                            </Text>
+                          </View>
+                        </View>
+                        <View style={tw`flex flex-row text-sm`}>
+                          <Text>Lorem ipsum dolor sit.</Text>
                         </View>
                       </View>
-                      <View style={tw`flex flex-row text-sm`}>
-                        <Text>Lorem ipsum dolor sit.</Text>
-                      </View>
                     </View>
-                  </View>
 
-                  <View>
-                    <Icon
-                      name="arrow-forward-ios"
-                      type="material"
-                      size={20}
-                      color="gray"
-                    />
-                  </View>
-                </TouchableOpacity>
-              ))}
-      </ScrollView> : <Loader loading={isFetching}/>}
+                    <View>
+                      <Icon
+                        name="arrow-forward-ios"
+                        type="material"
+                        size={20}
+                        color="gray"
+                      />
+                    </View>
+                  </TouchableOpacity>
+                ))}
+        </ScrollView>
+      ) : (
+        <Loader loading={isFetching} />
+      )}
     </View>
   );
 };
