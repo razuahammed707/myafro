@@ -134,16 +134,7 @@ const Request = () => {
           <Loader loading={isFetching} />
         )}
       </ScrollView>
-      <View style={tw`h-1/2 flex flex-row justify-center`}>
-        {/* <Image
-                      source={require("../../../assets/img/notFound.png")}
-                      height={100}
-                      resizeMode="cover"
-                    /> */}
-        <Text style={tw`text-xl text-gray-800`}>
-          No booking request found !
-        </Text>
-      </View>
+     
     </SafeAreaView>
   );
 };
