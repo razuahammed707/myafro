@@ -51,8 +51,6 @@ const SalonProfile = () => {
     salonAssets.token && dispatch(getSalon(salonAssets?.token));
   }, [isSuccess, isFetchingService, salonAssets.token]);
 
-  console.log(hairDresserData?._id)
-
   return (
     <>
       <SafeAreaView>

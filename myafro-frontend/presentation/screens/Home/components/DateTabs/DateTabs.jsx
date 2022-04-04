@@ -9,13 +9,13 @@ import CheckInDate from "./CheckInDate";
 import CheckOutDate from "./CheckOutDate";
 
 const FirstRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#fff" }}>
+  <View style={{backgroundColor: "#fff", height:"100%" }}>
     <CheckInDate />
   </View>
 );
 
 const SecondRoute = () => (
-  <View style={{ flex: 1, backgroundColor: "#fff" }}>
+  <View style={{backgroundColor: "#fff" }}>
     <CheckOutDate />
   </View>
 );

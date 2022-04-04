@@ -20,9 +20,9 @@ const Booking = ({ margin, previous }) => {
   const { bookings, isSuccess } = useSelector(bookingSelector);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  
   const getBooking = (id) => {
     const uniqueBooking = bookings?.find((booking) => booking._id === id);
-    console.log(uniqueBooking);
     dispatch(getSingleBooking(uniqueBooking));
   };
 
