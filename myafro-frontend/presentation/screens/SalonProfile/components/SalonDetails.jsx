@@ -13,6 +13,7 @@ const SalonDetails = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
 
   const { hairDresserData, updateSalonData } = useSelector(salonSelector);
   const dispatch = useDispatch();
@@ -24,9 +25,10 @@ const SalonDetails = () => {
         name: name || hairDresserData?.name,
         price: price || hairDresserData?.price,
         location: location || hairDresserData?.location,
+        description: description || hairDresserData?.description,
       })
     );
-  }, [name, price, location, hairDresserData]);
+  }, [name, price, location, hairDresserData, description]);
 
   return (
     <>
@@ -61,6 +63,17 @@ const SalonDetails = () => {
           />
         </View>
         <View>
+          <Text style={tw`ml-5`}>Description</Text>
+          <TextInput
+            style={styles.textarea}
+            multiline={true}
+            numberOfLines={4}
+            onChangeText={(newText) => setDescription(newText)}
+            defaultValue={description || hairDresserData?.description}
+            placeholder="Description"
+          />
+        </View>
+        <View>
           <Text style={tw`ml-5`}>Location</Text>
           <TextInput
             style={styles.input}
@@ -79,6 +92,13 @@ export default SalonDetails;
 const styles = StyleSheet.create({
   input: {
     height: 40,
+    margin: 12,
+    borderWidth: 1,
+    borderColor: "lightgray",
+    padding: 10,
+    borderRadius: 8,
+  },
+  textarea: {
     margin: 12,
     borderWidth: 1,
     borderColor: "lightgray",

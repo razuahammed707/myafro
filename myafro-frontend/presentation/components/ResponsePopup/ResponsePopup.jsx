@@ -14,9 +14,11 @@ import {
 import { userHomeSelector } from "../../../redux/slices/user/userHomeSlice";
 import Loader from "../Loader/Loader";
 import ReviewPopup from "../../screens/Bookings/userComponents/ReviewPopup";
+import { useNavigation } from '@react-navigation/native';
 
 const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
   const [visible, setVisible] = useState(false);
+  const navigation = useNavigation()
   const [assets, setAssets] = useState(null);
   const { isSuccess, createBookingData, createdBooking, isFetching } =
     useSelector(bookingSelector);
@@ -43,7 +45,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
         // Does nothing but dismiss the dialog when tapped
         {
           text: "No",
-          onPress: () => {},
+          onPress: () => { },
         },
       ]
     );
@@ -80,6 +82,10 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
     );
   }, [singleSalonId]);
 
+  setTimeout(() => {
+    visible === true && navigation.navigate("Home")
+  }, 3000);
+
   // useEffect(() => {
   //   dispatch(
   //     getUpdateBookingData({
@@ -112,7 +118,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
                       status: "cancel"
                     })
                   );
-                  }}
+                }}
               />
             ) : bookingConfirmation === "confirmation" ? (
               <Button
@@ -129,6 +135,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
                 onPress={() => {
                   dispatch(createBooking(assets));
                   toggleOverlay()
+                
                 }}
               />
             ) : (

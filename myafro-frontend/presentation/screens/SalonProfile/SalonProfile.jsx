@@ -21,7 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
   const navigation = useNavigation();
-  const { userData, hairDresserData, isFetching, isSuccess } =
+  const { userData, hairDresserData, isFetching, isSuccess,  message } =
     useSelector(salonSelector);
   const { isFetchingService } = useSelector(serviceSelector);
   const dispatch = useDispatch();
@@ -50,6 +50,8 @@ const SalonProfile = () => {
   useEffect(() => {
     salonAssets.token && dispatch(getSalon(salonAssets?.token));
   }, [isSuccess, isFetchingService, salonAssets.token]);
+
+  console.log(hairDresserData?._id)
 
   return (
     <>

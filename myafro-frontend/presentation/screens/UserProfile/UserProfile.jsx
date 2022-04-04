@@ -154,7 +154,7 @@ const UserProfile = () => {
                 />
               </View>
             </View>
-            <BookingHistory />
+            {/* <BookingHistory /> */}
           </View>
         </View>
         <Loader loading={isFetching} />

@@ -1,9 +1,7 @@
-module.exports = {
-    // ...the rest of your config
+const createExpoWebpackConfigAsync = require('@expo/webpack-config');
 
-    resolve: {
-        alias: {
-            'react-native$': 'react-native-web'
-        }
-    }
-}
+module.exports = async function (env, argv) {
+  const config = await createExpoWebpackConfigAsync(env, argv);
+  // Customize the config before returning it.
+  return config;
+};

@@ -43,7 +43,6 @@ export const getSalon = createAsyncThunk(
           authorization: `Bearer ${token}`,
         },
       });
-      console.log(response?.data?.salons[0]);
       return response?.data?.salons[0];
     } catch (e) {
       console.log("Error", e.response.data);
