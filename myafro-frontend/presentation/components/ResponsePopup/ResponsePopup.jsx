@@ -14,11 +14,11 @@ import {
 import { userHomeSelector } from "../../../redux/slices/user/userHomeSlice";
 import Loader from "../Loader/Loader";
 import ReviewPopup from "../../screens/Bookings/userComponents/ReviewPopup";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
   const [visible, setVisible] = useState(false);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [assets, setAssets] = useState(null);
   const { isSuccess, createBookingData, createdBooking, isFetching } =
     useSelector(bookingSelector);
@@ -45,13 +45,13 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
         // Does nothing but dismiss the dialog when tapped
         {
           text: "No",
-          onPress: () => { },
+          onPress: () => {},
         },
       ]
     );
   };
 
-  console.log(bookingInfo)
+  console.log(bookingInfo);
   const getToken = async () => {
     try {
       const userInfo = await AsyncStorage.getItem("user_info");
@@ -59,7 +59,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
         const parsedToken = JSON.parse(userInfo);
         setAssets({
           token: parsedToken?.access_token,
-          bookingId: bookingInfo?._id
+          bookingId: bookingInfo?._id,
         });
       }
     } catch (e) {
@@ -83,7 +83,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
   }, [singleSalonId]);
 
   setTimeout(() => {
-    visible === true && navigation.navigate("Home")
+    visible === true && navigation.navigate("Home");
   }, 3000);
 
   // useEffect(() => {
@@ -115,7 +115,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
                   showConfirmDialog();
                   dispatch(
                     getUpdateBookingData({
-                      status: "cancel"
+                      status: "cancel",
                     })
                   );
                 }}
@@ -134,13 +134,14 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
                 iconPosition="left"
                 onPress={() => {
                   dispatch(createBooking(assets));
-                  toggleOverlay()
-                
+                  toggleOverlay();
                 }}
               />
             ) : (
               bookingInfo?.status === "booked" &&
-              bookingInfo?.status !== undefined && <ReviewPopup authToken={assets} />
+              bookingInfo?.status !== undefined && (
+                <ReviewPopup authToken={assets} />
+              )
             )}
           </View>
         </TouchableOpacity>
@@ -151,6 +152,17 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
             <Text style={styles.textPrimary}>Booking is placed successful</Text>
             <Icon name="check-circle" type="feather" size={40} color="green" />
           </View>
+          <Button
+            title="Close"
+            type="clear"
+            buttonStyle={{
+              backgroundColor: "green",
+            }}
+            titleStyle={{ marginLeft: 10 }}
+            onPress={() => {
+              toggleOverlay();
+            }}
+          />
         </Overlay>
       )}
       <Loader loading={isFetching} />
@@ -169,7 +181,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   textPrimary: {
-    fontSize: 25,
+    fontSize: 20,
     color: "green",
     marginBottom: 20,
   },

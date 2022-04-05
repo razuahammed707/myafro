@@ -51,7 +51,6 @@ const Home = () => {
     setRefreshing(true);
     // dispatch(getSalons(assets))
     wait(2000).then(() => setRefreshing(false));
-
   }, []);
   // let [fontsLoaded, error] = useFonts({
   //   regular: Nunito_400Regular,
@@ -66,7 +65,7 @@ const Home = () => {
   const [assets, setAssets] = useState(null);
   const { salons, queries, isSuccess, isFetching } =
     useSelector(userHomeSelector);
-    const {times} = useSelector(mapSelector)
+  const { times } = useSelector(mapSelector);
   const dispatch = useDispatch();
 
   const getToken = async () => {
@@ -114,10 +113,14 @@ const Home = () => {
             onPress={() => bottomSheet.current.show()}
           >
             <Icon name="shopping-bag" type="feather" size={20} color="black" />
-            {times?.checkIn || times?.checkOut ? <View>
-            <Text style={tw`text-sm ml-2`}>{times.checkIn}</Text>
-            <Text style={tw`text-sm ml-2`}>{times.checkOut}</Text>
-            </View> : <Text style={tw`text-sm ml-2`}>When</Text>}
+            {times?.checkIn || times?.checkOut ? (
+              <View>
+                <Text style={tw`text-sm ml-2`}>{times.checkIn}</Text>
+                <Text style={tw`text-sm ml-2`}>{times.checkOut}</Text>
+              </View>
+            ) : (
+              <Text style={tw`text-sm ml-2`}>When</Text>
+            )}
           </TouchableOpacity>
         </View>
         <View style={tw`flex items-center flex-row justify-center my-3`}>

@@ -44,9 +44,12 @@ const Request = () => {
     dispatch(getSingleBooking(uniqueBooking));
   };
 
-  setTimeout(() => {
+  useEffect(() => {
+    // setTimeout(() => {
+    //   assets !== null && dispatch(getBookings(assets));
+    // }, 1000);
     assets !== null && dispatch(getBookings(assets));
-  }, 1000);
+  }, [])
 
   return (
     <SafeAreaView style={tw`p-5 h-full`}>

@@ -2,7 +2,7 @@ import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
-import { Button, Icon } from "react-native-elements";
+import { Button, Icon, Overlay } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -14,12 +14,17 @@ import {
   getUpdateBookingData,
   updateBooking,
 } from "../../../redux/slices/booking/bookingSlice";
+import Loader from "../../components/Loader/Loader";
 
 const CurrentHair = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { bookings, singleBooking, sendMessage } = useSelector(bookingSelector);
+  const { bookings, singleBooking, sendMessage, isSuccess, isFetching } = useSelector(bookingSelector);
   const [assets, setAssets] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
   // const [isBooked, setIsBooked] = useState(false);
   // const [isCanceled, setIsCanceled] = useState(false);
   const [createMessage, setCreateMessage] = useState("");
@@ -43,15 +48,6 @@ const CurrentHair = () => {
     getToken();
   }, []);
 
-  // useEffect(() => {
-  //   dispatch(
-  //     getUpdateBookingData({
-  //       status: (isBooked && "booked") || (isCanceled && "cancel"),
-  //     })
-  //   );
-  // }, [isBooked, isCanceled]);
-
-  // console.log(singleBooking)
   const showConfirmDialog = () => {
     return Alert.alert(
       "Are your sure?",
@@ -62,6 +58,7 @@ const CurrentHair = () => {
           text: "Yes",
           onPress: () => {
             dispatch(updateBooking(assets));
+            toggleOverlay()
           },
         },
         // The "No" button
@@ -88,7 +85,6 @@ const CurrentHair = () => {
     // });
   }, [createMessage]);
 
-  console.log(singleBooking)
 
   return (
     <SafeAreaView style={tw`p-5`}>
@@ -121,8 +117,11 @@ const CurrentHair = () => {
               </View>
             ) : singleBooking?.status === "complete" ? (
               <View style={tw`flex flex-row justify-center`}>
-                <Text style={tw`text-xl text-green-800`}>The booking is completed</Text>
-              </View>):(
+                <Text style={tw`text-xl text-green-800`}>
+                  The booking is completed
+                </Text>
+              </View>
+            ) : (
               <View style={tw`flex flex-row items-center justify-between`}>
                 <Button
                   title="Accept"
@@ -145,8 +144,37 @@ const CurrentHair = () => {
                       })
                     );
                     dispatch(updateBooking(assets));
+                    toggleOverlay();
                   }}
                 />
+
+                {isSuccess && !isFetching && (
+                  <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+                    <View style={styles.container}>
+                      <Text style={styles.textPrimary}>
+                        Booking request is {showConfirmDialog ? "declined" : "accepted"}
+                      </Text>
+                      <Icon
+                        name="check-circle"
+                        type="feather"
+                        size={40}
+                        color="green"
+                      />
+                    </View>
+                    <Button
+                      title="Close"
+                      type="clear"
+                      buttonStyle={{
+                        backgroundColor: "green",
+                      }}
+                      titleStyle={{ marginLeft: 10 }}
+                      onPress={() => {
+                        toggleOverlay();
+                        navigation.navigate('Tabs')
+                      }}
+                    />
+                  </Overlay>
+                )}
                 <Button
                   title="Decline"
                   buttonStyle={{
@@ -161,9 +189,10 @@ const CurrentHair = () => {
                     showConfirmDialog();
                     dispatch(
                       getUpdateBookingData({
-                        status: "cancel"
+                        status: "cancel",
                       })
                     );
+
                   }}
                 />
               </View>
@@ -221,51 +250,53 @@ const CurrentHair = () => {
             </View>
           )}
 
-          {singleBooking?.status !== "cancel" && singleBooking?.status !== "complete" && (
-            <>
-              <Text style={tw`font-bold text-lg mb-3 mt-6 `}>
-                Write Message
-              </Text>
-              <View
-                style={{
-                  backgroundColor: "lightgray",
-                  borderBottomColor: "#000000",
-                }}
-              >
-                <TextInput
-                  style={styles.input}
-                  placeholder="Type a message"
-                  multiline={true}
-                  onChangeText={(text) => setCreateMessage(text)}
-                  numberOfLines={4}
-                />
-              </View>
-              <View style={tw`mt-2 flex flex-row justify-end`}>
-                <Button
-                  title="Send"
-                  buttonStyle={{
-                    paddingHorizontal: 20,
-                    paddingVertical: 16,
+          {singleBooking?.status !== "cancel" &&
+            singleBooking?.status !== "complete" && (
+              <>
+                <Text style={tw`font-bold text-lg mb-3 mt-6 `}>
+                  Write Message
+                </Text>
+                <View
+                  style={{
+                    backgroundColor: "lightgray",
+                    borderBottomColor: "#000000",
                   }}
-                  type="clear"
-                  icon={
-                    <Icon
-                      name="send"
-                      type="feather"
-                      size={20}
-                      color="#fff"
-                      style={tw`mr-2`}
-                    />
-                  }
-                  iconPosition="left"
-                  titleStyle={{ fontSize: 14 }}
-                  onPress={() => dispatch(createMessageToSend(assets))}
-                />
-              </View>
-            </>
-          )}
+                >
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Type a message"
+                    multiline={true}
+                    onChangeText={(text) => setCreateMessage(text)}
+                    numberOfLines={4}
+                  />
+                </View>
+                <View style={tw`mt-2 flex flex-row justify-end`}>
+                  <Button
+                    title="Send"
+                    buttonStyle={{
+                      paddingHorizontal: 20,
+                      paddingVertical: 16,
+                    }}
+                    type="clear"
+                    icon={
+                      <Icon
+                        name="send"
+                        type="feather"
+                        size={20}
+                        color="#fff"
+                        style={tw`mr-2`}
+                      />
+                    }
+                    iconPosition="left"
+                    titleStyle={{ fontSize: 14 }}
+                    onPress={() => dispatch(createMessageToSend(assets))}
+                  />
+                </View>
+              </>
+            )}
         </View>
       </ScrollView>
+      {/* <Loader loading={isFetching}/> */}
     </SafeAreaView>
   );
 };
@@ -291,5 +322,19 @@ const styles = StyleSheet.create({
     margin: 12,
     padding: 10,
     borderRadius: 8,
+  },
+  container: {
+    width: 300,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    borderRadius: 8,
+  },
+  textPrimary: {
+    fontSize: 20,
+    color: "green",
+    marginBottom: 20,
   },
 });

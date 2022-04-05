@@ -1,10 +1,10 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import tw from "twrnc";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProfileAccordion from "./components/ProfileAccordion";
-import { Avatar, Icon } from "react-native-elements";
+import { Avatar, Button, Icon, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -21,10 +21,14 @@ import { useNavigation } from "@react-navigation/native";
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
   const navigation = useNavigation();
-  const { userData, hairDresserData, isFetching, isSuccess,  message } =
+  const { userData, hairDresserData, isFetching, isSuccess, message } =
     useSelector(salonSelector);
   const { isFetchingService } = useSelector(serviceSelector);
   const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
 
   const getToken = async () => {
     try {
@@ -33,7 +37,7 @@ const SalonProfile = () => {
         const parsedToken = JSON.parse(userInfo);
         setSalonAssets({
           token: parsedToken?.access_token,
-          salonId: hairDresserData?._id
+          salonId: hairDresserData?._id,
         });
         dispatch(getLoggedInUser(parsedToken?.user?.user));
         dispatch(getTokenValue(parsedToken?.access_token));
@@ -57,17 +61,61 @@ const SalonProfile = () => {
         <View
           style={tw`flex flex-row items-center justify-between px-5 py-4 border-b border-gray-200`}
         >
-          <TouchableOpacity style={tw`flex flex-row items-center`} onPress={() => navigation.goBack()}>
-          <Icon name="cross" type="entypo" size={20} color="black" />
+          <TouchableOpacity
+            style={tw`flex flex-row items-center`}
+            onPress={() => navigation.goBack()}
+          >
+            <Icon name="cross" type="entypo" size={20} color="black" />
             <Text style={tw`text-base font-bold`}>Cancel</Text>
           </TouchableOpacity>
           <Text style={tw`text-base font-bold`}>Profile</Text>
-          <Text
+          {/* <Text
             style={tw`text-base font-bold`}
             onPress={() => dispatch(updateSalon(salonAssets))}
           >
             Save
-          </Text>
+          </Text> */}
+
+          <Button
+            title="Save"
+            type="clear"
+            buttonStyle={{
+              backgroundColor: "#444",
+            }}
+            titleStyle={{ marginLeft: 10 }}
+            icon={<Icon name="edit-2" type="feather" size={20} color="#fff" />}
+            iconPosition="left"
+            onPress={() => {
+              dispatch(updateSalon(salonAssets));
+              toggleOverlay();
+            }}
+          />
+          {isSuccess && !isFetching && (
+            <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+              <View style={styles.container}>
+                <Text style={styles.textPrimary}>
+                  Profile is updated successful
+                </Text>
+                <Icon
+                  name="check-circle"
+                  type="feather"
+                  size={40}
+                  color="green"
+                />
+              </View>
+              <Button
+                title="Close"
+                type="clear"
+                buttonStyle={{
+                  backgroundColor: "green",
+                }}
+                titleStyle={{ marginLeft: 10 }}
+                onPress={() => {
+                  toggleOverlay();
+                }}
+              />
+            </Overlay>
+          )}
         </View>
         <View style={tw`mb-5 h-full`}>
           <View
@@ -101,5 +149,22 @@ const SalonProfile = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: 300,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    borderRadius: 8,
+  },
+  textPrimary: {
+    fontSize: 20,
+    color: "green",
+    marginBottom: 20,
+  },
+});
 
 export default SalonProfile;

@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Avatar, Icon } from "react-native-elements";
+import { Avatar, Button, Icon, Overlay } from "react-native-elements";
 import tw from "twrnc";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
@@ -24,10 +24,15 @@ import BookingHistory from "./BookingHistory";
 const UserProfile = () => {
   const navigation = useNavigation();
   const [assets, setAssets] = useState(null);
-  const [name, setName] = useState('')
-  const [address, setAddress] = useState('')
-  const { userInfo, updateUserData, isSuccess, isFetching } = useSelector(userProfileSelector);
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const { userInfo, updateUserData, isSuccess, isFetching } =
+    useSelector(userProfileSelector);
   const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
 
   const getToken = async () => {
     try {
@@ -65,99 +70,137 @@ const UserProfile = () => {
 
   return (
     <SafeAreaView>
-        <View>
-          <View
-            style={tw`flex flex-row items-center justify-between px-5 py-4 border-b border-gray-200`}
+      <View>
+        <View
+          style={tw`flex flex-row items-center justify-between px-5 py-4 border-b border-gray-200`}
+        >
+          <TouchableOpacity
+            style={tw`flex flex-row items-center`}
+            onPress={() => navigation.goBack()}
           >
-            <TouchableOpacity
-              style={tw`flex flex-row items-center`}
-              onPress={() => navigation.goBack()}
-            >
-              <Icon name="cross" type="entypo" size={20} color="black" />
-              <Text style={tw`text-base font-bold`}>Cancel</Text>
-            </TouchableOpacity>
-            <Text style={tw`text-base font-bold`}>Profile</Text>
-            <TouchableOpacity
+            <Icon name="cross" type="entypo" size={20} color="black" />
+            <Text style={tw`text-base font-bold`}>Cancel</Text>
+          </TouchableOpacity>
+          <Text style={tw`text-base font-bold`}>Profile</Text>
+          {/* <TouchableOpacity
               style={tw`text-base font-bold`}
               onPress={() => dispatch(updateUser(assets))}
             >
              <Text style={tw`text-base font-bold`}>Save</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={tw`mb-5 h-full`}>
-            <View
-              style={{
-                padding: 20,
-                display: "flex",
-                flexDirection: "row",
-                position: "relative",
-              }}
-            >
-              <Avatar
-                size={64}
-                rounded
-                source={require("../../../assets/img/1.png")}
+            </TouchableOpacity> */}
+          <Button
+            title="Save"
+            type="clear"
+            buttonStyle={{
+              backgroundColor: "#444",
+            }}
+            titleStyle={{ marginLeft: 10 }}
+            icon={<Icon name="edit-2" type="feather" size={20} color="#fff" />}
+            iconPosition="left"
+            onPress={() => {
+              dispatch(updateUser(assets))
+              toggleOverlay();
+            }}
+          />
+          {isSuccess && !isFetching && <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+            <View style={styles.container}>
+              <Text style={styles.textPrimary}>
+                Profile is updated successful
+              </Text>
+              <Icon
+                name="check-circle"
+                type="feather"
+                size={40}
+                color="green"
               />
-              <View style={tw`absolute bottom-6 z-10 left-15`}>
-                <Icon name="edit-2" type="feather" size={16} color="white" />
-              </View>
-              <View style={tw`ml-4`}>
-                <Text style={tw`text-base font-bold`}>
-                  {userInfo?.full_name}
-                </Text>
-                <Text style={tw` text-sm text-gray-500`}>{userInfo?.role}</Text>
-              </View>
+            </View>
+            <Button
+              title="Close"
+              type="clear"
+              buttonStyle={{
+                backgroundColor: "green",
+              }}
+              titleStyle={{ marginLeft: 10 }}
+              onPress={() => {
+                toggleOverlay();
+              }}
+            />
+          </Overlay>}
+        </View>
+        <View style={tw`mb-5 h-full`}>
+          <View
+            style={{
+              padding: 20,
+              display: "flex",
+              flexDirection: "row",
+              position: "relative",
+            }}
+          >
+            <Avatar
+              size={64}
+              rounded
+              source={require("../../../assets/img/1.png")}
+            />
+            <View style={tw`absolute bottom-6 z-10 left-15`}>
+              <Icon name="edit-2" type="feather" size={16} color="white" />
+            </View>
+            <View style={tw`ml-4`}>
+              <Text style={tw`text-base font-bold`}>{userInfo?.full_name}</Text>
+              <Text style={tw` text-sm text-gray-500`}>{userInfo?.role}</Text>
+            </View>
+          </View>
+          <View>
+            <Text style={tw`font-bold text-base px-5 mb-3`}>
+              Personal Details
+            </Text>
+            <View>
+              <Text style={tw`ml-5`}>Full name</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(newText) => setName(newText)}
+                defaultValue={userInfo?.full_name}
+                placeholder="Name"
+                keyboardType="default"
+              />
             </View>
             <View>
-              <Text style={tw`font-bold text-base px-5 mb-3`}>Personal Details</Text>
-              <View>
-                <Text style={tw`ml-5`}>Full name</Text>
-                <TextInput
-                  style={styles.input}
-                    onChangeText={(newText) => setName(newText)}
-                  defaultValue={userInfo?.full_name}
-                  placeholder="Name"
-                  keyboardType="default"
-                />
-              </View>
-              <View>
-                <Text style={tw`ml-5`}>Email</Text>
-                <TextInput
-                  style={styles.input}
-                  // onChangeText={(newText) => setName(newText)}
-                  defaultValue={userInfo?.email}
-                  placeholder="Email"
-                  editable={false}
-                  keyboardType="default"
-                />
-              </View>
-              <View>
-                <Text style={tw`ml-5`}>Mobile</Text>
-                <TextInput
-                  style={styles.input}
-                  // onChangeText={(newText) => setName(newText)}
-                  defaultValue={userInfo?.mobile}
-                  editable={false}
-                  placeholder="Mobile"
-                  keyboardType="default"
-                />
-              </View>
-              <View>
-                <Text style={tw`ml-5`}>Address</Text>
-                <TextInput
-                  multiline
-                  numberOfLines={4}
-                  style={styles.input}
-                  onChangeText={(newText) => setAddress(newText)}
-                  defaultValue={userInfo?.address}
-                  placeholder="Address"
-                />
-              </View>
+              <Text style={tw`ml-5`}>Email</Text>
+              <TextInput
+                style={styles.input}
+                // onChangeText={(newText) => setName(newText)}
+                defaultValue={userInfo?.email}
+                placeholder="Email"
+                editable={false}
+                keyboardType="default"
+              />
             </View>
-            {/* <BookingHistory /> */}
+            <View>
+              <Text style={tw`ml-5`}>Mobile</Text>
+              <TextInput
+                style={styles.input}
+                // onChangeText={(newText) => setName(newText)}
+                defaultValue={userInfo?.mobile}
+                editable={false}
+                placeholder="Mobile"
+                keyboardType="default"
+              />
+            </View>
+            <View>
+              <Text style={tw`ml-5`}>Address</Text>
+              <TextInput
+                multiline
+                numberOfLines={4}
+                style={styles.input}
+                onChangeText={(newText) => setAddress(newText)}
+                defaultValue={userInfo?.address}
+                placeholder="Address"
+              />
+            </View>
           </View>
+          {/* <BookingHistory /> */}
         </View>
-        <Loader loading={isFetching} />
+      </View>
+      <Loader loading={isFetching} />
     </SafeAreaView>
   );
 };
@@ -170,6 +213,20 @@ const styles = StyleSheet.create({
     borderColor: "lightgray",
     padding: 10,
     borderRadius: 8,
+  },
+  container: {
+    width: 300,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    borderRadius: 8,
+  },
+  textPrimary: {
+    fontSize: 20,
+    color: "green",
+    marginBottom: 20,
   },
 });
 export default UserProfile;
