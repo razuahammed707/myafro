@@ -7,7 +7,7 @@ import { Icon } from "react-native-elements";
 import Onboard from "../../../Onboard/Onboard";
 import ProfileReview from "../../../ProfileReview/ProfileReview";
 import Account from "../../../Account/Account";
-import { ActivityIndicator, Text } from "react-native";
+import { ActivityIndicator, Image, Text } from "react-native";
 import Bookings from "../../../Bookings/Bookings";
 import UserBookings from "../../../Bookings/UserBookings";
 
@@ -50,12 +50,13 @@ const HomeTabs = () => {
             options={{
               tabBarLabel: "Bookings",
               tabBarIcon: ({ color, size }) => (
-                <Icon
-                  name="wheelchair"
-                  type="fontisto"
-                  size={size}
-                  color={color}
-                />
+                // <Icon
+                //   name="wheelchair"
+                //   type="fontisto"
+                //   size={size}
+                //   color={color}
+                // />
+                <Image source={require('../../../../../assets/img/salonIcon.png')} width={24} height={20}/>
               ),
               tabBarActiveTintColor: "#222",
               tabBarStyle: {

@@ -8,6 +8,7 @@ import { Avatar, Button, Icon, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  createSalon,
   getLoggedInUser,
   getSalon,
   salonSelector,
@@ -65,8 +66,8 @@ const SalonProfile = () => {
             style={tw`flex flex-row items-center`}
             onPress={() => navigation.goBack()}
           >
-            <Icon name="cross" type="entypo" size={20} color="black" />
-            <Text style={tw`text-base font-bold`}>Cancel</Text>
+            <Icon name="arrow-left" type="feather" size={20} color="black" />
+            <Text style={tw`text-base font-bold ml-2`}>Back</Text>
           </TouchableOpacity>
           <Text style={tw`text-base font-bold`}>Profile</Text>
           {/* <Text
@@ -76,25 +77,47 @@ const SalonProfile = () => {
             Save
           </Text> */}
 
-          <Button
-            title="Save"
-            type="clear"
-            buttonStyle={{
-              backgroundColor: "#444",
-            }}
-            titleStyle={{ marginLeft: 10 }}
-            icon={<Icon name="edit-2" type="feather" size={20} color="#fff" />}
-            iconPosition="left"
-            onPress={() => {
-              dispatch(updateSalon(salonAssets));
-              toggleOverlay();
-            }}
-          />
+          {hairDresserData?._id ? (
+            <Button
+              title="Save"
+              type="clear"
+              buttonStyle={{
+                backgroundColor: "#444",
+              }}
+              titleStyle={{ marginLeft: 10 }}
+              icon={
+                <Icon name="edit-2" type="feather" size={20} color="#fff" />
+              }
+              iconPosition="left"
+              onPress={() => {
+                dispatch(updateSalon(salonAssets));
+                toggleOverlay();
+              }}
+            />
+          ) : (
+            <Button
+              title="Create"
+              type="clear"
+              buttonStyle={{
+                backgroundColor: "#444",
+              }}
+              titleStyle={{ marginLeft: 10 }}
+              icon={
+                <Icon name="edit-2" type="feather" size={20} color="#fff" />
+              }
+              iconPosition="left"
+              onPress={() => {
+                dispatch(createSalon(salonAssets));
+                toggleOverlay();
+              }}
+            />
+          )}
+
           {isSuccess && !isFetching && (
             <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
               <View style={styles.container}>
                 <Text style={styles.textPrimary}>
-                  Profile is updated successful
+                  Profile is {hairDresserData?._id ? 'updated' : 'created'} successful
                 </Text>
                 <Icon
                   name="check-circle"
@@ -112,6 +135,7 @@ const SalonProfile = () => {
                 titleStyle={{ marginLeft: 10 }}
                 onPress={() => {
                   toggleOverlay();
+                  navigation.navigate("Tabs");
                 }}
               />
             </Overlay>

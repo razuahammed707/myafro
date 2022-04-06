@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 import { Icon } from "react-native-elements";
@@ -45,15 +45,12 @@ const Request = () => {
   };
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   assets !== null && dispatch(getBookings(assets));
-    // }, 1000);
     assets !== null && dispatch(getBookings(assets));
-  }, [])
+  }, [assets])
 
   return (
     <SafeAreaView style={tw`p-5 h-full`}>
-      <View style={tw`flex flex-row`}>
+      <View style={tw`flex flex-row`}>  
         <Icon
           name="arrow-left"
           type="feather"

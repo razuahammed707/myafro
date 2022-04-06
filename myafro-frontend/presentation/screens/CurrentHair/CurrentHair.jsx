@@ -15,6 +15,7 @@ import {
   updateBooking,
 } from "../../../redux/slices/booking/bookingSlice";
 import Loader from "../../components/Loader/Loader";
+import UserMediaCarousel from "./components/UserMediaCarousel";
 
 const CurrentHair = () => {
   const navigation = useNavigation();
@@ -100,10 +101,11 @@ const CurrentHair = () => {
           <Text style={tw`font-bold text-lg ml-2`}>Current Hair</Text>
         </View>
         <View style={tw`my-5`}>
-          <Image
+          {/* <Image
             style={{ width: "100%" }}
             source={require("../../../assets/img/current.png")}
-          />
+          /> */}
+          <UserMediaCarousel />
           <View style={tw`my-5`}>
             {singleBooking?.status === "cancel" ? (
               <View style={tw`flex flex-row justify-center`}>
@@ -152,7 +154,7 @@ const CurrentHair = () => {
                   <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
                     <View style={styles.container}>
                       <Text style={styles.textPrimary}>
-                        Booking request is {showConfirmDialog ? "declined" : "accepted"}
+                        Booking request is {!showConfirmDialog ? "declined" : "accepted"}
                       </Text>
                       <Icon
                         name="check-circle"

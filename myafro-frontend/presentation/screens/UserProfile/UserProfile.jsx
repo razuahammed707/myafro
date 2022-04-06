@@ -78,8 +78,8 @@ const UserProfile = () => {
             style={tw`flex flex-row items-center`}
             onPress={() => navigation.goBack()}
           >
-            <Icon name="cross" type="entypo" size={20} color="black" />
-            <Text style={tw`text-base font-bold`}>Cancel</Text>
+           <Icon name="arrow-left" type="feather" size={20} color="black" />
+            <Text style={tw`text-base font-bold ml-2`}>Back</Text>
           </TouchableOpacity>
           <Text style={tw`text-base font-bold`}>Profile</Text>
           {/* <TouchableOpacity
@@ -123,6 +123,7 @@ const UserProfile = () => {
               titleStyle={{ marginLeft: 10 }}
               onPress={() => {
                 toggleOverlay();
+                navigation.navigate("Home");
               }}
             />
           </Overlay>}

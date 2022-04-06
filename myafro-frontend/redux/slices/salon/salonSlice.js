@@ -16,9 +16,10 @@ export const createSalon = createAsyncThunk(
   "/create/salons",
   async (assets, thunkAPI) => {
     try {
+      const { salon } = thunkAPI.getState();
       let response = await axiosClient.post(
         "/salons",
-        JSON.stringify(assets.salonData),
+        JSON.stringify(salon.updateSalonData),
         {
           headers: {
             authorization: `Bearer ${assets.token}`,
@@ -38,12 +39,13 @@ export const getSalon = createAsyncThunk(
   "/get/salon",
   async (token, thunkAPI) => {
     try {
-      let response = await axiosClient.get("/salons", {
+      let response = await axiosClient.get("/salons/unique", {
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
-      return response?.data?.salons[0];
+      console.log(response?.data)
+      return response?.data?.salon;
     } catch (e) {
       console.log("Error", e.response.data);
       thunkAPI.rejectWithValue(e.response.data);

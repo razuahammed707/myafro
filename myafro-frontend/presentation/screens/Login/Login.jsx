@@ -23,20 +23,20 @@ const Login = () => {
     dispatch(login(val));
   };
 
-  useEffect(() => {
-    if (data.status === true) {
-      if (data.user?.role === "user") {
-        navigation.navigate("HomeTabs");
-      }
-      if (data?.user?.role === "hair_dresser") {
-        if (data?.salon?._id) {
-          navigation.navigate("Tabs");
-        } else {
-          navigation.navigate("FreelanceOnboard");
-        }
-      }
-    }
-  }, [message]);
+  // useEffect(() => {
+  //   if (data.status === true) {
+  //     if (data.user?.role === "user") {
+  //       navigation.navigate("HomeTabs");
+  //     }
+  //     if (data?.user?.role === "hair_dresser") {
+  //       if (data?.salon?._id) {
+  //         navigation.navigate("Tabs");
+  //       } else {
+  //         navigation.navigate("FreelanceOnboard");
+  //       }
+  //     }
+  //   }
+  // }, [message]);
 
   // validation schema
   const formValidationSchema = yup.object().shape({

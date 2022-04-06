@@ -33,7 +33,7 @@ const Booking = ({ margin, previous }) => {
           ? bookings?.length > 0 ?
             bookings
               ?.filter(
-                (book) => book?.status === "cancel" && book.status === "complete"
+                (book) => book?.status === "cancel" || book.status === "complete"
               )
               .map((booking) => (
                 <TouchableOpacity

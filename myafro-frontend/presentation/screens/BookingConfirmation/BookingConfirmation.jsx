@@ -130,7 +130,7 @@ const BookingConfirmation = () => {
                   numberOfLines={4}
                 />
               </View>
-              <View style={tw`mt-2 flex flex-row justify-end`}>
+              {/* <View style={tw`mt-2 flex flex-row justify-end`}>
                 <Button
                   title="Send"
                   buttonStyle={{
@@ -151,7 +151,7 @@ const BookingConfirmation = () => {
                   titleStyle={{ fontSize: 14 }}
                   onPress={() => dispatch(createMessageToSend(messageAssets))}
                 />
-              </View>
+              </View> */}
               <ResponsePopup bookingConfirmation="confirmation"/>
             </View>
           </ScrollView>

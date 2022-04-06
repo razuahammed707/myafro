@@ -24,21 +24,28 @@ import GoogleMap from "../../screens/Map/GoogleMap";
 import CreatePassword from "../../screens/CreatePassword/CreatePassword";
 import SalonProfile from "../../screens/SalonProfile/SalonProfile";
 import UserProfile from "../../screens/UserProfile/UserProfile";
-import { useDispatch } from "react-redux";
-import { getTokenValue } from "../../../redux/slices/login/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  authSelector,
+  getTokenValue,
+} from "../../../redux/slices/login/authSlice";
 import BookingConfirmation from "../../screens/BookingConfirmation/BookingConfirmation";
 import BookedSalon from "../../screens/Bookings/userComponents/BookedSalon";
+import AppNavigator from "../../screenTypes/AppNavigator";
+import AuthNavigator from "../../screenTypes/AuthNavigator";
+import { useNavigation } from "@react-navigation/native";
 
 const ScreenContainer = () => {
-  const Stack = createNativeStackNavigator();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const { token } = useSelector(authSelector);
+
   // get token to make sure the user is authenticated or not
   const getToken = async () => {
     try {
       const userInfo = await AsyncStorage.getItem("user_info");
       if (userInfo) {
         const parsedToken = JSON.parse(userInfo);
-       dispatch(getTokenValue(parsedToken?.access_token))
+        dispatch(getTokenValue(parsedToken?.access_token));
       }
     } catch (e) {
       console.log(e);
@@ -48,132 +55,12 @@ const ScreenContainer = () => {
   useLayoutEffect(() => {
     getToken();
   }, []);
+  const { data } = useSelector(authSelector);
 
-  return (
-    <Stack.Navigator initialRouteName="Account">
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="OTP"
-        component={OneTimePass}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="ForgotPassword"
-        component={ForgotPassword}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="ResetPassword"
-        component={ResetPassword}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Signup"
-        component={Signup}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="CreatePassword"
-        component={CreatePassword}
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="HomeTabs"
-        component={HomeTabs}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="UserProfile"
-        component={UserProfile}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Tabs"
-        component={Tabs}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Map"
-        component={GoogleMap}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Request"
-        component={Request}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Bookings"
-        component={Bookings}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="BookingConfirmation"
-        component={BookingConfirmation}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="BookedSalon"
-        component={BookedSalon}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="FreelanceOnboard"
-        component={FreelanceOnboard}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="ProfileReview"
-        component={ProfileReview}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SaloonOption"
-        component={SaloonOption}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SalonProfile"
-        component={SalonProfile}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SaloonLocation"
-        component={SaloonLocation}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="CurrentHair"
-        component={CurrentHair}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="ProfileDetails"
-        component={ProfileDetails}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Onboard"
-        component={Onboard}
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="DateTime"
-        component={DateTimePicker}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
+  return token === null && !data?.access_token ? (
+    <AuthNavigator />
+  ) : (
+    <AppNavigator data={data} />
   );
 };
 

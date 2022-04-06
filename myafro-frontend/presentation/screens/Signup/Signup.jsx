@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { Button, CheckBox, Icon, Input } from "react-native-elements";
@@ -74,7 +74,7 @@ const Signup = () => {
         errors,
         isValid,
       }) => (
-        <SafeAreaView style={tw`p-5 bg-white`}>
+        <ScrollView style={tw`p-5 bg-white`} showsVerticalScrollIndicator={false}>
           <View>
             <View style={tw`p-5 flex items-center`}>
               <Image
@@ -86,7 +86,7 @@ const Signup = () => {
                 source={require("../../../assets/img/signup.png")}
               />
             </View>
-            <View style={tw`h-1/1`}>
+            <View style={tw``}>
               <Text style={styles.text}>Sign Up</Text>
               <View style={tw`mb-5`}>
                 <Input
@@ -150,7 +150,7 @@ const Signup = () => {
                 ) : (
                   <Text style={tw`text-red-600 ml-2`}>{message}</Text>
                 )}
-                <Text style={tw`text-gray-600 text-base font-bold ml-2 mt-2`}>
+                <Text style={tw`text-gray-600 text-base font-bold ml-2`}>
                   Are you?
                 </Text>
                 <View style={tw`flex items-center flex-row `}>
@@ -211,7 +211,7 @@ const Signup = () => {
             </View>
           </View>
           <Loader loading={loading} />
-        </SafeAreaView>
+        </ScrollView>
       )}
     </Formik>
   );

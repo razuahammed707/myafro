@@ -7,13 +7,18 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { accountData1, accountData2 } from "../../../utils/dummyData";
 import { ScrollView } from "react-native-gesture-handler";
-import { reset } from "../../../redux/slices/login/authSlice";
-import { useDispatch } from "react-redux";
+import {
+  authSelector,
+  getTokenValue,
+  reset,
+} from "../../../redux/slices/login/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Account = () => {
   const navigation = useNavigation();
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const dispatch = useDispatch()
+  const { token } = useSelector(authSelector);
+  const dispatch = useDispatch();
   const getToken = async () => {
     try {
       const userInfo = await AsyncStorage.getItem("user_info");
@@ -30,12 +35,11 @@ const Account = () => {
     getToken();
   }, []);
 
-  console.log(loggedInUser);
+  console.log(token);
 
-  const logout = async () => {
-    await AsyncStorage.clear();
-    dispatch(reset()) 
-    // navigation.navigate("Login");
+  const logout = () => {
+    dispatch(getTokenValue(null));
+    dispatch(reset());
   };
 
   return (
@@ -158,7 +162,6 @@ const Account = () => {
           style={tw` mb-3 flex flex-row items-center justify-between border-gray-200 border-b-2 pb-3`}
           onPress={() => {
             logout();
-            navigation.navigate("Login");
           }}
         >
           <View style={tw`flex flex-row items-center`}>

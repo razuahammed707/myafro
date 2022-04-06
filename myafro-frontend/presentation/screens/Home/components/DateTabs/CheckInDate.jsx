@@ -28,7 +28,7 @@ const CheckInDate = () => {
       <DatePicker date={date} onDateChange={setDate} />
       <Button
         title="Confirm"
-        buttonStyle={{ marginTop: 50 }}
+        buttonStyle={{ marginTop: 30 }}
         onPress={() => {
           dispatch(
             getDateTimes({
