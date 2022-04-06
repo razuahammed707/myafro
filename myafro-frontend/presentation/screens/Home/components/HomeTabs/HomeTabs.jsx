@@ -3,12 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Home from "../../Home";
-import { Icon } from "react-native-elements";
-import Onboard from "../../../Onboard/Onboard";
-import ProfileReview from "../../../ProfileReview/ProfileReview";
 import Account from "../../../Account/Account";
 import { ActivityIndicator, Image, Text } from "react-native";
-import Bookings from "../../../Bookings/Bookings";
 import UserBookings from "../../../Bookings/UserBookings";
 
 const HomeTabs = () => {
@@ -56,7 +52,11 @@ const HomeTabs = () => {
                 //   size={size}
                 //   color={color}
                 // />
-                <Image source={require('../../../../../assets/img/salonIcon.png')} width={24} height={20}/>
+                <Image
+                  source={require("../../../../../assets/img/salonIcon.png")}
+                  width={24}
+                  height={20}
+                />
               ),
               tabBarActiveTintColor: "#222",
               tabBarStyle: {

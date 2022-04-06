@@ -9,6 +9,7 @@ import { accountData1, accountData2 } from "../../../utils/dummyData";
 import { ScrollView } from "react-native-gesture-handler";
 import {
   authSelector,
+  emptyLoggedInData,
   getTokenValue,
   reset,
 } from "../../../redux/slices/login/authSlice";
@@ -39,6 +40,7 @@ const Account = () => {
 
   const logout = () => {
     dispatch(getTokenValue(null));
+    dispatch(emptyLoggedInData({}))
     dispatch(reset());
   };
 

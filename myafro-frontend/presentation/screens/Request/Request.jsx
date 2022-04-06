@@ -64,7 +64,7 @@ const Request = () => {
         {isSuccess ? (
           bookings.length > 0 ?
             bookings
-              ?.filter((book) => book?.status !== null && book?.status === "pending")
+              ?.filter((book) =>  book?.status === "pending")
               .map((booking) => (
                 booking._id && <TouchableOpacity
                   onPress={() => {
@@ -132,7 +132,6 @@ const Request = () => {
               )) : (
 
               <View style={tw`mt-20 flex flex-row justify-center`}>
-
                 <Image
                   source={require("../../../assets/img/notFound.png")}
                   height={100}

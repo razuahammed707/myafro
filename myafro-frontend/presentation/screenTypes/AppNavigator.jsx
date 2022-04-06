@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Onboard from "../screens/Onboard/Onboard";
 import Profile from "../screens/Profile/Profile";
@@ -20,7 +19,6 @@ import BookedSalon from "../screens/Bookings/userComponents/BookedSalon";
 
 const AppNavigator = ({ data }) => {
   const Stack = createNativeStackNavigator();
-
   return (
     <Stack.Navigator
       initialRouteName={
@@ -123,5 +121,3 @@ const AppNavigator = ({ data }) => {
 };
 
 export default AppNavigator;
-
-const styles = StyleSheet.create({});

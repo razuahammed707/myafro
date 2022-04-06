@@ -19,8 +19,9 @@ const ReviewPopup = ({ authToken }) => {
   const [comment, setComment] = useState("");
   const [visible, setVisible] = useState(false);
   const [rating, setRating] = useState(5);
-  const { createReviewData, isSuccess, isFetching } = useSelector(reviewSelector);
-  const navigation = useNavigation()
+  const { createReviewData, isSuccess, isFetching } =
+    useSelector(reviewSelector);
+  const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const toggleOverlay = () => {
@@ -105,8 +106,8 @@ const ReviewPopup = ({ authToken }) => {
               })
             );
             dispatch(updateBooking(authToken));
-            if(isSuccess){
-              navigation.navigate('Home')
+            if (isSuccess) {
+              navigation.navigate("Home");
             }
           }}
         />

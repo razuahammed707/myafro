@@ -16,6 +16,7 @@ import {
 } from "../../../redux/slices/booking/bookingSlice";
 import Loader from "../../components/Loader/Loader";
 import UserMediaCarousel from "./components/UserMediaCarousel";
+import MessagePopup from "./components/MessagePopup";
 
 const CurrentHair = () => {
   const navigation = useNavigation();
@@ -26,8 +27,6 @@ const CurrentHair = () => {
   const toggleOverlay = () => {
     setVisible(!visible);
   };
-  // const [isBooked, setIsBooked] = useState(false);
-  // const [isCanceled, setIsCanceled] = useState(false);
   const [createMessage, setCreateMessage] = useState("");
 
   const getToken = async () => {
@@ -273,26 +272,7 @@ const CurrentHair = () => {
                   />
                 </View>
                 <View style={tw`mt-2 flex flex-row justify-end`}>
-                  <Button
-                    title="Send"
-                    buttonStyle={{
-                      paddingHorizontal: 20,
-                      paddingVertical: 16,
-                    }}
-                    type="clear"
-                    icon={
-                      <Icon
-                        name="send"
-                        type="feather"
-                        size={20}
-                        color="#fff"
-                        style={tw`mr-2`}
-                      />
-                    }
-                    iconPosition="left"
-                    titleStyle={{ fontSize: 14 }}
-                    onPress={() => dispatch(createMessageToSend(assets))}
-                  />
+                  <MessagePopup onPress={() => dispatch(createMessageToSend(assets))}/>
                 </View>
               </>
             )}
