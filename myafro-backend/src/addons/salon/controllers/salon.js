@@ -38,7 +38,26 @@ const getSalons = async (req, res, next) => {
 
     const salons = await SalonModel.find(query)
       .sort({ createdAt: -1 })
-      .populate("user", "-password").populate('review');
+      .populate("user", "-password").populate('review').lean()
+
+    const reviewsData = await ReviewModel.find().lean()
+
+    salons.map(salon=>{
+
+      let reviews =  reviewsData.filter(review=>{
+          if(salon._id.toString()===review.salon.toString()){
+            return review;
+          }
+      })
+      salon.reviews=reviews
+    });
+
+    
+  
+
+
+
+    
 
     res.send({
       status: true,
