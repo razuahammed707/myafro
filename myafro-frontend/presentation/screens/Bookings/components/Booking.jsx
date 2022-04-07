@@ -108,7 +108,7 @@ const Booking = ({ margin, previous }) => {
                 />
               </View>
             )
-          : bookings.length > 0 ?
+          : bookings?.length > 0 ?
             bookings
               ?.filter((book) => book?.status === "booked")
               .map((booking) => (
@@ -177,7 +177,6 @@ const Booking = ({ margin, previous }) => {
                 </TouchableOpacity>
               )) : (
               <View style={tw`mt-20 flex flex-row justify-center`}>
-
                 <Image
                   source={require("../../../../assets/img/notFound.png")}
                   height={100}

@@ -1,15 +1,16 @@
 import { Button, Overlay, Icon } from "react-native-elements";
 import { View, Text, StyleSheet } from "react-native";
 import tw from "twrnc";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { bookingSelector } from "../../../../redux/slices/booking/bookingSlice";
+import { bookingSelector, getSingleBookedSalon } from "../../../../redux/slices/booking/bookingSlice";
 import Loader from "../../../components/Loader/Loader";
 
-const UserMessagePopup = ({ onPress }) => {
-  const { isSuccess, isFetching } = useSelector(bookingSelector);
+const UserMessagePopup = ({ onPress, getUpdatedBookings }) => {
+  const { isSuccess, isFetching, singleBookedSalon } = useSelector(bookingSelector);
   const navigation = useNavigation();
+  const dispatch = useDispatch()
   const [visible, setVisible] = useState(false);
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -38,6 +39,7 @@ const UserMessagePopup = ({ onPress }) => {
           titleStyle={{ fontSize: 14 }}
           onPress={() => {
             onPress();
+                
             toggleOverlay();
           }}
         />
@@ -57,6 +59,7 @@ const UserMessagePopup = ({ onPress }) => {
             titleStyle={{ marginLeft: 10 }}
             onPress={() => {
               toggleOverlay();
+              getUpdatedBookings()   
               navigation.navigate("HomeTabs");
             }}
           />

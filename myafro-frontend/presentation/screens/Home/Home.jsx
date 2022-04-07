@@ -90,6 +90,8 @@ const Home = () => {
     assets !== null && dispatch(getSalons(assets));
   }, [assets, queries]);
 
+  console.log(salons)
+
   return (
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`h-1/1 p-5`}>

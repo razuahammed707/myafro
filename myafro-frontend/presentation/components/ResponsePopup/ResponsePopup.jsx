@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   bookingSelector,
   createBooking,
+  getBookingsByUser,
   getCreateBookingData,
   getUpdateBookingData,
   updateBooking,
@@ -29,29 +30,6 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
     setVisible(!visible);
   };
 
-  const showConfirmDialog = () => {
-    return Alert.alert(
-      "Are your sure?",
-      "Do you want to cancel the booking request?",
-      [
-        // The "Yes" button
-        {
-          text: "Yes",
-          onPress: () => {
-            dispatch(updateBooking(assets));
-          },
-        },
-        // The "No" button
-        // Does nothing but dismiss the dialog when tapped
-        {
-          text: "No",
-          onPress: () => {},
-        },
-      ]
-    );
-  };
-
-  console.log(bookingInfo);
   const getToken = async () => {
     try {
       const userInfo = await AsyncStorage.getItem("user_info");
@@ -86,13 +64,29 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
     visible === true && navigation.navigate("Home");
   }, 3000);
 
-  // useEffect(() => {
-  //   dispatch(
-  //     getUpdateBookingData({
-  //       status: isCanceled && "cancel",
-  //     })
-  //   );
-  // }, [isCanceled]);
+  const showConfirmDialog = () => {
+    return Alert.alert(
+      "Are your sure?",
+      "Do you want to cancel the booking request?",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+            dispatch(updateBooking(assets));
+            dispatch(getBookingsByUser(assets))
+            navigation.navigate("HomeTabs");
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+          onPress: () => {},
+        },
+      ]
+    );
+  };
 
   return (
     <View>
@@ -161,6 +155,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
             titleStyle={{ marginLeft: 10 }}
             onPress={() => {
               toggleOverlay();
+              dispatch(getBookingsByUser(assets))
             }}
           />
         </Overlay>
