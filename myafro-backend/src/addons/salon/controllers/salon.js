@@ -46,13 +46,14 @@ const getSalons = async (req, res, next) => {
 
     salons.map((salon) => {
       let reviews = reviewsData.filter((review) => {
-        if (salon._id.toString() === review.salon.toString()) {
+        if (salon._id.equals(review.salon)) {
           return review;
         }
       });
       salon.reviews = reviews;
     });
 
+    
     res.send({
       status: true,
       salons,
