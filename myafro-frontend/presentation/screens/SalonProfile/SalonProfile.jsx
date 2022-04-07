@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import tw from "twrnc";
@@ -18,6 +18,7 @@ import Loader from "../../components/Loader/Loader";
 import { getTokenValue } from "../../../redux/slices/login/authSlice";
 import { serviceSelector } from "../../../redux/slices/salon/serviceSlice";
 import { useNavigation } from "@react-navigation/native";
+import { getBookings } from "../../../redux/slices/booking/bookingSlice";
 
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
@@ -58,7 +59,7 @@ const SalonProfile = () => {
 
   return (
     <>
-      <SafeAreaView>
+      <SafeAreaView style={tw`h-full`}>
         <View
           style={tw`flex flex-row items-center justify-between px-5 py-4 border-b border-gray-200`}
         >
@@ -92,6 +93,7 @@ const SalonProfile = () => {
               onPress={() => {
                 dispatch(updateSalon(salonAssets));
                 toggleOverlay();
+               
               }}
             />
           ) : (
@@ -135,6 +137,7 @@ const SalonProfile = () => {
                 titleStyle={{ marginLeft: 10 }}
                 onPress={() => {
                   toggleOverlay();
+                  dispatch(getBookings(salonAssets));
                   navigation.navigate("Tabs");
                 }}
               />
@@ -163,7 +166,7 @@ const SalonProfile = () => {
               <Text style={tw` text-sm text-gray-500`}>{userData?.role}</Text>
             </View>
           </View>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             <ProfileAccordion />
           </ScrollView>
         </View>

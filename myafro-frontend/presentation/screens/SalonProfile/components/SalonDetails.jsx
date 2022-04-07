@@ -31,59 +31,57 @@ const SalonDetails = () => {
   }, [name, price, location, hairDresserData, description]);
 
   return (
-    <>
+    <View>
       <View>
-        <View>
-          <Text style={tw`ml-5`}>Name</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(newText) => setName(newText)}
-            defaultValue={name || hairDresserData?.name}
-            placeholder="Name"
-            keyboardType="default"
-          />
-        </View>
-        <View>
-          <Text style={tw`ml-5`}>Hair type</Text>
-          <HairTypeDropdown />
-        </View>
-        <View>
-          <Text style={tw`ml-5`}>Salon Type</Text>
-          <SalonTypeDropdown />
-        </View>
-
-        <View>
-          <Text style={tw`ml-5`}>Price</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(newText) => setPrice(newText)}
-            defaultValue={hairDresserData?.price?.toString() || price.toString()}
-            placeholder="Price"
-            keyboardType="numeric"
-          />
-        </View>
-        <View>
-          <Text style={tw`ml-5`}>Description</Text>
-          <TextInput
-            style={styles.textarea}
-            multiline={true}
-            numberOfLines={4}
-            onChangeText={(newText) => setDescription(newText)}
-            defaultValue={description || hairDresserData?.description}
-            placeholder="Description"
-          />
-        </View>
-        <View>
-          <Text style={tw`ml-5`}>Location</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(newText) => setLocation(newText)}
-            defaultValue={hairDresserData?.location || location}
-            placeholder="Location"
-          />
-        </View>
+        <Text style={tw`ml-5`}>Name</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(newText) => setName(newText)}
+          defaultValue={name || hairDresserData?.name}
+          placeholder="Name"
+          keyboardType="default"
+        />
       </View>
-    </>
+      <View>
+        <Text style={tw`ml-5`}>Hair type</Text>
+        <HairTypeDropdown />
+      </View>
+      <View>
+        <Text style={tw`ml-5`}>Salon Type</Text>
+        <SalonTypeDropdown />
+      </View>
+
+      <View>
+        <Text style={tw`ml-5`}>Price</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(newText) => setPrice(newText)}
+          defaultValue={hairDresserData?.price?.toString() || price.toString()}
+          placeholder="Price"
+          keyboardType="numeric"
+        />
+      </View>
+      <View>
+        <Text style={tw`ml-5`}>Description</Text>
+        <TextInput
+          style={styles.textarea}
+          multiline={true}
+          numberOfLines={4}
+          onChangeText={(newText) => setDescription(newText)}
+          defaultValue={description || hairDresserData?.description}
+          placeholder="Description"
+        />
+      </View>
+      <View>
+        <Text style={tw`ml-5`}>Location</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(newText) => setLocation(newText)}
+          defaultValue={hairDresserData?.location || location}
+          placeholder="Location"
+        />
+      </View>
+    </View>
   );
 };
 

@@ -4,7 +4,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import tw from "twrnc";
-import { Button, Icon, Input } from "react-native-elements";
+import { Button, Icon, Input, Overlay } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import Loader from "../../components/Loader/Loader";
 import axiosClient from "../../../config/base";
@@ -15,6 +15,11 @@ const CreatePassword = () => {
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);
   const [message, setMessage] = useState("");
+
+  const [visible, setVisible] = useState(false);
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
 
   //validation schema
   const formValidationSchema = yup.object().shape({
@@ -57,7 +62,7 @@ const CreatePassword = () => {
         console.log(res.data);
         res.data.status === false ? setLoading(false) : setLoading(false);
         if (res.data.status === true) {
-          navigation.navigate("Login");
+          toggleOverlay();
           clearData();
         }
         setMessage(res.data.message);
@@ -69,6 +74,8 @@ const CreatePassword = () => {
       });
   };
   return (
+    <>
+    
     <Formik
       initialValues={{ password: "", confirm_password: "" }}
       validateOnMount={true}
@@ -146,6 +153,27 @@ const CreatePassword = () => {
         </SafeAreaView>
       )}
     </Formik>
+    <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+        <View style={styles.container}>
+          <Text style={styles.textPrimary}>
+           Your account has been created successfully
+          </Text>
+          <Icon name="check-circle" type="feather" size={40} color="green" />
+        </View>
+        <Button
+          title="Click here to login"
+          type="clear"
+          buttonStyle={{
+            backgroundColor: "green",
+          }}
+          titleStyle={{ marginLeft: 10 }}
+          onPress={() => {
+            toggleOverlay();
+            navigation.navigate("Login");
+          }}
+        />
+      </Overlay>
+    </>
   );
 };
 
@@ -162,5 +190,19 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
     backgroundColor: "gray",
+  },
+  container: {
+    width: 300,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    borderRadius: 8,
+  },
+  textPrimary: {
+    fontSize: 20,
+    color: "green",
+    marginBottom: 20,
   },
 });

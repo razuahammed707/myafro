@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,9 +8,9 @@ import {
 } from "../../../../redux/slices/salon/salonSlice";
 
 const data = [
-  { label: "Public", value: "public" },
-  { label: "Home Salon", value: "home_salon" },
-  { label: "both", value: "both" },
+  { label: "Public", value: "Public" },
+  { label: "Home Salon", value: "Home Salon" },
+  { label: "both", value: "Both" },
 ];
 
 const SalonTypeDropdown = () => {
@@ -28,29 +28,31 @@ const SalonTypeDropdown = () => {
   }, [value]);
 
   return (
-    <Dropdown
-      style={styles.dropdown}
-      placeholderStyle={styles.placeholderStyle}
-      selectedTextStyle={styles.selectedTextStyle}
-      inputSearchStyle={styles.inputSearchStyle}
-      iconStyle={styles.iconStyle}
-      data={data}
-      search
-      maxHeight={300}
-      labelField="label"
-      valueField="value"
-      placeholder="Salon type"
-      searchPlaceholder="Search..."
-      value={hairDresserData?.salon_type || value}
-      onChange={(item) => {
-        setValue(item.value);
-      }}
-      // renderLeftIcon={() =>
-      //   text === "saloon" && (
-      //     <AntDesign style={styles.icon} color="black" name="home" size={15} />
-      //   )
-      // }
-    />
+    <View>
+      <Dropdown
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        data={data}
+        search
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder="Salon type"
+        searchPlaceholder="Search..."
+        value={hairDresserData?.salon_type || value}
+        onChange={(item) => {
+          setValue(item.value);
+        }}
+        // renderLeftIcon={() =>
+        //   text === "saloon" && (
+        //     <AntDesign style={styles.icon} color="black" name="home" size={15} />
+        //   )
+        // }
+      />
+    </View>
   );
 };
 

@@ -30,8 +30,6 @@ const ScreenContainer = () => {
   }, []);
   const { data } = useSelector(authSelector);
 
-  console.log(token, data)
-
   return token === null && !data.access_token ? (
     <AuthNavigator />
   ) : (

@@ -206,7 +206,7 @@ const BookedSalon = () => {
                     />
                   </View>
                   <View style={tw`mt-2 flex flex-row justify-end`}>
-                    <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))}/>
+                    <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/>
                   </View>
                 </>
               )}

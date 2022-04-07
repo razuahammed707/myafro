@@ -59,6 +59,7 @@ const Popup = ({ visible, toggleOverlay }) => {
             onChangeText={(newText) => setTitle(newText)}
             defaultValue={fetchedSingleTitle?.title || title }
             placeholder="Title"
+            keyboardType="default"
           />
         </View>
         {fetchedSingleTitle?._id ? (

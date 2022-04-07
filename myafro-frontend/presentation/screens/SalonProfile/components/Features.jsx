@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect } from "react";
 import tw from "twrnc";
 import FeaturesPopup from "./FeaturesPopup";
@@ -12,6 +12,8 @@ const Features = () => {
   useEffect(() => {
     dispatch(getValues({...updateSalonData}))
   }, [])
+
+  console.log(updateSalonData?.features)
   return (
     <View style={tw`px-5`}>
       <FeaturesPopup />
@@ -24,15 +26,15 @@ const Features = () => {
       >
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
           <Text style={tw`text-base`}>Year</Text>
-          <Text style={tw`text-base`}>{hairDresserData?.features?.year || "none"}</Text>
+          <Text style={tw`text-base`}>{hairDresserData?.features?.year || updateSalonData?.features?.year}</Text>
         </View>
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
           <Text style={tw`text-base`}>Condition</Text>
-          <Text style={tw`text-base`}>{hairDresserData?.features?.condition || "none"}</Text>
+          <Text style={tw`text-base`}>{hairDresserData?.features?.condition || updateSalonData?.features?.condition}</Text>
         </View>
         <View style={tw`flex flex-row justify-between items-center mt-5`}>
           <Text style={tw`text-base`}>License</Text>
-          <Text style={tw`text-base`}>{hairDresserData?.features?.license || "none"}</Text>
+          <Text style={tw`text-base`}>{hairDresserData?.features?.license || updateSalonData?.features?.license}</Text>
         </View>
       </View>
     </View>

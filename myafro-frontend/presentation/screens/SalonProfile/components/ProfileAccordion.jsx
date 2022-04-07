@@ -84,6 +84,7 @@ const ProfileAccordion = () => {
       renderContent={renderContent}
       underlayColor={"lightgray"}
       onChange={updateSections}
+      containerStyle={{height:"100%"}}
     />
   );
 };
