@@ -52,6 +52,7 @@ const getBookingsByUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+  return;
 };
 
 const updateBooking = async (req, res, next) => {
