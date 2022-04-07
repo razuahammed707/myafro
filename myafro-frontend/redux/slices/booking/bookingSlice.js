@@ -88,7 +88,7 @@ export const getBookings = createAsyncThunk(
   "/get/bookings",
   async (assets, thunkAPI) => {
     try {
-      let response = await axiosClient.get(`/bookings/user`, {
+      let response = await axiosClient.get(`/bookings`, {
         headers: {
           authorization: `Bearer ${assets?.token}`,
         },

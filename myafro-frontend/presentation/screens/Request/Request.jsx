@@ -51,6 +51,7 @@ const Request = () => {
     assets !== null && dispatch(getBookings(assets));
   }, [assets]);
 
+  console.log(bookings)
   return (
     <>
       <SafeAreaView style={tw`p-5`}>
