@@ -38,26 +38,20 @@ const getSalons = async (req, res, next) => {
 
     const salons = await SalonModel.find(query)
       .sort({ createdAt: -1 })
-      .populate("user", "-password").populate('review').lean()
+      .populate("user", "-password")
+      .populate("review")
+      .lean();
 
-    const reviewsData = await ReviewModel.find().lean()
+    const reviewsData = await ReviewModel.find().lean();
 
-    salons.map(salon=>{
-
-      let reviews =  reviewsData.filter(review=>{
-          if(salon._id.toString()===review.salon.toString()){
-            return review;
-          }
-      })
-      salon.reviews=reviews
+    salons.map((salon) => {
+      let reviews = reviewsData.filter((review) => {
+        if (salon._id.toString() === review.salon.toString()) {
+          return review;
+        }
+      });
+      salon.reviews = reviews;
     });
-
-    
-  
-
-
-
-    
 
     res.send({
       status: true,
@@ -70,10 +64,9 @@ const getSalons = async (req, res, next) => {
 
 const getSalon = async (req, res, next) => {
   try {
-    const salon = await SalonModel.findOne({ user: req.user.id }).populate(
-      "user",
-      "-password"
-    ).populate("review");
+    const salon = await SalonModel.findOne({ user: req.user.id })
+      .populate("user", "-password")
+      .populate("review");
     // const review = await ReviewModel.find({ salon: req.user.salon })
     //   .sort({ createdAt: -1 })
     //   .populate("user", "-password -otp -is_verified");
