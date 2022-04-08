@@ -128,6 +128,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
                 iconPosition="left"
                 onPress={() => {
                   dispatch(createBooking(assets));
+                  dispatch(getBookingsByUser(assets))
                   toggleOverlay();
                 }}
               />

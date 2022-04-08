@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   bookingSelector,
   createMessageToSend,
+  getBookings,
   getMessageToSend,
   getUpdateBookingData,
   updateBooking,
@@ -171,6 +172,7 @@ const CurrentHair = () => {
                       titleStyle={{ marginLeft: 10 }}
                       onPress={() => {
                         toggleOverlay();
+                        dispatch(getBookings(assets))
                         navigation.navigate('Tabs')
                       }}
                     />
@@ -272,7 +274,7 @@ const CurrentHair = () => {
                   />
                 </View>
                 <View style={tw`mt-2 flex flex-row justify-end`}>
-                  <MessagePopup onPress={() => dispatch(createMessageToSend(assets))}/>
+                  <MessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdateBookings ={() => dispatch(getBookings(assets))}/>
                 </View>
               </>
             )}

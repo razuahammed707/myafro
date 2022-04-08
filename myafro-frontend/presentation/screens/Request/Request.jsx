@@ -1,5 +1,12 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import {
+  Image,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
 import { Icon } from "react-native-elements";
@@ -22,13 +29,25 @@ const Request = () => {
   const [assets, setAssets] = useState(null);
   const [isSalonCreated, setSalonCreated] = useState(null);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+      setShow(true);
+  }, []);
+
   const getToken = async () => {
     try {
       const userInfo = await AsyncStorage.getItem("user_info");
       if (userInfo) {
         const parsedToken = JSON.parse(userInfo);
-        console.log(parsedToken)
-        setSalonCreated(parsedToken?.user?.salon)
+        console.log(parsedToken);
+        setSalonCreated(parsedToken?.user?.salon);
         setAssets({
           token: parsedToken?.access_token,
         });
@@ -38,9 +57,9 @@ const Request = () => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getToken();
-  }, []);
+  }, [show]);
 
   const getBooking = (id) => {
     const uniqueBooking = bookings?.find((booking) => booking._id === id);
@@ -48,13 +67,17 @@ const Request = () => {
   };
 
   useEffect(() => {
-    assets !== null && dispatch(getBookings(assets));
-  }, [assets]);
+    assets !== null && show && dispatch(getBookings(assets));
+  }, [assets, isSuccess]);
 
-  console.log(bookings)
   return (
     <>
-      <SafeAreaView style={tw`p-5`}>
+      <SafeAreaView
+        style={tw`p-5`}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={tw`flex flex-row`}>
           {/* <Icon
             name="arrow-left"
@@ -66,7 +89,7 @@ const Request = () => {
           <Text style={tw`font-bold text-lg ml-2`}>Request Screen</Text>
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {isSuccess ? (
+          {isSuccess && show && !isFetching ? (
             bookings?.length > 0 ? (
               bookings
                 ?.filter((book) => book?.status === "pending")
@@ -139,7 +162,7 @@ const Request = () => {
                     )
                 )
             ) : (
-            <View style={tw`mt-20 flex flex-row justify-center`}>
+              <View style={tw`mt-20 flex flex-row justify-center`}>
                 <Image
                   source={require("../../../assets/img/notFound.png")}
                   height={100}
@@ -152,16 +175,18 @@ const Request = () => {
           )}
         </ScrollView>
       </SafeAreaView>
-     {isSalonCreated === null && <SafeAreaView style={tw`p-5 flex flex-row justify-center`}>
-        <View>
-          <Text style={tw`text-xl `}>Your profile is not created yet.</Text>
-          <Text style={tw`text-lg text-center`}>Please create your profile.</Text>
-        </View>
-      </SafeAreaView>}
+      {isSalonCreated === null && !bookings?.length && (
+        <SafeAreaView style={tw`p-5 flex flex-row justify-center`}>
+          <View>
+            <Text style={tw`text-xl `}>Your profile is not created yet.</Text>
+            <Text style={tw`text-lg text-center`}>
+              Please create your profile.
+            </Text>
+          </View>
+        </SafeAreaView>
+      )}
     </>
   );
 };
 
 export default Request;
-
-const styles = StyleSheet.create({});

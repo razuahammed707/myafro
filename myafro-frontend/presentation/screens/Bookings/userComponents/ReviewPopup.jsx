@@ -10,6 +10,7 @@ import {
 } from "../../../../redux/slices/reviews/reviewSlice";
 import { AirbnbRating } from "react-native-ratings";
 import {
+  getBookingsByUser,
   getUpdateBookingData,
   updateBooking,
 } from "../../../../redux/slices/booking/bookingSlice";
@@ -41,7 +42,6 @@ const ReviewPopup = ({ authToken }) => {
     );
   }, [comment, rating]);
 
-  console.log(createReviewData, authToken);
   return (
     <View>
       <View style={tw`my-3`}>
@@ -105,6 +105,7 @@ const ReviewPopup = ({ authToken }) => {
                 status: "complete",
               })
             );
+            dispatch(getBookingsByUser(authToken))
             dispatch(updateBooking(authToken));
             if (isSuccess) {
               navigation.navigate("Home");

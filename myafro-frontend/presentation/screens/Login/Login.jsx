@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { Button, Icon, Input } from "react-native-elements";
@@ -55,7 +55,7 @@ const Login = () => {
       validationSchema={formValidationSchema}
     >
       {({ handleChange, handleBlur, values, touched, errors, isValid }) => (
-        <SafeAreaView style={tw`p-5 bg-white`}>
+        <ScrollView showsVerticalScrollIndicator={false} style={tw`p-5 bg-white`}>
           <View>
             <View style={tw`p-5 flex items-center`}>
               <Image
@@ -136,27 +136,6 @@ const Login = () => {
                   handleLogin(values);
                 }}
               />
-              {/* <View style={tw`my-4 flex items-center justify-center p-3`}>
-                <View style={styles.grayBorder} />
-                <Text
-                  style={tw`text-center font-bold text-gray-400 mt--3 bg-white px-2`}
-                >
-                  OR
-                </Text>
-              </View>
-              <View
-                style={tw`flex flex-row items-center justify-center p-3 mx-2 mb-5 border-gray-300 border rounded-lg`}
-              >
-                <Image
-                  style={{
-                    width: 30,
-                    height: 30,
-                    resizeMode: "contain",
-                  }}
-                  source={require("../../../assets/img/google.png")}
-                />
-                <Text style={tw`text-base ml-4`}>Login with Google</Text>
-              </View> */}
               <Text style={tw`text-sm text-gray-400 text-center`}>
                 Don't have account?{" "}
                 <Text
@@ -171,7 +150,7 @@ const Login = () => {
 
           {/* progress loader */}
           <Loader loading={isFetching} />
-        </SafeAreaView>
+        </ScrollView>
       )}
     </Formik>
   );

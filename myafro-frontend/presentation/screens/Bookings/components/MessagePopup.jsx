@@ -1,15 +1,16 @@
 import { Button, Overlay, Icon } from "react-native-elements";
 import { View, Text, StyleSheet } from "react-native";
 import tw from "twrnc";
-import { useSelector } from "react-redux";
-import { bookingSelector } from "../../../../redux/slices/booking/bookingSlice";
-import Loader from "../../../components/Loader/Loader";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { bookingSelector, getSingleBookedSalon } from "../../../../redux/slices/booking/bookingSlice";
+import Loader from "../../../components/Loader/Loader";
 
-const MessagePopup = ({ onPress, getUpdateBookings }) => {
-  const { isSuccess, isFetching } = useSelector(bookingSelector);
+const MessagePopup = ({ onPress, getUpdatedBookings }) => {
+  const { isSuccess, isFetching, singleBookedSalon } = useSelector(bookingSelector);
   const navigation = useNavigation();
+  const dispatch = useDispatch()
   const [visible, setVisible] = useState(false);
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -45,7 +46,7 @@ const MessagePopup = ({ onPress, getUpdateBookings }) => {
       {isSuccess && !isFetching && (
         <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
           <View style={styles.container}>
-            <Text style={styles.textPrimary}>Message has been sent.</Text>
+            <Text style={styles.textPrimary}>Message has been sent to user.</Text>
             <Icon name="check-circle" type="feather" size={40} color="green" />
           </View>
           <Button
@@ -57,7 +58,7 @@ const MessagePopup = ({ onPress, getUpdateBookings }) => {
             titleStyle={{ marginLeft: 10 }}
             onPress={() => {
               toggleOverlay();
-              getUpdateBookings()
+              getUpdatedBookings()   
               navigation.navigate("Tabs");
             }}
           />
