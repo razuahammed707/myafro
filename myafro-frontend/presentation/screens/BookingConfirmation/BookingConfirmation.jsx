@@ -13,6 +13,7 @@ import {
   bookingSelector,
   createMessageToSend,
   getBookingsByUser,
+  getCreateBookingData,
   getMessageToSend,
 } from "../../../redux/slices/booking/bookingSlice";
 import BookedSalon from "../Bookings/userComponents/BookedSalon";
@@ -24,11 +25,11 @@ import {
 
 const BookingConfirmation = () => {
   const navigation = useNavigation();
-  const [createMessage, setCreateMessage] = useState("");
+  const [sendMessage, setSendMessage] = useState("");
   const dispatch = useDispatch();
   const [assets, setAssets] = useState(null);
   const [messageAssets, setMessageAssets] = useState(null);
-  const { isFetching, createdBooking } = useSelector(bookingSelector);
+  const { isFetching, createdBooking, createBookingData } = useSelector(bookingSelector);
 
   const getToken = async () => {
     try {
@@ -51,17 +52,13 @@ const BookingConfirmation = () => {
 
   useEffect(() => {
     dispatch(
-      getMessageToSend({
-        user_type: assets?.role || "user",
-        message: createMessage,
+      getCreateBookingData({
+        ...createBookingData,
+        message: sendMessage
       })
     );
-    setMessageAssets({
-      token: assets?.token,
-      bookingId: createdBooking?._id,
-    });
-  }, [createMessage]);
-
+  }, [sendMessage]);
+  
   return (
     <SafeAreaView style={tw`p-5 mb-5`}>
       <View>
@@ -126,11 +123,11 @@ const BookingConfirmation = () => {
                   style={styles.input}
                   placeholder="Type a message"
                   multiline={true}
-                  onChangeText={(text) => setCreateMessage(text)}
+                  onChangeText={(text) => setSendMessage(text)}
                   numberOfLines={4}
                 />
               </View>
-              <View style={tw`mt-2 flex flex-row justify-end`}>
+              {/* <View style={tw`mt-2 flex flex-row justify-end`}>
                 <Button
                   title="Send"
                   buttonStyle={{
@@ -151,7 +148,7 @@ const BookingConfirmation = () => {
                   titleStyle={{ fontSize: 14 }}
                   onPress={() => dispatch(createMessageToSend(messageAssets))}
                 />
-              </View>
+              </View> */}
               <ResponsePopup bookingConfirmation="confirmation"/>
             </View>
           </ScrollView>

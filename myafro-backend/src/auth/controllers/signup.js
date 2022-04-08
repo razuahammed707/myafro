@@ -23,15 +23,50 @@ transporter.use("compile", hbs(handlebarOptions));
 const signup = async (req, res, next) => {
   try {
     const { email, mobile } = req.body;
+
     const user = await UserModel.findOne({
-      email: email,
-      mobile: mobile,
-    }).exec();
+      email,
+    });
+
+    // user exists but not varified
+    if (user && !user.is_verified) {
+      const otp = Math.floor(1000 + Math.random() * 9000);
+      const newOtp = await UserModel.findByIdAndUpdate(
+        user._id,
+        { otp: otp },
+        { new: true }
+      );
+
+      const token = jwt.sign(
+        {
+          _id: newOtp._id,
+          email: newOtp.email,
+        },
+        process.env.JWT_SECRET
+      );
+      // send mail with defined transport object
+      await transporter.sendMail({
+        from: '"Verify your email 👻" <ronybarua.corexlab@gmail.com>',
+        to: newOtp.email,
+        subject: "Verify Email",
+        template: "email",
+        context: {
+          name: newOtp.full_name,
+          token: token,
+          otp: otp,
+        },
+      });
+      res.send({
+        message: "OTP has been sent. Check your email",
+        status: true,
+        user: newOtp,
+      });
+    }
 
     if (!user) {
       //generate random number
       const otp = Math.floor(1000 + Math.random() * 9000);
-      const newUser = await UserModel.create({...req.body, otp});
+      const newUser = await UserModel.create({ ...req.body, otp });
       const token = jwt.sign(
         {
           _id: newUser._id,
@@ -55,12 +90,7 @@ const signup = async (req, res, next) => {
       res.send({
         message: "OTP has been sent. Check your email",
         status: true,
-        user: newUser
-      });
-    } else {
-      res.status(400).send({
-        message: "The email or mobile number is already taken",
-        status: false,
+        user: newUser,
       });
     }
   } catch (error) {

@@ -43,11 +43,13 @@ const ProfileReview = () => {
     assets?.token !== undefined &&
       assets?.token !== null &&
       (assets?.token !== "" && dispatch(getReviews(assets)));
-  }, []);
+  }, [assets, salonInfoForReview]);
 
   const totalRatings =
     reviews.length > 0 &&
     reviews?.reduce((acc, current) => acc + current.rating, 0);
+
+    console.log(reviews.length)
   return (
     <SafeAreaView style={tw`mb-20`}>
       <>
@@ -81,7 +83,6 @@ const ProfileReview = () => {
           </View>
         </View>
         {/* Top section end */}
-        {isSuccess ? (
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={tw`flex items-center flex-row justify-center my-6`}>
               <View>
@@ -166,9 +167,7 @@ const ProfileReview = () => {
             <Feedback reviews={reviews} />
             {/* Profile details section end */}
           </ScrollView>
-        ) : (
-          <Loader loading={reviews?.length < 1} />
-        )}
+          <Loader loading={isFetching} />
       </>
     </SafeAreaView>
   );

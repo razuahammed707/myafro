@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   bookingSelector,
   createBooking,
+  getBookingsByUser,
   getCreateBookingData,
   getUpdateBookingData,
   updateBooking,
@@ -14,9 +15,11 @@ import {
 import { userHomeSelector } from "../../../redux/slices/user/userHomeSlice";
 import Loader from "../Loader/Loader";
 import ReviewPopup from "../../screens/Bookings/userComponents/ReviewPopup";
+import { useNavigation } from "@react-navigation/native";
 
 const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
   const [visible, setVisible] = useState(false);
+  const navigation = useNavigation();
   const [assets, setAssets] = useState(null);
   const { isSuccess, createBookingData, createdBooking, isFetching } =
     useSelector(bookingSelector);
@@ -27,29 +30,6 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
     setVisible(!visible);
   };
 
-  const showConfirmDialog = () => {
-    return Alert.alert(
-      "Are your sure?",
-      "Do you want to cancel the booking request?",
-      [
-        // The "Yes" button
-        {
-          text: "Yes",
-          onPress: () => {
-            dispatch(updateBooking(assets));
-          },
-        },
-        // The "No" button
-        // Does nothing but dismiss the dialog when tapped
-        {
-          text: "No",
-          onPress: () => {},
-        },
-      ]
-    );
-  };
-
-  console.log(bookingInfo)
   const getToken = async () => {
     try {
       const userInfo = await AsyncStorage.getItem("user_info");
@@ -57,7 +37,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
         const parsedToken = JSON.parse(userInfo);
         setAssets({
           token: parsedToken?.access_token,
-          bookingId: bookingInfo?._id
+          bookingId: bookingInfo?._id,
         });
       }
     } catch (e) {
@@ -80,13 +60,33 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
     );
   }, [singleSalonId]);
 
-  // useEffect(() => {
-  //   dispatch(
-  //     getUpdateBookingData({
-  //       status: isCanceled && "cancel",
-  //     })
-  //   );
-  // }, [isCanceled]);
+  setTimeout(() => {
+    visible === true && navigation.navigate("Home");
+  }, 3000);
+
+  const showConfirmDialog = () => {
+    return Alert.alert(
+      "Are your sure?",
+      "Do you want to cancel the booking request?",
+      [
+        // The "Yes" button
+        {
+          text: "Yes",
+          onPress: () => {
+            dispatch(updateBooking(assets));
+            dispatch(getBookingsByUser(assets))
+            navigation.navigate("HomeTabs");
+          },
+        },
+        // The "No" button
+        // Does nothing but dismiss the dialog when tapped
+        {
+          text: "No",
+          onPress: () => {},
+        },
+      ]
+    );
+  };
 
   return (
     <View>
@@ -109,10 +109,10 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
                   showConfirmDialog();
                   dispatch(
                     getUpdateBookingData({
-                      status: "cancel"
+                      status: "cancel",
                     })
                   );
-                  }}
+                }}
               />
             ) : bookingConfirmation === "confirmation" ? (
               <Button
@@ -128,12 +128,14 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
                 iconPosition="left"
                 onPress={() => {
                   dispatch(createBooking(assets));
-                  toggleOverlay()
+                  toggleOverlay();
                 }}
               />
             ) : (
               bookingInfo?.status === "booked" &&
-              bookingInfo?.status !== undefined && <ReviewPopup authToken={assets} />
+              bookingInfo?.status !== undefined && (
+                <ReviewPopup authToken={assets} />
+              )
             )}
           </View>
         </TouchableOpacity>
@@ -144,6 +146,18 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
             <Text style={styles.textPrimary}>Booking is placed successful</Text>
             <Icon name="check-circle" type="feather" size={40} color="green" />
           </View>
+          <Button
+            title="Close"
+            type="clear"
+            buttonStyle={{
+              backgroundColor: "green",
+            }}
+            titleStyle={{ marginLeft: 10 }}
+            onPress={() => {
+              toggleOverlay();
+              dispatch(getBookingsByUser(assets))
+            }}
+          />
         </Overlay>
       )}
       <Loader loading={isFetching} />
@@ -162,7 +176,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   textPrimary: {
-    fontSize: 25,
+    fontSize: 20,
     color: "green",
     marginBottom: 20,
   },

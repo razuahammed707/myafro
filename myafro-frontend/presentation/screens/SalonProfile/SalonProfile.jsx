@@ -1,13 +1,14 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import tw from "twrnc";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProfileAccordion from "./components/ProfileAccordion";
-import { Avatar, Icon } from "react-native-elements";
+import { Avatar, Button, Icon, Overlay } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  createSalon,
   getLoggedInUser,
   getSalon,
   salonSelector,
@@ -17,14 +18,19 @@ import Loader from "../../components/Loader/Loader";
 import { getTokenValue } from "../../../redux/slices/login/authSlice";
 import { serviceSelector } from "../../../redux/slices/salon/serviceSlice";
 import { useNavigation } from "@react-navigation/native";
+import { getBookings } from "../../../redux/slices/booking/bookingSlice";
 
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
   const navigation = useNavigation();
-  const { userData, hairDresserData, isFetching, isSuccess } =
+  const { userData, hairDresserData, isFetching, isSuccess, message } =
     useSelector(salonSelector);
   const { isFetchingService } = useSelector(serviceSelector);
   const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
 
   const getToken = async () => {
     try {
@@ -33,7 +39,7 @@ const SalonProfile = () => {
         const parsedToken = JSON.parse(userInfo);
         setSalonAssets({
           token: parsedToken?.access_token,
-          salonId: hairDresserData?._id
+          salonId: hairDresserData?._id,
         });
         dispatch(getLoggedInUser(parsedToken?.user?.user));
         dispatch(getTokenValue(parsedToken?.access_token));
@@ -53,21 +59,90 @@ const SalonProfile = () => {
 
   return (
     <>
-      <SafeAreaView>
+      <SafeAreaView style={tw`h-full`}>
         <View
           style={tw`flex flex-row items-center justify-between px-5 py-4 border-b border-gray-200`}
         >
-          <TouchableOpacity style={tw`flex flex-row items-center`} onPress={() => navigation.goBack()}>
-          <Icon name="cross" type="entypo" size={20} color="black" />
-            <Text style={tw`text-base font-bold`}>Cancel</Text>
+          <TouchableOpacity
+            style={tw`flex flex-row items-center`}
+            onPress={() => navigation.goBack()}
+          >
+            <Icon name="arrow-left" type="feather" size={20} color="black" />
+            <Text style={tw`text-base font-bold ml-2`}>Back</Text>
           </TouchableOpacity>
           <Text style={tw`text-base font-bold`}>Profile</Text>
-          <Text
+          {/* <Text
             style={tw`text-base font-bold`}
             onPress={() => dispatch(updateSalon(salonAssets))}
           >
             Save
-          </Text>
+          </Text> */}
+
+          {hairDresserData?._id ? (
+            <Button
+              title="Save"
+              type="clear"
+              buttonStyle={{
+                backgroundColor: "#444",
+              }}
+              titleStyle={{ marginLeft: 10 }}
+              icon={
+                <Icon name="edit-2" type="feather" size={20} color="#fff" />
+              }
+              iconPosition="left"
+              onPress={() => {
+                dispatch(updateSalon(salonAssets));
+                toggleOverlay();
+               
+              }}
+            />
+          ) : (
+            <Button
+              title="Create"
+              type="clear"
+              buttonStyle={{
+                backgroundColor: "#444",
+              }}
+              titleStyle={{ marginLeft: 10 }}
+              icon={
+                <Icon name="edit-2" type="feather" size={20} color="#fff" />
+              }
+              iconPosition="left"
+              onPress={() => {
+                dispatch(createSalon(salonAssets));
+                toggleOverlay();
+              }}
+            />
+          )}
+
+          {isSuccess && !isFetching && (
+            <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+              <View style={styles.container}>
+                <Text style={styles.textPrimary}>
+                  Profile is {hairDresserData?._id ? 'updated' : 'created'} successful
+                </Text>
+                <Icon
+                  name="check-circle"
+                  type="feather"
+                  size={40}
+                  color="green"
+                />
+              </View>
+              <Button
+                title="Close"
+                type="clear"
+                buttonStyle={{
+                  backgroundColor: "green",
+                }}
+                titleStyle={{ marginLeft: 10 }}
+                onPress={() => {
+                  toggleOverlay();
+                  dispatch(getBookings(salonAssets));
+                  navigation.navigate("Tabs");
+                }}
+              />
+            </Overlay>
+          )}
         </View>
         <View style={tw`mb-5 h-full`}>
           <View
@@ -91,7 +166,7 @@ const SalonProfile = () => {
               <Text style={tw` text-sm text-gray-500`}>{userData?.role}</Text>
             </View>
           </View>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             <ProfileAccordion />
           </ScrollView>
         </View>
@@ -101,5 +176,22 @@ const SalonProfile = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: 300,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    borderRadius: 8,
+  },
+  textPrimary: {
+    fontSize: 20,
+    color: "green",
+    marginBottom: 20,
+  },
+});
 
 export default SalonProfile;

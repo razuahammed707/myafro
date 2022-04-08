@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import tw from "twrnc";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,7 +29,6 @@ const ContactDetails = () => {
   }, [address, mobile]);
 
   return (
-    <>
       <View>
         <View>
           <Text style={tw`ml-5`}>Mobile</Text>
@@ -54,7 +53,6 @@ const ContactDetails = () => {
         <CountryDropdown />
         {/* <DropdownComponent text="country" /> */}
       </View>
-    </>
   );
 };
 

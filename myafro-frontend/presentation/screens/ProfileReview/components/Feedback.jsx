@@ -39,6 +39,7 @@ const Feedback = ({ reviews }) => {
                 <AirbnbRating
                   count={5}
                   reviewSize={0}
+                  reviews={[]}
                   defaultRating={review?.rating}
                   size={13}
                   starContainerStyle={{

@@ -20,9 +20,9 @@ const Booking = ({ margin, previous }) => {
   const { bookings, isSuccess } = useSelector(bookingSelector);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  
   const getBooking = (id) => {
     const uniqueBooking = bookings?.find((booking) => booking._id === id);
-    console.log(uniqueBooking);
     dispatch(getSingleBooking(uniqueBooking));
   };
 
@@ -30,10 +30,10 @@ const Booking = ({ margin, previous }) => {
     <View style={tw` flex flex-row items-center justify-between ${margin}`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {previous === "previous"
-          ? isSuccess && bookings?.length > 0 &&
+          ? bookings?.length > 0 ?
             bookings
               ?.filter(
-                (book) => book?.status !== "pending" && book.status !== "booked"
+                (book) => book?.status === "cancel" || book.status === "complete"
               )
               .map((booking) => (
                 <TouchableOpacity
@@ -99,8 +99,16 @@ const Booking = ({ margin, previous }) => {
                     />
                   </View>
                 </TouchableOpacity>
-              ))
-          : bookings.length > 0 &&
+              )) : (
+              <View style={tw`mt-20 flex flex-row justify-center`}>
+                <Image
+                  source={require("../../../../assets/img/notFound.png")}
+                  height={100}
+                  resizeMode="cover"
+                />
+              </View>
+            )
+          : bookings?.length > 0 ?
             bookings
               ?.filter((book) => book?.status === "booked")
               .map((booking) => (
@@ -167,7 +175,15 @@ const Booking = ({ margin, previous }) => {
                     />
                   </View>
                 </TouchableOpacity>
-              ))}
+              )) : (
+              <View style={tw`mt-20 flex flex-row justify-center`}>
+                <Image
+                  source={require("../../../../assets/img/notFound.png")}
+                  height={100}
+                  resizeMode="cover"
+                />
+              </View>
+            )}
       </ScrollView>
     </View>
   );

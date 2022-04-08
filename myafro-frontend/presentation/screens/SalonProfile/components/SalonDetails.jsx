@@ -13,6 +13,7 @@ const SalonDetails = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
 
   const { hairDresserData, updateSalonData } = useSelector(salonSelector);
   const dispatch = useDispatch();
@@ -24,53 +25,63 @@ const SalonDetails = () => {
         name: name || hairDresserData?.name,
         price: price || hairDresserData?.price,
         location: location || hairDresserData?.location,
+        description: description || hairDresserData?.description,
       })
     );
-  }, [name, price, location, hairDresserData]);
+  }, [name, price, location, hairDresserData, description]);
 
   return (
-    <>
+    <View>
       <View>
-        <View>
-          <Text style={tw`ml-5`}>Name</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(newText) => setName(newText)}
-            defaultValue={name || hairDresserData?.name}
-            placeholder="Name"
-            keyboardType="default"
-          />
-        </View>
-        <View>
-          <Text style={tw`ml-5`}>Hair type</Text>
-          <HairTypeDropdown />
-        </View>
-        <View>
-          <Text style={tw`ml-5`}>Salon Type</Text>
-          <SalonTypeDropdown />
-        </View>
-
-        <View>
-          <Text style={tw`ml-5`}>Price</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(newText) => setPrice(newText)}
-            defaultValue={hairDresserData?.price?.toString() || price.toString()}
-            placeholder="Price"
-            keyboardType="numeric"
-          />
-        </View>
-        <View>
-          <Text style={tw`ml-5`}>Location</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={(newText) => setLocation(newText)}
-            defaultValue={hairDresserData?.location || location}
-            placeholder="Location"
-          />
-        </View>
+        <Text style={tw`ml-5`}>Name</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(newText) => setName(newText)}
+          defaultValue={name || hairDresserData?.name}
+          placeholder="Name"
+          keyboardType="default"
+        />
       </View>
-    </>
+      <View>
+        <Text style={tw`ml-5`}>Hair type</Text>
+        <HairTypeDropdown />
+      </View>
+      <View>
+        <Text style={tw`ml-5`}>Salon Type</Text>
+        <SalonTypeDropdown />
+      </View>
+
+      <View>
+        <Text style={tw`ml-5`}>Price</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(newText) => setPrice(newText)}
+          defaultValue={hairDresserData?.price?.toString() || price.toString()}
+          placeholder="Price"
+          keyboardType="numeric"
+        />
+      </View>
+      <View>
+        <Text style={tw`ml-5`}>Description</Text>
+        <TextInput
+          style={styles.textarea}
+          multiline={true}
+          numberOfLines={4}
+          onChangeText={(newText) => setDescription(newText)}
+          defaultValue={description || hairDresserData?.description}
+          placeholder="Description"
+        />
+      </View>
+      <View>
+        <Text style={tw`ml-5`}>Location</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(newText) => setLocation(newText)}
+          defaultValue={hairDresserData?.location || location}
+          placeholder="Location"
+        />
+      </View>
+    </View>
   );
 };
 
@@ -79,6 +90,13 @@ export default SalonDetails;
 const styles = StyleSheet.create({
   input: {
     height: 40,
+    margin: 12,
+    borderWidth: 1,
+    borderColor: "lightgray",
+    padding: 10,
+    borderRadius: 8,
+  },
+  textarea: {
     margin: 12,
     borderWidth: 1,
     borderColor: "lightgray",

@@ -35,6 +35,7 @@ import {
 } from "../../../redux/slices/user/userHomeSlice";
 import { authSelector } from "../../../redux/slices/login/authSlice";
 import Loader from "../../components/Loader/Loader";
+import { mapSelector } from "../../../redux/slices/map/mapSlice";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -50,7 +51,6 @@ const Home = () => {
     setRefreshing(true);
     // dispatch(getSalons(assets))
     wait(2000).then(() => setRefreshing(false));
-
   }, []);
   // let [fontsLoaded, error] = useFonts({
   //   regular: Nunito_400Regular,
@@ -65,6 +65,7 @@ const Home = () => {
   const [assets, setAssets] = useState(null);
   const { salons, queries, isSuccess, isFetching } =
     useSelector(userHomeSelector);
+  const { times } = useSelector(mapSelector);
   const dispatch = useDispatch();
 
   const getToken = async () => {
@@ -89,6 +90,8 @@ const Home = () => {
     assets !== null && dispatch(getSalons(assets));
   }, [assets, queries]);
 
+  console.log(salons)
+
   return (
     <SafeAreaView style={tw`flex-1`}>
       <View style={tw`h-1/1 p-5`}>
@@ -112,7 +115,14 @@ const Home = () => {
             onPress={() => bottomSheet.current.show()}
           >
             <Icon name="shopping-bag" type="feather" size={20} color="black" />
-            <Text style={tw`text-sm ml-2`}>When</Text>
+            {times?.checkIn || times?.checkOut ? (
+              <View>
+                <Text style={tw`text-sm ml-2`}>{times.checkIn}</Text>
+                <Text style={tw`text-sm ml-2`}>{times.checkOut}</Text>
+              </View>
+            ) : (
+              <Text style={tw`text-sm ml-2`}>When</Text>
+            )}
           </TouchableOpacity>
         </View>
         <View style={tw`flex items-center flex-row justify-center my-3`}>

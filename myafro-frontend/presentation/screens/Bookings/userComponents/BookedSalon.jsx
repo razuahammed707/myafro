@@ -24,6 +24,7 @@ import {
   getCreateReviewData,
   reviewSelector,
 } from "../../../../redux/slices/reviews/reviewSlice";
+import UserMessagePopup from "./UserMessagePopup";
 
 const BookedSalon = () => {
   const [createMessage, setCreateMessage] = useState("");
@@ -51,25 +52,6 @@ const BookedSalon = () => {
   useEffect(() => {
     getToken();
   }, []);
-
-  // const getSingleBooking = () => {
-  //   const uniqueBooking = userBookings?.find(
-  //     (booking) => booking._id && booking?.salon?._id === singleSalonId
-  //   );
-  //   setUniqueBooking({
-  //     uniqueBooking,
-  //     role: assets?.role,
-  //     token: assets?.token,
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   assets?.token !== (undefined && null && "") &&
-  //     dispatch(getBookingsByUser(assets));
-  //   if (userBookings?.length > 0) {
-  //     getSingleBooking();
-  //   }
-  // }, [assets]);
 
   useEffect(() => {
     dispatch(
@@ -224,26 +206,7 @@ const BookedSalon = () => {
                     />
                   </View>
                   <View style={tw`mt-2 flex flex-row justify-end`}>
-                    <Button
-                      title="Send"
-                      buttonStyle={{
-                        paddingHorizontal: 20,
-                        paddingVertical: 16,
-                      }}
-                      type="clear"
-                      icon={
-                        <Icon
-                          name="send"
-                          type="feather"
-                          size={20}
-                          color="#fff"
-                          style={tw`mr-2`}
-                        />
-                      }
-                      iconPosition="left"
-                      titleStyle={{ fontSize: 14 }}
-                      onPress={() => dispatch(createMessageToSend(assets))}
-                    />
+                    <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/>
                   </View>
                 </>
               )}

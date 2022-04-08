@@ -6,6 +6,12 @@ const createBooking = async (req, res, next) => {
       ...req.body,
       user: req.user.id,
       salon: req.body.salon,
+      messages: [
+        {
+          user_type: "user",
+          message: req.body.message,
+        },
+      ],
     });
     res.status(200).send({
       status: true,
@@ -19,8 +25,8 @@ const createBooking = async (req, res, next) => {
 
 const getBookings = async (req, res, next) => {
   try {
-    console.log(req.user);
     const booking = await BookingModel.find({ salon: req.user.salon })
+      .sort({ createdAt: -1 })
       .populate("user", "_id full_name email profile mobile role")
       .populate("salon", "_id name location");
     res.send({
@@ -35,7 +41,7 @@ const getBookings = async (req, res, next) => {
 
 const getBookingsByUser = async (req, res, next) => {
   try {
-    const bookings = await BookingModel.find({ user: req.user.id })
+    const bookings = await BookingModel.find({ user: req.user.id })  .sort({ createdAt: -1 })
       .populate("user", "_id full_name email profile mobile role")
       .populate("salon", "_id name location price salon_type ");
     res.status(200).send({
@@ -46,6 +52,7 @@ const getBookingsByUser = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+  return;
 };
 
 const updateBooking = async (req, res, next) => {

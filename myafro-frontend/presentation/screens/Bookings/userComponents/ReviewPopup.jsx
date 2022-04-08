@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Button, Overlay, Icon } from "react-native-elements";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 import tw from "twrnc";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    createReview,
+  createReview,
   getCreateReviewData,
   reviewSelector,
 } from "../../../../redux/slices/reviews/reviewSlice";
 import { AirbnbRating } from "react-native-ratings";
-import { getUpdateBookingData, updateBooking } from "../../../../redux/slices/booking/bookingSlice";
+import {
+  getUpdateBookingData,
+  updateBooking,
+} from "../../../../redux/slices/booking/bookingSlice";
+import { useNavigation } from "@react-navigation/native";
 
 const ReviewPopup = ({ authToken }) => {
   const [comment, setComment] = useState("");
   const [visible, setVisible] = useState(false);
   const [rating, setRating] = useState(5);
-  const { createReviewData } = useSelector(reviewSelector);
+  const { createReviewData, isSuccess, isFetching } =
+    useSelector(reviewSelector);
+  const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const toggleOverlay = () => {
@@ -29,7 +30,6 @@ const ReviewPopup = ({ authToken }) => {
   const ratingCompleted = (rating) => {
     setRating(rating);
   };
-  
 
   useEffect(() => {
     dispatch(
@@ -41,7 +41,7 @@ const ReviewPopup = ({ authToken }) => {
     );
   }, [comment, rating]);
 
-console.log(createReviewData, authToken)
+  console.log(createReviewData, authToken);
   return (
     <View>
       <View style={tw`my-3`}>
@@ -50,7 +50,7 @@ console.log(createReviewData, authToken)
           type="clear"
           buttonStyle={{
             backgroundColor: "#444",
-            width: "100%"
+            width: "100%",
           }}
           titleStyle={{ marginLeft: 10 }}
           icon={<Icon name="trash" type="feather" size={20} color="#fff" />}
@@ -99,17 +99,41 @@ console.log(createReviewData, authToken)
           }
           title="Submit"
           onPress={() => {
-            dispatch(createReview(authToken))
+            dispatch(createReview(authToken));
             dispatch(
               getUpdateBookingData({
-                status: "complete"
+                status: "complete",
               })
             );
-            dispatch(updateBooking(authToken))
-            toggleOverlay();
+            dispatch(updateBooking(authToken));
+            if (isSuccess) {
+              navigation.navigate("Home");
+            }
           }}
         />
       </Overlay>
+      {/* {isSuccess && !isFetching && (
+        <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+          <View style={styles.container}>
+            <Text style={styles.textPrimary}>
+              Thanks for giving us your feedback!
+            </Text>
+            <Icon name="check-circle" type="feather" size={40} color="green" />
+          </View>
+          <Button
+            title="Close"
+            type="clear"
+            buttonStyle={{
+              backgroundColor: "green",
+            }}
+            titleStyle={{ marginLeft: 10 }}
+            onPress={() => {
+              toggleOverlay();
+              navigation.navigate("Tabs");
+            }}
+          />
+        </Overlay>
+      )} */}
       {/* <Loader loading={isFetching} /> */}
     </View>
   );

@@ -12,20 +12,14 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { NavigationContainer } from "@react-navigation/native";
 import ScreenContainer from "./presentation/components/ScreenContainer/ScreenContainer";
-import Tabs from "./presentation/components/Tabs/Tabs";
+import { LogBox } from "react-native";
 
+LogBox.ignoreLogs([
+  'VirtualizedLists should never be nested', 
+  "Can't perform a React state update on an unmounted component",
+  "Failed prop type: Invalid prop `defaultValue` of type `string` supplied to `TextInput`, expected `number`.",
+])
 export default function App() {
-  // let [fontsLoaded, error] = useFonts({
-  //   regular: Nunito_400Regular,
-  //   semiBold: Nunito_600SemiBold,
-  //   bold: Nunito_700Bold,
-  //   extraBold: Nunito_800ExtraBold,
-  // });
-
-  // if (!fontsLoaded) {
-  //   return <AppLoading />;
-  // }
-  // const [isLoggedIn, setLoggedIn] = useState(true)
   return (
     <Provider store={store}>
       <NavigationContainer>
