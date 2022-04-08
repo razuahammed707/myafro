@@ -111,6 +111,9 @@ const ReviewPopup = ({ authToken }) => {
             if (isSuccess) {
               navigation.navigate("Home");
             }
+            else{
+              alert("Something went wrong")
+            }
           }}
         />
       </Overlay>
