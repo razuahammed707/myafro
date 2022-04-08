@@ -17,6 +17,7 @@ import {
   bookingSelector,
   createMessageToSend,
   getBookingsByUser,
+  getMessages,
   getMessageToSend,
 } from "../../../../redux/slices/booking/bookingSlice";
 import { userHomeSelector } from "../../../../redux/slices/user/userHomeSlice";
@@ -30,7 +31,7 @@ const BookedSalon = () => {
   const [createMessage, setCreateMessage] = useState("");
   const [assets, setAssets] = useState({});
   const { createReviewData } = useSelector(reviewSelector);
-  const { singleBookedSalon } = useSelector(bookingSelector);
+  const { singleBookedSalon, isSuccess } = useSelector(bookingSelector);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -99,12 +100,14 @@ const BookedSalon = () => {
               <Text style={tw`text-base`}>
                 Status: {singleBookedSalon?.status}
               </Text>
-              {singleBookedSalon?.status === "complete" ?  <Text style={tw`text-xl text-green-800`}>
+              {singleBookedSalon?.status === "complete" ? (
+                <Text style={tw`text-xl text-green-800`}>
                   The booking is Completed
-                </Text> : singleBookedSalon?.status === "cancel" ? (
-                 <Text style={tw`text-xl text-red-800`}>
-                 The booking is canceled
-               </Text>
+                </Text>
+              ) : singleBookedSalon?.status === "cancel" ? (
+                <Text style={tw`text-xl text-red-800`}>
+                  The booking is canceled
+                </Text>
               ) : (
                 <View style={tw`flex flex-col justify-end items-end`}>
                   <Button
@@ -206,15 +209,38 @@ const BookedSalon = () => {
                     />
                   </View>
                   <View style={tw`mt-2 flex flex-row justify-end`}>
-                    <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/>
+                    {/* <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/> */}
+                    <Button
+                      title="Send"
+                      buttonStyle={{
+                        paddingHorizontal: 20,
+                        paddingVertical: 16,
+                      }}
+                      type="clear"
+                      icon={
+                        <Icon
+                          name="send"
+                          type="feather"
+                          size={20}
+                          color="#fff"
+                          style={tw`mr-2`}
+                        />
+                      }
+                      iconPosition="left"
+                      titleStyle={{ fontSize: 14 }}
+                      onPress={() => {
+                        dispatch(createMessageToSend(assets));
+                        if (isSuccess) {
+                          dispatch(getMessages(assets));
+                        }
+                      }}
+                    />
                   </View>
                 </>
               )}
             {singleBookedSalon?.status !== "cancel" &&
               singleBookedSalon?.status !== "complete" && (
-                <ResponsePopup
-                  bookingInfo={singleBookedSalon}
-                />
+                <ResponsePopup bookingInfo={singleBookedSalon} />
               )}
           </View>
         </ScrollView>

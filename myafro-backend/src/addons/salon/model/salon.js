@@ -27,7 +27,7 @@ const salonSchema = Schema(
         img_url: String,
       },
     ],
-    cover: { type: String, default: "imageURL" },
+    cover: { type: String, default: "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png" },
     price: { type: Number },
     user: {
       type: mongoose.Types.ObjectId,

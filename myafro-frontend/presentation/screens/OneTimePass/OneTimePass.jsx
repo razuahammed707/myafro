@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
   Text,
@@ -150,7 +151,7 @@ const OneTimePass = () => {
         <Text style={tw`text-sm text-gray-400 text-left mx-2 mb-10`}>
           An 4 digit code has been sent to +{crendential}
         </Text>
-        <KeyboardAvoidingView>
+        <KeyboardAvoidingView behavior="padding">
           <View style={styles.otpContainer}>
             {inputs.map((i, index) => (
               <View key={index.toString()} style={styles.inputContainer}>
