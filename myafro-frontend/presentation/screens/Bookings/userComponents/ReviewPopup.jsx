@@ -68,6 +68,7 @@ const ReviewPopup = ({ authToken }) => {
           </Text>
           <AirbnbRating
             count={5}
+            reviews={[]}
             reviewSize={0}
             defaultRating={5}
             size={20}

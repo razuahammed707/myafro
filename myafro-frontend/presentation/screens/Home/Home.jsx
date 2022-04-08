@@ -166,7 +166,7 @@ const Home = () => {
                           height: 190,
                           resizeMode: "cover",
                         }}
-                        source={{ uri: item?.media[0]?.img_url }}
+                        source={{ uri: item?.cover}}
                       />
                       <View style={tw`flex flex-row absolute top-0 left-1`}>
                         <View
@@ -203,6 +203,7 @@ const Home = () => {
                       <View style={tw`flex items-center flex-row `}>
                         <AirbnbRating
                           count={5}
+                          reviews={[]}
                           reviewSize={0}
                           defaultRating={item?.averageRatings}
                           size={13}

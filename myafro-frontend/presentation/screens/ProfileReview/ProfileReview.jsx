@@ -63,6 +63,39 @@ const ProfileReview = () => {
                     resizeMode="cover"
                     source={{ uri: profileReviewInfo?.user?.profile }}
                   />
+<<<<<<< HEAD
+=======
+                )}
+                <View style={tw`mt-3`}>
+                  <View style={tw`flex flex-row`}>
+                    <Text style={tw`font-bold text-lg mr-2`}>
+                      {salonInfoForReview?.user?.full_name}
+                    </Text>
+                    <Icon
+                      name="verified"
+                      type="material"
+                      size={20}
+                      color="#30a8f8"
+                    />
+                  </View>
+                  <View style={tw`flex flex-row items-center justify-center`}>
+                    <AirbnbRating
+                      count={5}
+                      reviews={[]}
+                      reviewSize={0}
+                      defaultRating={5}
+                      size={13}
+                      starContainerStyle={{
+                        marginTop: -20,
+                        marginRight: 5,
+                      }}
+                    />
+                    <Text style={tw`text-gray-400`}>{totalRatings}</Text>
+                  </View>
+                  <Text style={tw`text-gray-400 text-base text-center`}>
+                    16 Saloons
+                  </Text>
+>>>>>>> 7aa3e1695a7c7ac2e3a6e20e54f36b2b06f5c913
                 </View>
               )}
               <View style={tw`mt-3`}>

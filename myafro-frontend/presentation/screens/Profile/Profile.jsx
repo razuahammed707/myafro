@@ -57,6 +57,7 @@ const Profile = () => {
             <View style={tw`flex flex-row items-center`}>
               <AirbnbRating
                 count={5}
+                reviews={[]}
                 reviewSize={0}
                 defaultRating={5}
                 size={13}
