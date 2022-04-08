@@ -55,7 +55,8 @@ const getSalons = async (req, res, next) => {
         0
       );
       salon.reviews = reviews;
-      salon.totalRatings = totalRatings;
+      salon.averageRatings = Math.ceil(totalRatings / reviews.length) || 0;
+      salon.totalReviews = reviews.length;
     });
 
     res.send({
