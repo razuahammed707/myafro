@@ -8,6 +8,7 @@ const initialState = {
   message: "",
   createReviewData: {},
   salonInfoForReview: {},
+  profileReviewInfo: {},
   reviews: {},
 };
 
@@ -62,7 +63,10 @@ export const reviewSlice = createSlice({
     },
     getSalonInfoForReview: (state, { payload }) => {
       state.salonInfoForReview = payload
-    }
+    },
+    getProfileReviewInfo: (state, { payload }) => {
+      state.profileReviewInfo = payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -103,6 +107,6 @@ export const reviewSlice = createSlice({
   },
 });
 
-export const { getCreateReviewData, getSalonInfoForReview } = reviewSlice.actions;
+export const { getCreateReviewData, getSalonInfoForReview, getProfileReviewInfo } = reviewSlice.actions;
 export const reviewSelector = (state) => state.reviews;
 export default reviewSlice.reducer;

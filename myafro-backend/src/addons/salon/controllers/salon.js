@@ -46,13 +46,20 @@ const getSalons = async (req, res, next) => {
 
     salons.map((salon) => {
       let reviews = reviewsData.filter((review) => {
-        if (salon._id.toString() === review.salon.toString()) {
+        if (salon._id.equals(review.salon)) {
           return review;
         }
       });
+      const totalRatings = reviews.reduce(
+        (acc, current) => acc + current?.rating,
+        0
+      );
       salon.reviews = reviews;
+      salon.averageRatings = Math.ceil(totalRatings / reviews.length) || 0;
+      salon.totalReviews = reviews.length;
     });
 
+    
     res.send({
       status: true,
       salons,
