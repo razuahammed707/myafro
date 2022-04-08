@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   bookingSelector,
   createMessageToSend,
+  getBookings,
   getBookingsByUser,
   getMessages,
   getMessageToSend,
@@ -31,7 +32,7 @@ const BookedSalon = () => {
   const [createMessage, setCreateMessage] = useState("");
   const [assets, setAssets] = useState({});
   const { createReviewData } = useSelector(reviewSelector);
-  const { singleBookedSalon, isSuccess } = useSelector(bookingSelector);
+  const { singleBookedSalon, isSuccess, getMessagesData } = useSelector(bookingSelector);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -75,8 +76,10 @@ const BookedSalon = () => {
         salon: singleBookedSalon?.salon?._id,
       })
     );
+    dispatch(getMessages(assets));
   }, [singleBookedSalon]);
 
+  console.log(getMessagesData)
   return (
     <View style={tw`p-5 my-5`}>
       <View style={tw`flex flex-row`}>
@@ -143,7 +146,7 @@ const BookedSalon = () => {
 
             {/* Message section start */}
             <Text style={tw`font-bold text-lg mb-5`}>Message</Text>
-            {singleBookedSalon?.messages?.map((message) => (
+            {getMessagesData[0]?.messages?.map((message) => (
               <View key={message?._id}>
                 {message?.user_type === "hair_dresser" ? (
                   <View style={tw`flex flex-row justify-between mt-4`}>
@@ -232,6 +235,7 @@ const BookedSalon = () => {
                         dispatch(createMessageToSend(assets));
                         if (isSuccess) {
                           dispatch(getMessages(assets));
+                          // dispatch(getBookings(assets))
                         }
                       }}
                     />
