@@ -168,7 +168,7 @@ const Home = () => {
                           height: 190,
                           resizeMode: "cover",
                         }}
-                        source={{ uri: item?.media[0]?.img_url }}
+                        source={{ uri: item?.cover}}
                       />
                       <View style={tw`flex flex-row absolute top-0 left-1`}>
                         <View
@@ -202,23 +202,22 @@ const Home = () => {
                     <View
                       style={tw`flex items-center flex-row justify-between`}
                     >
-                      {item?.reviews?.reduce((acc, current) => (
-                        <View style={tw`flex items-center flex-row `}>
-                          <AirbnbRating
-                            count={5}
-                            reviewSize={0}
-                            defaultRating={(acc + current?.rating, 0)}
-                            size={13}
-                            starContainerStyle={{
-                              marginTop: -20,
-                              marginRight: 5,
-                            }}
-                          />
-                          <Text style={tw`text-gray-400 text-sm`}>
-                            0
-                          </Text>
-                        </View>
-                      ))}
+                      <View style={tw`flex items-center flex-row `}>
+                        <AirbnbRating
+                          count={5}
+                          reviews={[]}
+                          reviewSize={0}
+                          defaultRating={5}
+                          size={13}
+                          starContainerStyle={{
+                            marginTop: -20,
+                            marginRight: 5,
+                          }}
+                        />
+                        <Text style={tw`text-gray-400 text-sm`}>
+                          {item.job}
+                        </Text>
+                      </View>
                       <View style={tw`flex items-center flex-row `}>
                         <Text style={tw`text-base text-black mr-2`}>
                           {item?.price}

@@ -71,6 +71,7 @@ const ProfileReview = () => {
             <AirbnbRating
               count={5}
               reviewSize={0}
+              reviews={[]}
               defaultRating={5}
               size={13}
               starContainerStyle={{
@@ -112,6 +113,7 @@ const ProfileReview = () => {
                   <View style={tw`flex flex-row items-center justify-center`}>
                     <AirbnbRating
                       count={5}
+                      reviews={[]}
                       reviewSize={0}
                       defaultRating={5}
                       size={13}
