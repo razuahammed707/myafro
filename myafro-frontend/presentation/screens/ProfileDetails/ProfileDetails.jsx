@@ -17,7 +17,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import { userHomeSelector } from "../../../redux/slices/user/userHomeSlice";
 import MediaCarousel from "./components/MediaCarousel";
-import { getSalonInfoForReview } from "../../../redux/slices/reviews/reviewSlice";
+import { getProfileReviewInfo, getSalonInfoForReview } from "../../../redux/slices/reviews/reviewSlice";
 
 const ProfileDetails = () => {
   const navigation = useNavigation();
@@ -36,10 +36,10 @@ const ProfileDetails = () => {
 
   useEffect(() => {
     dispatch(getSalonInfoForReview({user:singleSalon?.user, salonId: singleSalon?._id}))
+    dispatch(getProfileReviewInfo(singleSalon))
   }, [singleSalon])
 
-  console.log(singleSalon)
-
+  
   return (
     <SafeAreaView style={tw`p-5`}>
       {singleSalon !== null ? (
@@ -71,14 +71,14 @@ const ProfileDetails = () => {
                     <AirbnbRating
                       count={5}
                       reviewSize={0}
-                      defaultRating={5}
+                      defaultRating={singleSalon?.averageRatings}
                       size={13}
                       starContainerStyle={{
                         marginTop: -20,
                         marginRight: 5,
                       }}
                     />
-                    <Text style={tw`text-gray-400`}>4</Text>
+                    <Text style={tw`text-gray-400`}>{singleSalon?.totalReviews}</Text>
                   </View>
                   <View style={tw`flex flex-row mt-1`}>
                     <Icon
@@ -183,14 +183,14 @@ const ProfileDetails = () => {
                       count={5}
                       reviews={[]}
                       reviewSize={0}
-                      defaultRating={5}
+                      defaultRating={singleSalon?.averageRatings}
                       size={13}
                       starContainerStyle={{
                         marginTop: -20,
                         marginRight: 5,
                       }}
                     />
-                    <Text style={tw`text-gray-400`}>307</Text>
+                    <Text style={tw`text-gray-400`}>{singleSalon?.totalReviews}</Text>
                   </View>
                 </View>
               </View>

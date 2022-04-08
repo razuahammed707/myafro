@@ -59,6 +59,7 @@ const getSalons = async (req, res, next) => {
       salon.totalReviews = reviews.length;
     });
 
+    
     res.send({
       status: true,
       salons,

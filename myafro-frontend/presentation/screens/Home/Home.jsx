@@ -207,7 +207,7 @@ const Home = () => {
                           count={5}
                           reviews={[]}
                           reviewSize={0}
-                          defaultRating={5}
+                          defaultRating={item?.averageRatings}
                           size={13}
                           starContainerStyle={{
                             marginTop: -20,
@@ -215,7 +215,7 @@ const Home = () => {
                           }}
                         />
                         <Text style={tw`text-gray-400 text-sm`}>
-                          {item.job}
+                          {item.totalReviews} reviews
                         </Text>
                       </View>
                       <View style={tw`flex items-center flex-row `}>
