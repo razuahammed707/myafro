@@ -90,7 +90,9 @@ const Home = () => {
     assets !== null && dispatch(getSalons(assets));
   }, [assets, queries]);
 
-  console.log(salons)
+  console.log(salons);
+  const rating = salons?.map((salon) => salon?.reviews?.reduce((acc, current) => acc + current?.rating, 0))
+  console.log(rating)
 
   return (
     <SafeAreaView style={tw`flex-1`}>
@@ -200,21 +202,23 @@ const Home = () => {
                     <View
                       style={tw`flex items-center flex-row justify-between`}
                     >
-                      <View style={tw`flex items-center flex-row `}>
-                        <AirbnbRating
-                          count={5}
-                          reviewSize={0}
-                          defaultRating={5}
-                          size={13}
-                          starContainerStyle={{
-                            marginTop: -20,
-                            marginRight: 5,
-                          }}
-                        />
-                        <Text style={tw`text-gray-400 text-sm`}>
-                          {item.job}
-                        </Text>
-                      </View>
+                      {item?.reviews?.reduce((acc, current) => (
+                        <View style={tw`flex items-center flex-row `}>
+                          <AirbnbRating
+                            count={5}
+                            reviewSize={0}
+                            defaultRating={(acc + current?.rating, 0)}
+                            size={13}
+                            starContainerStyle={{
+                              marginTop: -20,
+                              marginRight: 5,
+                            }}
+                          />
+                          <Text style={tw`text-gray-400 text-sm`}>
+                            0
+                          </Text>
+                        </View>
+                      ))}
                       <View style={tw`flex items-center flex-row `}>
                         <Text style={tw`text-base text-black mr-2`}>
                           {item?.price}

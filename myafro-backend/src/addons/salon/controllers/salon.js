@@ -51,6 +51,7 @@ const getSalons = async (req, res, next) => {
         }
       });
       salon.reviews = reviews;
+      // console.log(reviews)
     });
 
     res.send({
