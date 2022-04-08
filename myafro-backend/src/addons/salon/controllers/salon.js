@@ -50,11 +50,14 @@ const getSalons = async (req, res, next) => {
           return review;
         }
       });
+      const totalRatings = reviews.reduce(
+        (acc, current) => acc + current?.rating,
+        0
+      );
       salon.reviews = reviews;
-      // console.log(reviews)
+      salon.totalRatings = totalRatings;
     });
 
-    
     res.send({
       status: true,
       salons,
