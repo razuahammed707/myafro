@@ -90,9 +90,8 @@ const Home = () => {
     assets !== null && dispatch(getSalons(assets));
   }, [assets, queries]);
 
-  console.log(salons);
-  const rating = salons?.map((salon) => salon?.reviews?.reduce((acc, current) => acc + current?.rating, 0))
-  console.log(rating)
+  // const rating = salons?.map((salon) => salon?.reviews?.reduce((acc, current) => acc + current?.rating, 0))
+  // console.log(rating)
 
   return (
     <SafeAreaView style={tw`flex-1`}>
