@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,6 +7,7 @@ import {
 } from "../../../redux/slices/login/authSlice";
 import AppNavigator from "../../screenTypes/AppNavigator";
 import AuthNavigator from "../../screenTypes/AuthNavigator";
+import { useNavigation } from "@react-navigation/native";
 
 const ScreenContainer = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const ScreenContainer = () => {
   return token === null && !data.access_token ? (
     <AuthNavigator />
   ) : (
-    <AppNavigator data={data} />
+   <AppNavigator data={data} />
   );
 };
 

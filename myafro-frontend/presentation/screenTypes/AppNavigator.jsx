@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Onboard from "../screens/Onboard/Onboard";
 import Profile from "../screens/Profile/Profile";
 import ProfileDetails from "../screens/ProfileDetails/ProfileDetails";
@@ -16,9 +17,32 @@ import SalonProfile from "../screens/SalonProfile/SalonProfile";
 import UserProfile from "../screens/UserProfile/UserProfile";
 import BookingConfirmation from "../screens/BookingConfirmation/BookingConfirmation";
 import BookedSalon from "../screens/Bookings/userComponents/BookedSalon";
+import { useLayoutEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 const AppNavigator = ({ data }) => {
   const Stack = createNativeStackNavigator();
+  const navigation = useNavigation()
+  const getToken = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user_info");
+      if (userInfo) {
+        const parsedToken = JSON.parse(userInfo);
+        if(parsedToken?.user?.user?.role ===  'hair_dresser'){
+          navigation.navigate('Tabs')
+        }else{
+          navigation.navigate('HomeTabs')
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useLayoutEffect(() => {
+    getToken();
+  }, []);
+
   return (
     <Stack.Navigator
       initialRouteName={

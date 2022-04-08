@@ -38,10 +38,19 @@ const Account = () => {
 
   console.log(token);
 
-  const logout = () => {
+  const logout = async () => {
+   try {
+    await AsyncStorage.getAllKeys()
+    .then((keys) => AsyncStorage.multiRemove(keys))
+    .then(() => {
+     console.log('logout')
+    });
     dispatch(getTokenValue(null));
     dispatch(emptyLoggedInData({}))
     dispatch(reset());
+   } catch (error) {
+     
+   }
   };
 
   return (
