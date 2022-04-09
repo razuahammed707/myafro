@@ -175,11 +175,7 @@ const Request = () => {
           )}
         </ScrollView>
       </SafeAreaView>
-<<<<<<< HEAD
-      {isSalonCreated === null && (
-=======
       {isSalonCreated === null && !bookings?.length && (
->>>>>>> fix-issues
         <SafeAreaView style={tw`p-5 flex flex-row justify-center`}>
           <View>
             <Text style={tw`text-xl `}>Your profile is not created yet.</Text>
