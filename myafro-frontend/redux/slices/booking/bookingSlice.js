@@ -154,7 +154,21 @@ export const bookingSlice = createSlice({
     getMessageToSend: (state, { payload }) => {
       state.sendMessage = payload;
     },
-    resetBooking: () => initialState({}),
+    resetBooking: (state) => {
+      state.isFetching= false,
+      state.isSuccess= false,
+      state.isError= false,
+      state.message= "",
+      state.sendMessage= "",
+      state.bookings= [],
+      state.getUpdateBookingData= {},
+      state.singleBooking= {},
+      state.singleBookedSalon= {},
+      state.getMessagesData= [],
+      state.userBookings= [],
+      state.createBookingData= {},
+      state.createdBooking= {}
+    },
     getSingleBooking: (state, { payload }) => {
       state.singleBooking = payload;
     },

@@ -1,3 +1,4 @@
+  
 import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -28,7 +29,8 @@ const BookingConfirmation = () => {
   const [sendMessage, setSendMessage] = useState("");
   const dispatch = useDispatch();
   const [assets, setAssets] = useState(null);
-  const [messageAssets, setMessageAssets] = useState(null);
+  // const [messageAssets, setMessageAssets] = useState(null);
+  const {singleSalonId} = useSelector(userHomeSelector)
   const { isFetching, createdBooking, createBookingData } = useSelector(bookingSelector);
 
   const getToken = async () => {
@@ -54,6 +56,9 @@ const BookingConfirmation = () => {
     dispatch(
       getCreateBookingData({
         ...createBookingData,
+        starting_time: "16-2-2021",
+        ending_time: "15-3-2022",
+        salon: singleSalonId,
         message: sendMessage
       })
     );

@@ -1,3 +1,5 @@
+
+   
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Button, Overlay, Icon, Input } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,9 +23,8 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
   const [assets, setAssets] = useState(null);
-  const { isSuccess, createBookingData, createdBooking, isFetching } =
+  const { isSuccess, isFetching } =
     useSelector(bookingSelector);
-  const { singleSalonId } = useSelector(userHomeSelector);
   const dispatch = useDispatch();
 
   const toggleOverlay = () => {
@@ -49,16 +50,16 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
     getToken();
   }, []);
 
-  useEffect(() => {
-    dispatch(
-      getCreateBookingData({
-        ...createBookingData,
-        starting_time: "16-2-2021",
-        ending_time: "15-3-2022",
-        salon: singleSalonId,
-      })
-    );
-  }, [createBookingData]);
+  // useEffect(() => {
+  //   dispatch(
+  //     getCreateBookingData({
+  //       ...createBookingData,
+  //       starting_time: "16-2-2021",
+  //       ending_time: "15-3-2022",
+  //       salon: singleSalonId,
+  //     })
+  //   );
+  // }, [singleSalonId]);
 
   setTimeout(() => {
     visible === true && navigation.navigate("Home");
@@ -88,7 +89,8 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
     );
   };
 
-  console.log(createBookingData)
+  // console.log(createBookingData)
+
   return (
     <View>
       <View style={tw`flex flex-row items-center justify-between my-3`}>
@@ -129,7 +131,6 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
                 iconPosition="left"
                 onPress={() => {
                   dispatch(createBooking(assets));
-                  dispatch(getBookingsByUser(assets))
                   toggleOverlay();
                 }}
               />

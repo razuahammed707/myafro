@@ -178,7 +178,7 @@ console.log(getMessagesData)
                       onPress={() => {
                         toggleOverlay();
                         dispatch(getBookings(assets))
-                        navigation.navigate('Tabs')
+                        navigation.navigate('Bookings')
                       }}
                     />
                   </Overlay>

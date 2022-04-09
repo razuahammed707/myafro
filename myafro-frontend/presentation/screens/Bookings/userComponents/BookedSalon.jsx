@@ -79,10 +79,6 @@ const BookedSalon = () => {
     );
     creds !== null && dispatch(getMessages(creds));
   }, [creds]);
-  
-console.log(assets)
-
-  console.log(getMessagesData);
 
   return (
     <View style={tw`p-5 my-5`}>
@@ -150,7 +146,7 @@ console.log(assets)
 
             {/* Message section start */}
             <Text style={tw`font-bold text-lg mb-5`}>Message</Text>
-            {getMessagesData?.messages?.map((message) => (
+            {singleBookedSalon?.messages?.map((message) => (
               <View key={message?._id}>
                 {message?.user_type === "hair_dresser" ? (
                   <View style={tw`flex flex-row justify-between mt-4`}>
