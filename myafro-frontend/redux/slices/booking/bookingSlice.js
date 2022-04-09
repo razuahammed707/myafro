@@ -66,6 +66,7 @@ export const createMessageToSend = createAsyncThunk(
 export const getMessages = createAsyncThunk(
   "/get/message",
   async (assets, thunkAPI) => {
+    console.log(assets, "Redux store")
     try {
       let response = await axiosClient.get(
         `/bookings/message/${assets?.bookingId}`,
@@ -76,7 +77,7 @@ export const getMessages = createAsyncThunk(
         }
       );
       console.log(response?.data?.messages);
-      return response?.data?.messages;
+      return response?.data?.messages[0];
     } catch (e) {
       console.log("Error", e.response.data);
       thunkAPI.rejectWithValue(e.response.data);
@@ -153,6 +154,7 @@ export const bookingSlice = createSlice({
     getMessageToSend: (state, { payload }) => {
       state.sendMessage = payload;
     },
+    resetBooking: () => initialState({}),
     getSingleBooking: (state, { payload }) => {
       state.singleBooking = payload;
     },
@@ -189,7 +191,7 @@ export const bookingSlice = createSlice({
       .addCase(createMessageToSend.fulfilled, (state, { payload }) => {
         state.isFetching = false;
         state.isSuccess = true;
-        state.message = payload.message;
+        // state.message = payload.message;
         return state;
       })
       .addCase(createMessageToSend.rejected, (state, { payload }) => {
@@ -278,7 +280,8 @@ export const {
   getMessageToSend,
   getSingleBooking,
   getUpdateBookingData,
-  getSingleBookedSalon
+  getSingleBookedSalon,
+  resetBooking
 } = bookingSlice.actions;
 export const bookingSelector = (state) => state.booking;
 export default bookingSlice.reducer;

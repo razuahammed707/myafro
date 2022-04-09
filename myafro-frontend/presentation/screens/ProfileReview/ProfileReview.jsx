@@ -81,7 +81,7 @@ const ProfileReview = () => {
                   <AirbnbRating
                     count={5}
                     reviewSize={0}
-                    defaultRating={5}
+                    defaultRating={profileReviewInfo?.averageRatings}
                     size={13}
                     starContainerStyle={{
                       marginTop: -20,

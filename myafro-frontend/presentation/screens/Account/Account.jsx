@@ -14,12 +14,14 @@ import {
   reset,
 } from "../../../redux/slices/login/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { bookingSelector, resetBooking } from "../../../redux/slices/booking/bookingSlice";
 
 const Account = () => {
   const navigation = useNavigation();
   const [loggedInUser, setLoggedInUser] = useState(null);
   const { token } = useSelector(authSelector);
   const dispatch = useDispatch();
+  // const {resetBooking} = useSelector(bookingSelector)
   const getToken = async () => {
     try {
       const userInfo = await AsyncStorage.getItem("user_info");
@@ -48,10 +50,12 @@ const Account = () => {
     dispatch(getTokenValue(null));
     dispatch(emptyLoggedInData({}))
     dispatch(reset());
+    dispatch(resetBooking())
    } catch (error) {
-     
+     console.log(error)
    }
   };
+
 
   return (
     <SafeAreaView style={tw`p-5 h-full`}>

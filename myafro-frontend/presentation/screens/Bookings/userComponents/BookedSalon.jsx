@@ -6,7 +6,7 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ResponsePopup from "../../../components/ResponsePopup/ResponsePopup";
 import { Button, Icon } from "react-native-elements";
@@ -21,18 +21,18 @@ import {
   getMessages,
   getMessageToSend,
 } from "../../../../redux/slices/booking/bookingSlice";
-import { userHomeSelector } from "../../../../redux/slices/user/userHomeSlice";
 import {
   getCreateReviewData,
   reviewSelector,
 } from "../../../../redux/slices/reviews/reviewSlice";
-import UserMessagePopup from "./UserMessagePopup";
 
 const BookedSalon = () => {
   const [createMessage, setCreateMessage] = useState("");
-  const [assets, setAssets] = useState({});
+  const [assets, setAssets] = useState(null);
+  const [creds, setCreds] = useState(null);
   const { createReviewData } = useSelector(reviewSelector);
-  const { singleBookedSalon, isSuccess, getMessagesData } = useSelector(bookingSelector);
+  const { singleBookedSalon, isSuccess, getMessagesData } =
+    useSelector(bookingSelector);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -51,9 +51,9 @@ const BookedSalon = () => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getToken();
-  }, []);
+  }, [singleBookedSalon]);
 
   useEffect(() => {
     dispatch(
@@ -62,10 +62,11 @@ const BookedSalon = () => {
         message: createMessage,
       })
     );
-    setAssets({
+    setCreds({
       token: assets?.token,
       bookingId: singleBookedSalon?._id,
     });
+
   }, [createMessage]);
 
   useEffect(() => {
@@ -76,10 +77,13 @@ const BookedSalon = () => {
         salon: singleBookedSalon?.salon?._id,
       })
     );
-    dispatch(getMessages(assets));
-  }, [singleBookedSalon]);
+    creds !== null && dispatch(getMessages(creds));
+  }, [creds]);
+  
+console.log(assets)
 
-  console.log(getMessagesData)
+  console.log(getMessagesData);
+
   return (
     <View style={tw`p-5 my-5`}>
       <View style={tw`flex flex-row`}>
@@ -146,7 +150,7 @@ const BookedSalon = () => {
 
             {/* Message section start */}
             <Text style={tw`font-bold text-lg mb-5`}>Message</Text>
-            {getMessagesData[0]?.messages?.map((message) => (
+            {getMessagesData?.messages?.map((message) => (
               <View key={message?._id}>
                 {message?.user_type === "hair_dresser" ? (
                   <View style={tw`flex flex-row justify-between mt-4`}>
@@ -234,7 +238,7 @@ const BookedSalon = () => {
                       onPress={() => {
                         dispatch(createMessageToSend(assets));
                         if (isSuccess) {
-                          dispatch(getMessages(assets));
+                          dispatch(getMessages(creds));
                           // dispatch(getBookings(assets))
                         }
                       }}

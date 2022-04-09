@@ -1,11 +1,17 @@
 import * as React from "react";
 import { View, useWindowDimensions, Text } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import ActiveBookings from "./components/ActiveBookings";
 import PreviousBookings from "./components/PreviousBookings";
 import tw from "twrnc";
 import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  bookingSelector,
+  getBookings,
+} from "../../../redux/slices/booking/bookingSlice";
 
 const FirstRoute = () => (
   <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -24,26 +30,36 @@ const renderScene = SceneMap({
   second: SecondRoute,
 });
 
-const renderTabBar = (props) => (
-  <TabBar
-    inactiveColor="black"
-    activeColor="black"
-    labelStyle={{ fontSize: 14, textTransform: "capitalize" }}
-    {...props}
-    indicatorStyle={{ backgroundColor: "black" }}
-    style={{ backgroundColor: "white", marginHorizontal: 20, borderRadius: 8 }}
-  />
-);
-
 export default function Bookings() {
   const layout = useWindowDimensions();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "first", title: "Active Bookings" },
     { key: "second", title: "Previous Bookings" },
   ]);
+
+  const dispatch = useDispatch();
+  const [assets, setAssets] = React.useState(null);
+  // const { bookings } = useSelector(bookingSelector);
+  const getToken = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user_info");
+      if (userInfo) {
+        const parsedToken = JSON.parse(userInfo);
+        setAssets({
+          token: parsedToken?.access_token,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  React.useEffect(() => {
+    getToken();
+  }, []);
 
   return (
     <>
@@ -60,7 +76,23 @@ export default function Bookings() {
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
-        renderTabBar={renderTabBar}
+        renderTabBar={(props) => (
+          <TabBar
+            inactiveColor="black"
+            onTabPress={() => {
+              assets !== null && dispatch(getBookings(assets));
+            }}
+            activeColor="black"
+            labelStyle={{ fontSize: 14, textTransform: "capitalize" }}
+            {...props}
+            indicatorStyle={{ backgroundColor: "black" }}
+            style={{
+              backgroundColor: "white",
+              marginHorizontal: 20,
+              borderRadius: 8,
+            }}
+          />
+        )}
         style={{ backgroundColor: "white" }}
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
