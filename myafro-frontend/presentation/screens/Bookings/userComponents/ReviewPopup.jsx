@@ -15,6 +15,7 @@ import {
   updateBooking,
 } from "../../../../redux/slices/booking/bookingSlice";
 import { useNavigation } from "@react-navigation/native";
+import { getSalons } from "../../../../redux/slices/user/userHomeSlice";
 
 const ReviewPopup = ({ authToken }) => {
   const [comment, setComment] = useState("");
@@ -108,12 +109,8 @@ const ReviewPopup = ({ authToken }) => {
             );
             dispatch(getBookingsByUser(authToken))
             dispatch(updateBooking(authToken));
-            if (isSuccess) {
-              navigation.navigate("Home");
-            }
-            else{
-              alert("Something went wrong")
-            }
+            dispatch(getSalons(authToken))
+            navigation.navigate("Home");
           }}
         />
       </Overlay>

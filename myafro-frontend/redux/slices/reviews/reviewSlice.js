@@ -77,7 +77,7 @@ export const reviewSlice = createSlice({
       .addCase(createReview.fulfilled, (state, { payload }) => {
         state.isFetching = false;
         state.isSuccess = true;
-        // state.message = payload.message;
+        state.message = payload.message;
         return state;
       })
       .addCase(createReview.rejected, (state, { payload }) => {
