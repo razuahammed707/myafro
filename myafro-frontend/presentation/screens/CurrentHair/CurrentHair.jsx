@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   bookingSelector,
   createMessageToSend,
+  getBookings,
+  getMessages,
   getMessageToSend,
   getUpdateBookingData,
   updateBooking,
@@ -21,7 +23,7 @@ import MessagePopup from "./components/MessagePopup";
 const CurrentHair = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { bookings, singleBooking, sendMessage, isSuccess, isFetching } = useSelector(bookingSelector);
+  const { bookings, singleBooking, sendMessage, isSuccess, isFetching, getMessagesData } = useSelector(bookingSelector);
   const [assets, setAssets] = useState(null);
   const [visible, setVisible] = useState(false);
   const toggleOverlay = () => {
@@ -85,7 +87,11 @@ const CurrentHair = () => {
     // });
   }, [createMessage]);
 
+useEffect(() => {
+ dispatch(getMessages(assets));
+}, [singleBooking])
 
+console.log(getMessagesData)
   return (
     <SafeAreaView style={tw`p-5`}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -171,6 +177,7 @@ const CurrentHair = () => {
                       titleStyle={{ marginLeft: 10 }}
                       onPress={() => {
                         toggleOverlay();
+                        dispatch(getBookings(assets))
                         navigation.navigate('Tabs')
                       }}
                     />
@@ -272,7 +279,33 @@ const CurrentHair = () => {
                   />
                 </View>
                 <View style={tw`mt-2 flex flex-row justify-end`}>
-                  <MessagePopup onPress={() => dispatch(createMessageToSend(assets))}/>
+                  {/* <MessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdateBookings ={() => dispatch(getBookings(assets))}/> */}
+                  <Button
+                      title="Send"
+                      buttonStyle={{
+                        paddingHorizontal: 20,
+                        paddingVertical: 16,
+                      }}
+                      type="clear"
+                      icon={
+                        <Icon
+                          name="send"
+                          type="feather"
+                          size={20}
+                          color="#fff"
+                          style={tw`mr-2`}
+                        />
+                      }
+                      iconPosition="left"
+                      titleStyle={{ fontSize: 14 }}
+                      onPress={() => {
+                        dispatch(createMessageToSend(assets));
+                        if (isSuccess) {
+                          dispatch(getMessages(assets));
+                          // dispatch(getBookings(assets))
+                        }
+                      }}
+                    />
                 </View>
               </>
             )}

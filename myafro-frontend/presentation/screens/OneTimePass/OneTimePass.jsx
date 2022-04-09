@@ -1,7 +1,8 @@
 import {
   Dimensions,
   Image,
-  SafeAreaView,
+  KeyboardAvoidingView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -125,7 +126,7 @@ const OneTimePass = () => {
       });
   };
   return (
-    <SafeAreaView style={tw`p-5 bg-white`}>
+    <ScrollView showsVerticalScrollIndicator={false} style={tw`p-5 bg-white`}>
       <View style={tw`flex flex-row justify-start`}>
         <Icon
           name="arrow-left"
@@ -150,21 +151,23 @@ const OneTimePass = () => {
         <Text style={tw`text-sm text-gray-400 text-left mx-2 mb-10`}>
           An 4 digit code has been sent to +{crendential}
         </Text>
-        <View style={styles.otpContainer}>
-          {inputs.map((i, index) => (
-            <View key={index.toString()} style={styles.inputContainer}>
-              <TextInput
-                placeholder="0"
-                value={OTP[index]}
-                onChangeText={(text) => handleChangeText(text, index)}
-                keyboardType="numeric"
-                maxLength={1}
-                style={tw`text-lg text-center`}
-                ref={nextInputIndex === index ? input : null}
-              />
-            </View>
-          ))}
-        </View>
+        <KeyboardAvoidingView behavior="padding">
+          <View style={styles.otpContainer}>
+            {inputs.map((i, index) => (
+              <View key={index.toString()} style={styles.inputContainer}>
+                <TextInput
+                  placeholder="0"
+                  value={OTP[index]}
+                  onChangeText={(text) => handleChangeText(text, index)}
+                  keyboardType="numeric"
+                  maxLength={1}
+                  style={tw`text-lg text-center`}
+                  ref={nextInputIndex === index ? input : null}
+                />
+              </View>
+            ))}
+          </View>
+        </KeyboardAvoidingView>
         <View>
           <Text style={tw`text-base font-normal text-center mt-5`}>
             Tap to resend OTP
@@ -182,7 +185,7 @@ const OneTimePass = () => {
         </View>
       </View>
       <Loader loading={loading} />
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

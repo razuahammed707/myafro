@@ -20,7 +20,7 @@ const HomeTabs = () => {
     <>
       {show ? (
         <Tab.Navigator
-          initialRouteName="Request"
+          initialRouteName="Home"
           screenOptions={{
             headerShown: false,
           }}

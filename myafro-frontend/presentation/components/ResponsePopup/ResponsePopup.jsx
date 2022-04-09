@@ -58,7 +58,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
         salon: singleSalonId,
       })
     );
-  }, [singleSalonId]);
+  }, [createBookingData]);
 
   setTimeout(() => {
     visible === true && navigation.navigate("Home");
@@ -88,6 +88,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
     );
   };
 
+  console.log(createBookingData)
   return (
     <View>
       <View style={tw`flex flex-row items-center justify-between my-3`}>
@@ -128,6 +129,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
                 iconPosition="left"
                 onPress={() => {
                   dispatch(createBooking(assets));
+                  dispatch(getBookingsByUser(assets))
                   toggleOverlay();
                 }}
               />

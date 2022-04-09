@@ -6,7 +6,7 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ResponsePopup from "../../../components/ResponsePopup/ResponsePopup";
 import { Button, Icon } from "react-native-elements";
@@ -16,21 +16,23 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   bookingSelector,
   createMessageToSend,
+  getBookings,
   getBookingsByUser,
+  getMessages,
   getMessageToSend,
 } from "../../../../redux/slices/booking/bookingSlice";
-import { userHomeSelector } from "../../../../redux/slices/user/userHomeSlice";
 import {
   getCreateReviewData,
   reviewSelector,
 } from "../../../../redux/slices/reviews/reviewSlice";
-import UserMessagePopup from "./UserMessagePopup";
 
 const BookedSalon = () => {
   const [createMessage, setCreateMessage] = useState("");
-  const [assets, setAssets] = useState({});
+  const [assets, setAssets] = useState(null);
+  const [creds, setCreds] = useState(null);
   const { createReviewData } = useSelector(reviewSelector);
-  const { singleBookedSalon } = useSelector(bookingSelector);
+  const { singleBookedSalon, isSuccess, getMessagesData } =
+    useSelector(bookingSelector);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -49,9 +51,9 @@ const BookedSalon = () => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getToken();
-  }, []);
+  }, [singleBookedSalon]);
 
   useEffect(() => {
     dispatch(
@@ -60,10 +62,11 @@ const BookedSalon = () => {
         message: createMessage,
       })
     );
-    setAssets({
+    setCreds({
       token: assets?.token,
       bookingId: singleBookedSalon?._id,
     });
+
   }, [createMessage]);
 
   useEffect(() => {
@@ -74,7 +77,12 @@ const BookedSalon = () => {
         salon: singleBookedSalon?.salon?._id,
       })
     );
-  }, [singleBookedSalon]);
+    creds !== null && dispatch(getMessages(creds));
+  }, [creds]);
+  
+console.log(assets)
+
+  console.log(getMessagesData);
 
   return (
     <View style={tw`p-5 my-5`}>
@@ -99,12 +107,14 @@ const BookedSalon = () => {
               <Text style={tw`text-base`}>
                 Status: {singleBookedSalon?.status}
               </Text>
-              {singleBookedSalon?.status === "complete" ?  <Text style={tw`text-xl text-green-800`}>
+              {singleBookedSalon?.status === "complete" ? (
+                <Text style={tw`text-xl text-green-800`}>
                   The booking is Completed
-                </Text> : singleBookedSalon?.status === "cancel" ? (
-                 <Text style={tw`text-xl text-red-800`}>
-                 The booking is canceled
-               </Text>
+                </Text>
+              ) : singleBookedSalon?.status === "cancel" ? (
+                <Text style={tw`text-xl text-red-800`}>
+                  The booking is canceled
+                </Text>
               ) : (
                 <View style={tw`flex flex-col justify-end items-end`}>
                   <Button
@@ -140,7 +150,7 @@ const BookedSalon = () => {
 
             {/* Message section start */}
             <Text style={tw`font-bold text-lg mb-5`}>Message</Text>
-            {singleBookedSalon?.messages?.map((message) => (
+            {getMessagesData?.messages?.map((message) => (
               <View key={message?._id}>
                 {message?.user_type === "hair_dresser" ? (
                   <View style={tw`flex flex-row justify-between mt-4`}>
@@ -206,15 +216,39 @@ const BookedSalon = () => {
                     />
                   </View>
                   <View style={tw`mt-2 flex flex-row justify-end`}>
-                    <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/>
+                    {/* <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/> */}
+                    <Button
+                      title="Send"
+                      buttonStyle={{
+                        paddingHorizontal: 20,
+                        paddingVertical: 16,
+                      }}
+                      type="clear"
+                      icon={
+                        <Icon
+                          name="send"
+                          type="feather"
+                          size={20}
+                          color="#fff"
+                          style={tw`mr-2`}
+                        />
+                      }
+                      iconPosition="left"
+                      titleStyle={{ fontSize: 14 }}
+                      onPress={() => {
+                        dispatch(createMessageToSend(assets));
+                        if (isSuccess) {
+                          dispatch(getMessages(creds));
+                          // dispatch(getBookings(assets))
+                        }
+                      }}
+                    />
                   </View>
                 </>
               )}
             {singleBookedSalon?.status !== "cancel" &&
               singleBookedSalon?.status !== "complete" && (
-                <ResponsePopup
-                  bookingInfo={singleBookedSalon}
-                />
+                <ResponsePopup bookingInfo={singleBookedSalon} />
               )}
           </View>
         </ScrollView>

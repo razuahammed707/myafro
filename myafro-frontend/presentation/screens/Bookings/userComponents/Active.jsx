@@ -1,18 +1,16 @@
-import { StyleSheet } from "react-native";
-import React from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import tw from "twrnc";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import UserBooking from "./UserBooking";
 
 const Active = () => {
   return (
-    <SafeAreaView style={tw`px-5 h-full`}>
+    <TouchableOpacity style={tw`px-5 h-full`}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* <Booking /> */}
         <UserBooking booked="booked"/>
       </ScrollView>
-    </SafeAreaView>
+    </TouchableOpacity>
   );
 };
 

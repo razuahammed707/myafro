@@ -1,10 +1,43 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AirbnbRating } from "react-native-elements";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import tw from "twrnc";
 import moment from 'moment'
+import { getReviews, reviewSelector } from "../../../../redux/slices/reviews/reviewSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const Feedback = ({ reviews }) => {
+const Feedback = () => {
+  const dispatch = useDispatch();
+  const { salonInfoForReview, reviews } =
+    useSelector(reviewSelector);
+  const [assets, setAssets] = useState(null);
+
+  const getToken = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user_info");
+      if (userInfo) {
+        const parsedToken = JSON.parse(userInfo);
+        setAssets({
+          salonId: salonInfoForReview?.salonId,
+          token: parsedToken?.access_token,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
+
+  useEffect(() => {
+    assets?.token !== undefined &&
+      assets?.token !== null &&
+      assets?.token !== "" &&
+      dispatch(getReviews(assets));
+  }, [assets, salonInfoForReview]);
   return (
     <View style={tw`flex justify-between mb-5`}>
       {reviews.length > 0 && reviews?.map((review) => (
