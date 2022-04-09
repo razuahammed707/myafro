@@ -33,7 +33,10 @@ import {
   getUserHomeAPIQueries,
   userHomeSelector,
 } from "../../../redux/slices/user/userHomeSlice";
-import { authSelector } from "../../../redux/slices/login/authSlice";
+import {
+  authSelector,
+  getTokenValue,
+} from "../../../redux/slices/login/authSlice";
 import Loader from "../../components/Loader/Loader";
 import { mapSelector } from "../../../redux/slices/map/mapSlice";
 
@@ -44,12 +47,14 @@ const wait = (timeout) => {
 const Home = () => {
   const navigation = useNavigation();
   const bottomSheet = useRef();
+  const dispatch = useDispatch();
 
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     // dispatch(getSalons(assets))
+    dispatch(getUserHomeAPIQueries({}));
     wait(2000).then(() => setRefreshing(false));
   }, []);
   // let [fontsLoaded, error] = useFonts({
@@ -66,7 +71,6 @@ const Home = () => {
   const { salons, queries, isSuccess, isFetching } =
     useSelector(userHomeSelector);
   const { times } = useSelector(mapSelector);
-  const dispatch = useDispatch();
 
   const getToken = async () => {
     try {
@@ -76,6 +80,7 @@ const Home = () => {
         setAssets({
           token: parsedToken?.access_token,
         });
+        dispatch(getTokenValue({ token: parsedToken?.access_token }));
       }
     } catch (e) {
       console.log(e);
@@ -89,8 +94,6 @@ const Home = () => {
   useEffect(() => {
     assets !== null && dispatch(getSalons(assets));
   }, [assets, queries]);
-
-  console.log(salons)
 
   return (
     <SafeAreaView style={tw`flex-1`}>
@@ -166,7 +169,7 @@ const Home = () => {
                           height: 190,
                           resizeMode: "cover",
                         }}
-                        source={{ uri: item?.cover}}
+                        source={{ uri: item?.cover }}
                       />
                       <View style={tw`flex flex-row absolute top-0 left-1`}>
                         <View

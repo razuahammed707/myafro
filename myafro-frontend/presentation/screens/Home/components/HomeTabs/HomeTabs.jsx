@@ -6,9 +6,14 @@ import Home from "../../Home";
 import Account from "../../../Account/Account";
 import { ActivityIndicator, Image, Text } from "react-native";
 import UserBookings from "../../../Bookings/UserBookings";
+import { authSelector } from "../../../../../redux/slices/login/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getSalons } from "../../../../../redux/slices/user/userHomeSlice";
 
 const HomeTabs = () => {
   const [show, setShow] = useState(false);
+  // const {token} = useSelector(authSelector)
+  // const dispatch = useDispatch()
   useEffect(() => {
     setTimeout(() => {
       setShow(true);
@@ -16,6 +21,7 @@ const HomeTabs = () => {
   }, []);
 
   const Tab = createBottomTabNavigator();
+  
   return (
     <>
       {show ? (
@@ -26,6 +32,13 @@ const HomeTabs = () => {
           }}
         >
           <Tab.Screen
+          // listeners={{
+          //   tabPress: (e) => {
+          //     // Prevent default action
+          //     dispatch(getSalons(token))
+          //     // e.preventDefault();
+          //   },
+          // }}
             name="Home"
             component={Home}
             options={{
