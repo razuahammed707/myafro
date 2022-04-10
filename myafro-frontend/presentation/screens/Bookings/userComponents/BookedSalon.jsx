@@ -44,6 +44,7 @@ const BookedSalon = () => {
         setAssets({
           token: parsedToken?.access_token,
           role: parsedToken?.user?.user?.role,
+          bookingId: singleBookedSalon?._id,
         });
       }
     } catch (e) {
@@ -66,7 +67,6 @@ const BookedSalon = () => {
       token: assets?.token,
       bookingId: singleBookedSalon?._id,
     });
-
   }, [createMessage]);
 
   useEffect(() => {
@@ -77,8 +77,11 @@ const BookedSalon = () => {
         salon: singleBookedSalon?.salon?._id,
       })
     );
-    creds !== null && dispatch(getMessages(creds));
-  }, [creds]);
+    // creds !== null && dispatch(getMessages(creds));
+  }, []);
+
+  console.log(getMessagesData)
+  console.log(assets)
 
   return (
     <View style={tw`p-5 my-5`}>
@@ -146,7 +149,7 @@ const BookedSalon = () => {
 
             {/* Message section start */}
             <Text style={tw`font-bold text-lg mb-5`}>Message</Text>
-            {singleBookedSalon?.messages?.map((message) => (
+            {getMessagesData?.messages?.map((message) => (
               <View key={message?._id}>
                 {message?.user_type === "hair_dresser" ? (
                   <View style={tw`flex flex-row justify-between mt-4`}>
@@ -233,10 +236,7 @@ const BookedSalon = () => {
                       titleStyle={{ fontSize: 14 }}
                       onPress={() => {
                         dispatch(createMessageToSend(assets));
-                        if (isSuccess) {
-                          dispatch(getMessages(creds));
-                          // dispatch(getBookings(assets))
-                        }
+                        dispatch(getMessages(assets));
                       }}
                     />
                   </View>

@@ -23,6 +23,7 @@ import {
   getCreateReviewData,
   reviewSelector,
 } from "../../../redux/slices/reviews/reviewSlice";
+import moment from "moment";
 
 const BookingConfirmation = () => {
   const navigation = useNavigation();
@@ -32,6 +33,10 @@ const BookingConfirmation = () => {
   // const [messageAssets, setMessageAssets] = useState(null);
   const {singleSalonId} = useSelector(userHomeSelector)
   const { isFetching, createdBooking, createBookingData } = useSelector(bookingSelector);
+
+  const today = new Date();
+  const tomorrow = new Date();
+
 
   const getToken = async () => {
     try {
@@ -56,13 +61,15 @@ const BookingConfirmation = () => {
     dispatch(
       getCreateBookingData({
         ...createBookingData,
-        starting_time: "16-2-2021",
-        ending_time: "15-3-2022",
+        starting_time: new Date('2020-12-02'),
+        ending_time: new Date('2020-12-04'),
         salon: singleSalonId,
         message: sendMessage
       })
     );
   }, [sendMessage]);
+
+  console.log(moment("2020-11-04T00:00:00.000Z").format('lll'))
   
   return (
     <SafeAreaView style={tw`p-5 mb-5`}>

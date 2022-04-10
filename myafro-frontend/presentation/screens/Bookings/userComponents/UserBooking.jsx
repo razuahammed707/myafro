@@ -15,9 +15,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   bookingSelector,
   getBookingsByUser,
+  getMessages,
   getSingleBookedSalon,
 } from "../../../../redux/slices/booking/bookingSlice";
 import Loader from "../../../components/Loader/Loader";
+import moment from 'moment'
 
 const UserBooking = ({ margin, previous, pending, booked }) => {
   const { userBookings, isSuccess, isFetching } = useSelector(bookingSelector);
@@ -61,6 +63,7 @@ const UserBooking = ({ margin, previous, pending, booked }) => {
                   <TouchableOpacity
                   onPress={() =>{
                     dispatch(getSingleBookedSalon(booking))
+                    assets !== null && dispatch(getMessages({token: assets?.token, bookingId: booking._id}))
                     navigation.navigate("BookedSalon")
                   }}
                     style={tw` mt-3 flex flex-row items-center justify-between `}
@@ -93,7 +96,7 @@ const UserBooking = ({ margin, previous, pending, booked }) => {
                           </Text>
                           <View style={tw`flex flex-row items-center my-1`}>
                             <Text style={tw`text-gray-400 mr-2 text-sm`}>
-                              {booking?.starting_time}
+                              {moment(booking?.starting_time).format("lll")}
                             </Text>
                             <Icon
                               name="arrow-right"
@@ -102,7 +105,7 @@ const UserBooking = ({ margin, previous, pending, booked }) => {
                               color="gray"
                             />
                             <Text style={tw`text-gray-400 ml-2 text-sm`}>
-                              {booking?.ending_time}
+                            {moment(booking?.ending_time).format("lll")}
                             </Text>
                           </View>
                         </View>
@@ -129,6 +132,7 @@ const UserBooking = ({ margin, previous, pending, booked }) => {
                   <TouchableOpacity
                   onPress={() =>{
                     dispatch(getSingleBookedSalon(booking))
+                    assets !== null && dispatch(getMessages({token: assets?.token, bookingId: booking._id}))
                     navigation.navigate("BookedSalon")
                   }}
                     style={tw` mt-3 flex flex-row items-center justify-between `}
@@ -161,7 +165,7 @@ const UserBooking = ({ margin, previous, pending, booked }) => {
                           </Text>
                           <View style={tw`flex flex-row items-center my-1`}>
                             <Text style={tw`text-gray-400 mr-2 text-sm`}>
-                              {booking?.starting_time}
+                            {moment(booking?.starting_time).format("lll")}
                             </Text>
                             <Icon
                               name="arrow-right"
@@ -170,7 +174,7 @@ const UserBooking = ({ margin, previous, pending, booked }) => {
                               color="gray"
                             />
                             <Text style={tw`text-gray-400 ml-2 text-sm`}>
-                              {booking?.ending_time}
+                            {moment(booking?.ending_time).format("lll")}
                             </Text>
                           </View>
                         </View>
@@ -197,6 +201,7 @@ const UserBooking = ({ margin, previous, pending, booked }) => {
                   <TouchableOpacity
                     onPress={() =>{
                       dispatch(getSingleBookedSalon(booking))
+                      assets !== null && dispatch(getMessages({token: assets?.token, bookingId: booking._id}))
                       navigation.navigate("BookedSalon")
                     }}
                     style={tw` mt-3 flex flex-row items-center justify-between `}
@@ -229,7 +234,7 @@ const UserBooking = ({ margin, previous, pending, booked }) => {
                           </Text>
                           <View style={tw`flex flex-row items-center my-1`}>
                             <Text style={tw`text-gray-400 mr-2 text-sm`}>
-                              {booking?.starting_time}
+                            {moment(booking?.starting_time).format("lll")}
                             </Text>
                             <Icon
                               name="arrow-right"
@@ -238,7 +243,7 @@ const UserBooking = ({ margin, previous, pending, booked }) => {
                               color="gray"
                             />
                             <Text style={tw`text-gray-400 ml-2 text-sm`}>
-                              {booking?.ending_time}
+                            {moment(booking?.ending_time).format("lll")}
                             </Text>
                           </View>
                         </View>

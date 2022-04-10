@@ -12,12 +12,14 @@ import tw from "twrnc";
 import { useDispatch, useSelector } from "react-redux";
 import {
   bookingSelector,
+  getMessages,
   getSingleBooking,
 } from "../../../../redux/slices/booking/bookingSlice";
 import { useNavigation } from "@react-navigation/native";
+import { authSelector } from "../../../../redux/slices/login/authSlice";
 
 const Booking = ({ margin, previous }) => {
-  const { bookings, isSuccess } = useSelector(bookingSelector);
+  const { bookings, isSuccess, token } = useSelector(bookingSelector);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   
@@ -38,8 +40,9 @@ const Booking = ({ margin, previous }) => {
               .map((booking) => (
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("CurrentHair");
                     getBooking(booking?._id);
+                    navigation.navigate("CurrentHair");
+                   token !== null && dispatch(getMessages({token: token, bookingId: booking?._id}))
                   }}
                   style={tw` mt-3 flex flex-row items-center justify-between `}
                   key={booking._id}
@@ -114,8 +117,9 @@ const Booking = ({ margin, previous }) => {
               .map((booking) => (
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("CurrentHair");
                     getBooking(booking?._id);
+                    navigation.navigate("CurrentHair");
+                   token !== null && dispatch(getMessages({token: token, bookingId: booking?._id}))
                   }}
                   style={tw` mt-3 flex flex-row items-center justify-between `}
                   key={booking._id}

@@ -81,15 +81,7 @@ const CurrentHair = () => {
         message: createMessage,
       })
     );
-    // setAssets({
-    //   // token: uniqueBooking?.token,
-    //   // bookingId: uniqueBooking?.uniqueBooking?._id,
-    // });
   }, [createMessage]);
-
-useEffect(() => {
- dispatch(getMessages(assets));
-}, [singleBooking])
 
 console.log(getMessagesData)
   return (
@@ -209,7 +201,7 @@ console.log(getMessagesData)
 
           {/* Message section start */}
           <Text style={tw`font-bold text-lg mb-5`}>Message</Text>
-          {singleBooking?.messages?.map((message) => (
+          {getMessagesData?.messages?.map((message) => (
             <View key={message?._id}>
               {message?.user_type === "hair_dresser" ? (
                 <View style={tw`flex flex-row justify-between mt-4`}>
@@ -252,7 +244,7 @@ console.log(getMessagesData)
           ))}
           {/* Message section end */}
 
-          {singleBooking?.messages?.length < 1 && (
+          {getMessagesData?.messages?.length < 1 && (
             <View style={tw`p-5 text-center shadow-sm`}>
               <Text style={tw`text-base`}>No message found !</Text>
             </View>
@@ -300,10 +292,7 @@ console.log(getMessagesData)
                       titleStyle={{ fontSize: 14 }}
                       onPress={() => {
                         dispatch(createMessageToSend(assets));
-                        if (isSuccess) {
-                          dispatch(getMessages(assets));
-                          // dispatch(getBookings(assets))
-                        }
+                        assets !== null && dispatch(getMessages(assets))
                       }}
                     />
                 </View>

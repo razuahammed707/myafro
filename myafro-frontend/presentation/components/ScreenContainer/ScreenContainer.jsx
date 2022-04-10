@@ -8,6 +8,7 @@ import {
 import AppNavigator from "../../screenTypes/AppNavigator";
 import AuthNavigator from "../../screenTypes/AuthNavigator";
 import { useNavigation } from "@react-navigation/native";
+import { getAuthToken } from "../../../redux/slices/booking/bookingSlice";
 
 const ScreenContainer = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const ScreenContainer = () => {
       if (userInfo) {
         const parsedToken = JSON.parse(userInfo);
         dispatch(getTokenValue(parsedToken?.access_token));
+        dispatch(getAuthToken(parsedToken?.access_token));
       }
     } catch (e) {
       console.log(e);
@@ -34,7 +36,7 @@ const ScreenContainer = () => {
   return token === null && !data.access_token ? (
     <AuthNavigator />
   ) : (
-   <AppNavigator data={data} />
+   <AppNavigator data={data} token={token}/>
   );
 };
 

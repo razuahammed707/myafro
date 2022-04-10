@@ -6,6 +6,7 @@ const initialState = {
   isSuccess: false,
   isError: false,
   message: "",
+  token: null,
   sendMessage: "",
   bookings: [],
   getUpdateBookingData: {},
@@ -135,7 +136,6 @@ export const updateBooking = createAsyncThunk(
           },
         }
       );
-      console.log(response?.data);
       return response?.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -178,6 +178,9 @@ export const bookingSlice = createSlice({
     getUpdateBookingData: (state, { payload }) => {
       state.getUpdateBookingData = payload;
     },
+    getAuthToken: (state, { payload }) => {
+      state.token = payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -295,7 +298,8 @@ export const {
   getSingleBooking,
   getUpdateBookingData,
   getSingleBookedSalon,
-  resetBooking
+  resetBooking,
+  getAuthToken
 } = bookingSlice.actions;
 export const bookingSelector = (state) => state.booking;
 export default bookingSlice.reducer;

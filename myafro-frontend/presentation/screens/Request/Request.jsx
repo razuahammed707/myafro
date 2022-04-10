@@ -17,9 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   bookingSelector,
   getBookings,
+  getMessages,
   getSingleBooking,
 } from "../../../redux/slices/booking/bookingSlice";
 import Loader from "../../components/Loader/Loader";
+import moment from "moment";
 
 const Request = () => {
   const navigation = useNavigation();
@@ -38,7 +40,7 @@ const Request = () => {
 
   const [show, setShow] = useState(false);
   useEffect(() => {
-      setShow(true);
+    setShow(true);
   }, []);
 
   const getToken = async () => {
@@ -98,8 +100,15 @@ const Request = () => {
                     booking._id && (
                       <TouchableOpacity
                         onPress={() => {
-                          getBooking(booking._id);
+                          getBooking(booking?._id);
                           navigation.navigate("CurrentHair");
+                          assets?.token !== null &&
+                            dispatch(
+                              getMessages({
+                                token: assets?.token,
+                                bookingId: booking?._id,
+                              })
+                            );
                         }}
                         style={tw` mt-3 flex flex-row items-center justify-between `}
                         key={booking._id}
@@ -131,7 +140,7 @@ const Request = () => {
                               </Text>
                               <View style={tw`flex flex-row items-center my-1`}>
                                 <Text style={tw`text-gray-400 mr-2 text-sm`}>
-                                  {booking?.starting_time}
+                                  {moment(booking?.starting_time).format("lll")}
                                 </Text>
                                 <Icon
                                   name="arrow-right"
@@ -140,7 +149,7 @@ const Request = () => {
                                   color="gray"
                                 />
                                 <Text style={tw`text-gray-400 ml-2 text-sm`}>
-                                  {booking?.ending_time}
+                                  {moment(booking?.ending_time).format("lll")}
                                 </Text>
                               </View>
                             </View>

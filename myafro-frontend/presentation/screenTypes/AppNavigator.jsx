@@ -19,29 +19,35 @@ import BookingConfirmation from "../screens/BookingConfirmation/BookingConfirmat
 import BookedSalon from "../screens/Bookings/userComponents/BookedSalon";
 import { useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { getTokenValue } from "../../redux/slices/login/authSlice";
+import { useDispatch } from "react-redux";
 
-const AppNavigator = ({ data }) => {
+const AppNavigator = ({ data, token }) => {
   const Stack = createNativeStackNavigator();
-  const navigation = useNavigation()
-  const getToken = async () => {
-    try {
-      const userInfo = await AsyncStorage.getItem("user_info");
-      if (userInfo) {
-        const parsedToken = JSON.parse(userInfo);
-        if(parsedToken?.user?.user?.role ===  'hair_dresser'){
-          navigation.navigate('Tabs')
-        }else{
-          navigation.navigate('HomeTabs')
-        }
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const navigation = useNavigation()
+  // const dispatch = useDispatch()
+  // const getToken = async () => {
+  //   try {
+  //     const userInfo = await AsyncStorage.getItem("user_info");
+  //     if (userInfo) {
+  //       const parsedToken = JSON.parse(userInfo);
+  //       dispatch(getTokenValue(parsedToken?.access_token))
+  //       if(parsedToken?.user?.user?.role ===  'hair_dresser'){
+  //         navigation.navigate('Tabs')
+  //       }else{
+  //         navigation.navigate('HomeTabs')
+  //       }
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
-  useLayoutEffect(() => {
-    getToken();
-  }, []);
+  // useLayoutEffect(() => {
+  //   getToken();
+  // }, []);
+
+  // console.log(token)
 
   return (
     <Stack.Navigator
