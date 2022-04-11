@@ -236,7 +236,7 @@ const BookedSalon = () => {
                       titleStyle={{ fontSize: 14 }}
                       onPress={() => {
                         dispatch(createMessageToSend(assets));
-                        dispatch(getMessages(assets));
+                        assets !== null && dispatch(getMessages(assets));
                       }}
                     />
                   </View>

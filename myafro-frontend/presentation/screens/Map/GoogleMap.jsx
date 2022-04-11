@@ -1,24 +1,44 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import MapView from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import tw from "twrnc";
 import BottomBar from "../../components/BottomBar/BottomBar";
 import { Icon } from "react-native-elements";
 import BottomDrawer from "../Home/components/BottomDrawer/BottomDrawer";
+import { useSelector } from "react-redux";
+import { mapSelector } from "../../../redux/slices/map/mapSlice";
 
 const GoogleMap = () => {
+  const { locationInfo } = useSelector(mapSelector);
+  console.log(locationInfo?.coordinates);
   return (
-    <View style={{ height: "100%", position: "relative" }}>
+    <View style={{ flex: 1, position: "relative" }}>
       <MapView
-        style={{ flex: 1 }}
-        mapType="mutedStandard"
+        style={styles.map}
+        loadingEnabled={true}
+        // mapType="mutedStandard"
         initialRegion={{
           latitude: 37.78825,
           longitude: -122.4324,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-      />
+        mapType="standard"
+        focusable={true}
+        // showsTraffic={true}
+        showsBuildings={true}
+      >
+        {locationInfo?.coordinates && (
+          <Marker
+            coordinate={{
+              latitude: locationInfo?.coordinates?.latitude,
+              longitude: locationInfo.coordinates?.longitude,
+            }}
+            title="My Location"
+            identifier="origin"
+          />
+        )}
+      </MapView>
       <View style={tw`absolute top-5 w-full`}>
         <View
           style={tw`flex flex-row items-center justify-between p-3 mx-5 rounded-lg  mt-8 border border-gray-100 bg-white`}
@@ -52,4 +72,9 @@ const GoogleMap = () => {
 
 export default GoogleMap;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  map: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+  },
+});

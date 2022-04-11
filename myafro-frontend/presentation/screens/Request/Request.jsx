@@ -72,6 +72,8 @@ const Request = () => {
     assets !== null && show && dispatch(getBookings(assets));
   }, [assets, isSuccess]);
 
+  const pendingTab = bookings.length > 0 && bookings?.filter((book) => book.status === "pending");
+
   return (
     <>
       <SafeAreaView
@@ -92,85 +94,7 @@ const Request = () => {
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
           {isSuccess && show && !isFetching ? (
-            bookings?.length > 0 ? (
-              bookings
-                ?.filter((book) => book?.status === "pending")
-                .map(
-                  (booking) =>
-                    booking._id && (
-                      <TouchableOpacity
-                        onPress={() => {
-                          getBooking(booking?._id);
-                          navigation.navigate("CurrentHair");
-                          assets?.token !== null &&
-                            dispatch(
-                              getMessages({
-                                token: assets?.token,
-                                bookingId: booking?._id,
-                              })
-                            );
-                        }}
-                        style={tw` mt-3 flex flex-row items-center justify-between `}
-                        key={booking._id}
-                      >
-                        <View style={tw`flex flex-row items-center`}>
-                          {booking?.user?.profile === "" ? (
-                            <Image
-                              style={{
-                                width: 36,
-                                height: 36,
-                              }}
-                              source={require("../../../assets/img/profile.png")}
-                              resizeMode="contain"
-                            />
-                          ) : (
-                            <Image
-                              style={{
-                                width: 36,
-                                height: 36,
-                              }}
-                              source={{ uri: booking?.user?.profile }}
-                              resizeMode="contain"
-                            />
-                          )}
-                          <View style={tw`ml-4`}>
-                            <View>
-                              <Text style={tw`font-bold text-lg mr-2`}>
-                                {booking?.user?.full_name}
-                              </Text>
-                              <View style={tw`flex flex-row items-center my-1`}>
-                                <Text style={tw`text-gray-400 mr-2 text-sm`}>
-                                  {moment(booking?.starting_time).format("lll")}
-                                </Text>
-                                <Icon
-                                  name="arrow-right"
-                                  type="feather"
-                                  size={20}
-                                  color="gray"
-                                />
-                                <Text style={tw`text-gray-400 ml-2 text-sm`}>
-                                  {moment(booking?.ending_time).format("lll")}
-                                </Text>
-                              </View>
-                            </View>
-                            <View style={tw`flex flex-row text-sm`}>
-                              <Text>Lorem ipsum dolor sit.</Text>
-                            </View>
-                          </View>
-                        </View>
-
-                        <View>
-                          <Icon
-                            name="arrow-forward-ios"
-                            type="material"
-                            size={20}
-                            color="gray"
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    )
-                )
-            ) : (
+            pendingTab.length === 0 || pendingTab === undefined ? (
               <View style={tw`mt-20 flex flex-row justify-center`}>
                 <Image
                   source={require("../../../assets/img/notFound.png")}
@@ -178,6 +102,82 @@ const Request = () => {
                   resizeMode="cover"
                 />
               </View>
+            ) : (
+              pendingTab.length > 0 && pendingTab?.map(
+                (booking) =>
+                  booking._id && (
+                    <TouchableOpacity
+                      onPress={() => {
+                        getBooking(booking?._id);
+                        navigation.navigate("CurrentHair");
+                        assets?.token !== null &&
+                          dispatch(
+                            getMessages({
+                              token: assets?.token,
+                              bookingId: booking?._id,
+                            })
+                          );
+                      }}
+                      style={tw` mt-3 flex flex-row items-center justify-between `}
+                      key={booking._id}
+                    >
+                      <View style={tw`flex flex-row items-center`}>
+                        {booking?.user?.profile === "" ? (
+                          <Image
+                            style={{
+                              width: 36,
+                              height: 36,
+                            }}
+                            source={require("../../../assets/img/profile.png")}
+                            resizeMode="contain"
+                          />
+                        ) : (
+                          <Image
+                            style={{
+                              width: 36,
+                              height: 36,
+                            }}
+                            source={{ uri: booking?.user?.profile }}
+                            resizeMode="contain"
+                          />
+                        )}
+                        <View style={tw`ml-4`}>
+                          <View>
+                            <Text style={tw`font-bold text-lg mr-2`}>
+                              {booking?.user?.full_name}
+                            </Text>
+                            <View style={tw`flex flex-row items-center my-1`}>
+                              <Text style={tw`text-gray-400 mr-2 text-sm`}>
+                                {moment(booking?.starting_time).format("lll")}
+                              </Text>
+                              <Icon
+                                name="arrow-right"
+                                type="feather"
+                                size={20}
+                                color="gray"
+                              />
+                              <Text style={tw`text-gray-400 ml-2 text-sm`}>
+                                {moment(booking?.ending_time).format("lll")}
+                              </Text>
+                            </View>
+                          </View>
+                          <View style={tw`flex flex-row text-sm`}>
+                            <Text>Lorem ipsum dolor sit.</Text>
+                          </View>
+                        </View>
+                      </View>
+
+                      <View>
+                        <Icon
+                          name="arrow-forward-ios"
+                          type="material"
+                          size={20}
+                          color="gray"
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  )
+              )
             )
           ) : (
             <Loader loading={isFetching} />

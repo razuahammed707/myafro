@@ -5,7 +5,7 @@ const initialState = {
   isFetching: false,
   isSuccess: false,
   isError: false,
-  times: {},
+  locationInfo: {},
   message: "",
 };
 
@@ -21,7 +21,7 @@ export const mapSlice = createSlice({
         (state.message = "");
     },
     getDateTimes: (state, { payload }) => {
-      state.times = payload;
+      state.locationInfo = payload;
     }
   },
 //   extraReducers: (builder) => {

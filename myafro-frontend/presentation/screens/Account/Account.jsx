@@ -15,6 +15,7 @@ import {
 } from "../../../redux/slices/login/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { bookingSelector, resetBooking } from "../../../redux/slices/booking/bookingSlice";
+import { getDateTimes } from "../../../redux/slices/map/mapSlice";
 
 const Account = () => {
   const navigation = useNavigation();
@@ -51,6 +52,7 @@ const Account = () => {
     dispatch(emptyLoggedInData({}))
     dispatch(reset());
     dispatch(resetBooking())
+    dispatch(getDateTimes({}))
    } catch (error) {
      console.log(error)
    }

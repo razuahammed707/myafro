@@ -16,10 +16,10 @@ const BottomBar = ({ name1, name2, name3 }) => {
           <Text style={tw`text-sm`}>{name1 || "Home"}</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+      <TouchableOpacity onPress={() => navigation.navigate("UserBookings")}>
         <View style={tw`opacity-15`}>
           <Icon name="wheelchair" type="fontisto" size={20} color="black" />
-          <Text style={tw`text-sm`}>{name2 || "Saloon"}</Text>
+          <Text style={tw`text-sm`}>{name2 || "Bookings"}</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("Account")}>
