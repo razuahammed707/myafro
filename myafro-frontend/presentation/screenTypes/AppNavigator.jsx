@@ -23,7 +23,8 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { getTokenValue } from "../../redux/slices/login/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getDateTimes, mapSelector } from "../../redux/slices/map/mapSlice";
+import { getLocationInfo, mapSelector } from "../../redux/slices/map/mapSlice";
+import MapAutocomplete from "../screens/Map/MapAutocomplete/MapAutocomplete";
 
 const AppNavigator = ({ data }) => {
   const Stack = createNativeStackNavigator();
@@ -48,7 +49,7 @@ const AppNavigator = ({ data }) => {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-      dispatch(getDateTimes({...locationInfo, coordinates: location?.coords}))
+      dispatch(getLocationInfo({...locationInfo, coordinates: location?.coords}))
     })();
   }, []);
 
@@ -58,6 +59,8 @@ const AppNavigator = ({ data }) => {
   } else if (location) {
     text = JSON.stringify(location);
   }
+
+  console.log(locationInfo)
 
   return (
     <Stack.Navigator
@@ -84,6 +87,11 @@ const AppNavigator = ({ data }) => {
       <Stack.Screen
         name="Map"
         component={GoogleMap}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MapAutocomplete"
+        component={MapAutocomplete}
         options={{ headerShown: false }}
       />
       <Stack.Screen

@@ -108,10 +108,10 @@ const Home = () => {
               size={20}
               color="black"
             />
-            <View style={tw`ml-3`}>
-              <Text style={tw`text-sm font-semibold`}>Gamle Oslo</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('MapAutocomplete')} style={tw`ml-3`}>
+              <Text style={tw`text-sm font-semibold`}>Current Location</Text>
               <Text style={tw`text-sm text-gray-600`}>NO</Text>
-            </View>
+            </TouchableOpacity>
           </View>
           <TouchableOpacity
             style={tw`flex flex-row items-center `}

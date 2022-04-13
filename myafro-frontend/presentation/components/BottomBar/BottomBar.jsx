@@ -10,7 +10,7 @@ const BottomBar = ({ name1, name2, name3 }) => {
     <View
       style={tw`flex items-center flex-row justify-between bg-white py-2 px-5 border border-gray-200 absolute bottom-0 left-0 right-0`}
     >
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity onPress={() => navigation.navigate("HomeTabs")}>
         <View>
           <Icon name="home" type="antdesign" size={20} color="black" />
           <Text style={tw`text-sm`}>{name1 || "Home"}</Text>

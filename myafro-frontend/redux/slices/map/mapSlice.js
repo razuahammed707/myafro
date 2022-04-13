@@ -20,7 +20,7 @@ export const mapSlice = createSlice({
         (state.isError = false),
         (state.message = "");
     },
-    getDateTimes: (state, { payload }) => {
+    getLocationInfo: (state, { payload }) => {
       state.locationInfo = payload;
     }
   },
@@ -33,6 +33,6 @@ export const mapSlice = createSlice({
 //   },
 });
 
-export const { reset,  getDateTimes} = mapSlice.actions;
+export const { reset,  getLocationInfo} = mapSlice.actions;
 export const mapSelector = (state) => state.map;
 export default mapSlice.reducer;

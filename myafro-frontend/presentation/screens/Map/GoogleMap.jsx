@@ -1,16 +1,26 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import MapView, { Marker } from "react-native-maps";
 import tw from "twrnc";
 import BottomBar from "../../components/BottomBar/BottomBar";
-import { Icon } from "react-native-elements";
+import { Button, Icon } from "react-native-elements";
 import BottomDrawer from "../Home/components/BottomDrawer/BottomDrawer";
 import { useSelector } from "react-redux";
 import { mapSelector } from "../../../redux/slices/map/mapSlice";
+import { useNavigation } from "@react-navigation/native";
 
 const GoogleMap = () => {
   const { locationInfo } = useSelector(mapSelector);
-  console.log(locationInfo?.coordinates);
+  const navigation = useNavigation();
+
+  console.log(locationInfo);
+
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <MapView
@@ -18,26 +28,40 @@ const GoogleMap = () => {
         loadingEnabled={true}
         // mapType="mutedStandard"
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
+          latitude: locationInfo?.geometry?.location?.lat
+            ? locationInfo?.geometry?.location?.lat
+            : locationInfo?.coordinates?.latitude,
+          longitude: locationInfo.geometry?.location?.lng
+            ? locationInfo.geometry?.location?.lng
+            : locationInfo?.coordinates?.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
         mapType="standard"
         focusable={true}
-        // showsTraffic={true}
+        showsTraffic={true}
         showsBuildings={true}
       >
-        {locationInfo?.coordinates && (
+        {locationInfo?.geometry?.location ? (
           <Marker
+            key={locationInfo?.place_id}
             coordinate={{
-              latitude: locationInfo?.coordinates?.latitude,
-              longitude: locationInfo.coordinates?.longitude,
+              latitude: locationInfo?.geometry?.location?.lat,
+              longitude: locationInfo.geometry?.location?.lng,
             }}
             title="My Location"
-            identifier="origin"
+          />
+        ) : (
+          <Marker
+            // key={locationInfo?.place_id}
+            coordinate={{
+              latitude: locationInfo?.coordinates?.latitude,
+              longitude: locationInfo?.coordinates?.longitude,
+            }}
+            title="My Location"
           />
         )}
+        {/* {mapMarkers()} */}
       </MapView>
       <View style={tw`absolute top-5 w-full`}>
         <View
@@ -50,10 +74,19 @@ const GoogleMap = () => {
               size={20}
               color="black"
             />
-            <View style={tw`ml-3`}>
-              <Text style={tw`text-sm font-semibold`}>Gamle Oslo</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("MapAutocomplete")}
+              style={tw`ml-3`}
+            >
+              {!locationInfo?.name ? (
+                <Text style={tw`text-sm font-semibold`}>Current Location</Text>
+              ) : (
+                <Text style={tw`text-sm font-semibold`}>
+                  {locationInfo?.name}
+                </Text>
+              )}
               <Text style={tw`text-sm text-gray-600`}>NO</Text>
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={tw`flex flex-row items-center `}>
             <Icon name="shopping-bag" type="feather" size={20} color="black" />
@@ -66,6 +99,33 @@ const GoogleMap = () => {
         </View>
       </View>
       <BottomBar />
+      <View style={{ position: "absolute", bottom: 100, width: "100%" }}>
+        <View style={tw`flex flex-row justify-center w-full`}>
+          <Button
+            title="See nearby salons"
+            buttonStyle={{
+              paddingHorizontal: 20,
+              paddingVertical: 16,
+              backgroundColor: "#fff",
+            }}
+            onPress={() => {
+              navigation.navigate("HomeTabs");
+            }}
+            type="clear"
+            icon={
+              <Icon
+                name="send"
+                type="feather"
+                size={20}
+                color="#000"
+                style={tw`mr-2`}
+              />
+            }
+            iconPosition="left"
+            titleStyle={{ fontSize: 14, color: "#000" }}
+          />
+        </View>
+      </View>
     </View>
   );
 };

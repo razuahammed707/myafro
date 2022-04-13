@@ -16,7 +16,7 @@ import {
   getSingleBooking,
 } from "../../../../redux/slices/booking/bookingSlice";
 import { useNavigation } from "@react-navigation/native";
-import { authSelector } from "../../../../redux/slices/login/authSlice";
+import moment from 'moment'
 
 const Booking = ({ margin, previous }) => {
   const { bookings, isSuccess, token } = useSelector(bookingSelector);
@@ -86,7 +86,7 @@ const Booking = ({ margin, previous }) => {
                       </Text>
                       <View style={tw`flex flex-row items-center my-1`}>
                         <Text style={tw`text-gray-400 mr-2 text-sm`}>
-                          {booking?.starting_time}
+                          {moment(booking?.starting_time).format('lll')}
                         </Text>
                         <Icon
                           name="arrow-right"
@@ -95,7 +95,7 @@ const Booking = ({ margin, previous }) => {
                           color="gray"
                         />
                         <Text style={tw`text-gray-400 ml-2 text-sm`}>
-                          {booking?.ending_time}
+                          {moment(booking?.ending_time).format('lll')}
                         </Text>
                       </View>
                     </View>
@@ -165,7 +165,7 @@ const Booking = ({ margin, previous }) => {
                     </Text>
                     <View style={tw`flex flex-row items-center my-1`}>
                       <Text style={tw`text-gray-400 mr-2 text-sm`}>
-                        {booking?.starting_time}
+                      {moment(booking?.starting_time).format('lll')}
                       </Text>
                       <Icon
                         name="arrow-right"
@@ -174,7 +174,7 @@ const Booking = ({ margin, previous }) => {
                         color="gray"
                       />
                       <Text style={tw`text-gray-400 ml-2 text-sm`}>
-                        {booking?.ending_time}
+                      {moment(booking?.ending_time).format('lll')}
                       </Text>
                     </View>
                   </View>
