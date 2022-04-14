@@ -24,6 +24,7 @@ const Tabs = () => {
           screenOptions={{
             headerShown: false,
           }}
+          
         >
           <Tab.Screen
             name="Request"

@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Constants from 'expo-constants';
-import * as Location from 'expo-location';
+import Constants from "expo-constants";
+import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Onboard from "../screens/Onboard/Onboard";
 import Profile from "../screens/Profile/Profile";
@@ -25,47 +25,58 @@ import { getTokenValue } from "../../redux/slices/login/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getLocationInfo, mapSelector } from "../../redux/slices/map/mapSlice";
 import MapAutocomplete from "../screens/Map/MapAutocomplete/MapAutocomplete";
+import SalonMap from "../screens/Map/SalonMap";
 
 const AppNavigator = ({ data }) => {
   const Stack = createNativeStackNavigator();
-  const {locationInfo} = useSelector(mapSelector)
-  const dispatch = useDispatch()
+  const { locationInfo } = useSelector(mapSelector);
+  const dispatch = useDispatch();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     (async () => {
-      if (Platform.OS === 'android' && !Constants.isDevice) {
+      if (Platform.OS === "android" && !Constants.isDevice) {
         setErrorMsg(
-          'Oops, this will not work on Snack in an Android emulator. Try it on your device!'
+          "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
         );
         return;
       }
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
         return;
       }
 
       let location = await Location.getCurrentPositionAsync({});
+      let name = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
       setLocation(location);
-      dispatch(getLocationInfo({...locationInfo, coordinates: location?.coords}))
+      dispatch(
+        getLocationInfo({
+          coordinates: location?.coords,
+          name: name[0]?.city, 
+        })
+      );
     })();
   }, []);
 
-  let text = 'Waiting..';
+  let text = "Waiting..";
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
     text = JSON.stringify(location);
+    // console.log(text)
   }
 
-  console.log(locationInfo)
+  console.log(data)
 
   return (
     <Stack.Navigator
       initialRouteName={
-        data.user?.role === "user"
+        data?.user?.role === "user"
           ? "HomeTabs"
           : data?.user?.role === "hair_dresser" && data?.salon?._id
           ? "Tabs"
@@ -87,6 +98,11 @@ const AppNavigator = ({ data }) => {
       <Stack.Screen
         name="Map"
         component={GoogleMap}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SalonMap"
+        component={SalonMap}
         options={{ headerShown: false }}
       />
       <Stack.Screen

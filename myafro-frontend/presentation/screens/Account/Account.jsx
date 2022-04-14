@@ -39,8 +39,6 @@ const Account = () => {
     getToken();
   }, []);
 
-  console.log(token);
-
   const logout = async () => {
    try {
     await AsyncStorage.getAllKeys()

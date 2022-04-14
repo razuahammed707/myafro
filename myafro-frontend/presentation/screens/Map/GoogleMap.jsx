@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Circle, Marker } from "react-native-maps";
 import tw from "twrnc";
 import BottomBar from "../../components/BottomBar/BottomBar";
 import { Button, Icon } from "react-native-elements";
@@ -19,7 +19,7 @@ const GoogleMap = () => {
   const { locationInfo } = useSelector(mapSelector);
   const navigation = useNavigation();
 
-  console.log(locationInfo);
+  // console.log(locationInfo);
 
   return (
     <View style={{ flex: 1, position: "relative" }}>
@@ -39,7 +39,6 @@ const GoogleMap = () => {
         }}
         mapType="standard"
         focusable={true}
-        showsTraffic={true}
         showsBuildings={true}
       >
         {locationInfo?.geometry?.location ? (
@@ -50,6 +49,7 @@ const GoogleMap = () => {
               longitude: locationInfo.geometry?.location?.lng,
             }}
             title="My Location"
+            pinColor="tomato"
           />
         ) : (
           <Marker
@@ -59,9 +59,21 @@ const GoogleMap = () => {
               longitude: locationInfo?.coordinates?.longitude,
             }}
             title="My Location"
+            pinColor="tomato"
           />
         )}
         {/* {mapMarkers()} */}
+        {locationInfo?.geometry?.location && (
+          <Circle
+            center={{
+              latitude: locationInfo?.geometry?.location?.lat,
+              longitude: locationInfo.geometry?.location?.lng,
+            }}
+            radius={100}
+            lineJoin="bevel"
+            strokeColor="#222"
+          />
+        )}
       </MapView>
       <View style={tw`absolute top-5 w-full`}>
         <View
