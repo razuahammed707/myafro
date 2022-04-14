@@ -1,4 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Constants from "expo-constants";
+import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Onboard from "../screens/Onboard/Onboard";
 import Profile from "../screens/Profile/Profile";
@@ -17,37 +19,59 @@ import SalonProfile from "../screens/SalonProfile/SalonProfile";
 import UserProfile from "../screens/UserProfile/UserProfile";
 import BookingConfirmation from "../screens/BookingConfirmation/BookingConfirmation";
 import BookedSalon from "../screens/Bookings/userComponents/BookedSalon";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { getTokenValue } from "../../redux/slices/login/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getLocationInfo, mapSelector } from "../../redux/slices/map/mapSlice";
+import MapAutocomplete from "../screens/Map/MapAutocomplete/MapAutocomplete";
+import SalonMap from "../screens/Map/SalonMap";
 
-const AppNavigator = ({ data, token }) => {
+const AppNavigator = ({ data }) => {
   const Stack = createNativeStackNavigator();
-  // const navigation = useNavigation()
-  // const dispatch = useDispatch()
-  // const getToken = async () => {
-  //   try {
-  //     const userInfo = await AsyncStorage.getItem("user_info");
-  //     if (userInfo) {
-  //       const parsedToken = JSON.parse(userInfo);
-  //       dispatch(getTokenValue(parsedToken?.access_token))
-  //       if(parsedToken?.user?.user?.role ===  'hair_dresser'){
-  //         navigation.navigate('Tabs')
-  //       }else{
-  //         navigation.navigate('HomeTabs')
-  //       }
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  const { locationInfo } = useSelector(mapSelector);
+  const dispatch = useDispatch();
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
-  // useLayoutEffect(() => {
-  //   getToken();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS === "android" && !Constants.isDevice) {
+        setErrorMsg(
+          "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
+        );
+        return;
+      }
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
 
-  // console.log(token)
+      let location = await Location.getCurrentPositionAsync({});
+      let name = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+      setLocation(location);
+      dispatch(
+        getLocationInfo({
+          coordinates: location?.coords,
+          name: name[0]?.city, 
+        })
+      );
+    })();
+  }, []);
+
+  let text = "Waiting..";
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+    // console.log(text)
+  }
+
+  console.log(locationInfo)
 
   return (
     <Stack.Navigator
@@ -55,7 +79,7 @@ const AppNavigator = ({ data, token }) => {
         data.user?.role === "user"
           ? "HomeTabs"
           : data?.user?.role === "hair_dresser" && data?.salon?._id
-          ? "Tabs"
+          ? "SalonMap"
           : data?.user?.role === "hair_dresser" &&
             !data?.salon?._id &&
             "FreelanceOnboard"
@@ -74,6 +98,16 @@ const AppNavigator = ({ data, token }) => {
       <Stack.Screen
         name="Map"
         component={GoogleMap}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SalonMap"
+        component={SalonMap}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MapAutocomplete"
+        component={MapAutocomplete}
         options={{ headerShown: false }}
       />
       <Stack.Screen
