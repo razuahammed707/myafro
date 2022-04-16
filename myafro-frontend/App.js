@@ -15,9 +15,10 @@ import ScreenContainer from "./presentation/components/ScreenContainer/ScreenCon
 import { LogBox } from "react-native";
 
 LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested', 
+  "VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.", 
   "Can't perform a React state update on an unmounted component",
   "Failed prop type: Invalid prop `defaultValue` of type `string` supplied to `TextInput`, expected `number`.",
+  "Failed prop type: Invalid prop `defaultValue` of type `object` supplied to `ForwardRef(TextInput)`, expected `string`"
 ])
 export default function App() {
   return (

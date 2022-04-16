@@ -1,11 +1,11 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import tw from "twrnc";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProfileAccordion from "./components/ProfileAccordion";
 import { Avatar, Button, Icon, Overlay } from "react-native-elements";
-import { ScrollView } from "react-native-gesture-handler";
+// import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createSalon,
@@ -37,9 +37,10 @@ const SalonProfile = () => {
       const userInfo = await AsyncStorage.getItem("user_info");
       if (userInfo) {
         const parsedToken = JSON.parse(userInfo);
+        console.log(parsedToken)
         setSalonAssets({
           token: parsedToken?.access_token,
-          salonId: hairDresserData?._id,
+          salonId: hairDresserData?._id || parsedToken?.salon?._id,
         });
         dispatch(getLoggedInUser(parsedToken?.user?.user));
         dispatch(getTokenValue(parsedToken?.access_token));
@@ -56,6 +57,8 @@ const SalonProfile = () => {
   useEffect(() => {
     salonAssets.token && dispatch(getSalon(salonAssets?.token));
   }, [isSuccess, isFetchingService, salonAssets.token]);
+
+  console.log(salonAssets)
 
   return (
     <>
@@ -166,9 +169,9 @@ const SalonProfile = () => {
               <Text style={tw` text-sm text-gray-500`}>{userData?.role}</Text>
             </View>
           </View>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <View >
             <ProfileAccordion />
-          </ScrollView>
+          </View>
         </View>
       </SafeAreaView>
       {/* progress loader */}

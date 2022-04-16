@@ -25,7 +25,7 @@ const SalonServices = () => {
 
 
   return (
-    <View style={tw`px-5`}>
+    <ScrollView style={tw`px-5 h-30`}>
       <Popup visible={visible} toggleOverlay={toggleOverlay}/>
       <View>
         {hairDresserData?.services?.map((item) => (
@@ -64,7 +64,7 @@ const SalonServices = () => {
           </View>
         ))}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

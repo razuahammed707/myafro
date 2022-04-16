@@ -1,4 +1,11 @@
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import tw from "twrnc";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,7 +36,8 @@ const ContactDetails = () => {
   }, [address, mobile]);
 
   return (
-      <View>
+    <View>
+      <KeyboardAvoidingView behavior="padding">
         <View>
           <Text style={tw`ml-5`}>Mobile</Text>
           <TextInput
@@ -51,8 +59,9 @@ const ContactDetails = () => {
         </View>
         <Text style={tw`ml-5`}>Country</Text>
         <CountryDropdown />
-        {/* <DropdownComponent text="country" /> */}
-      </View>
+      </KeyboardAvoidingView>
+      {/* <DropdownComponent text="country" /> */}
+    </View>
   );
 };
 

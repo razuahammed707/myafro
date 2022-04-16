@@ -82,6 +82,7 @@ const getSalon = async (req, res, next) => {
       salon,
       // review,
     });
+    return
   } catch (error) {
     next(error);
   }

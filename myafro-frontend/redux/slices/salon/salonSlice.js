@@ -81,11 +81,12 @@ export const salonSlice = createSlice({
   name: "salon",
   initialState,
   reducers: {
-    reset: (state) => {
+    resetSalon: (state) => {
       (state.isFetching = false),
         (state.isSuccess = false),
         (state.isError = false),
         (state.message = "");
+        (state.hairDresserData = {})
     },
     getValues: (state, action) => {
       state.updateSalonData = action.payload;
@@ -155,6 +156,6 @@ export const salonSlice = createSlice({
   },
 });
 
-export const { reset, getValues, getLoggedInUser } = salonSlice.actions;
+export const { resetSalon, getValues, getLoggedInUser } = salonSlice.actions;
 export const salonSelector = (state) => state.salon;
 export default salonSlice.reducer;

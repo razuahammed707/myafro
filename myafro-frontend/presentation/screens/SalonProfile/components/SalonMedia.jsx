@@ -21,7 +21,7 @@ const SalonMedia = () => {
   ];
 
   return (
-    <ScrollView>
+    <ScrollView style={tw`h-70`}>
       <UploadImage />
       <View>
         {images.map((item) => (

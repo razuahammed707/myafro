@@ -10,6 +10,7 @@ import SalonDetails from "./SalonDetails";
 import ContactDetails from "./ContactDetails";
 import { useState } from "react";
 import MapAutocomplete from "../../Map/MapAutocomplete/MapAutocomplete";
+import SalonMap from "../../Map/SalonMap";
 
 const ProfileAccordion = () => {
   const SECTIONS = [
@@ -21,8 +22,8 @@ const ProfileAccordion = () => {
     },
     {
       title: "Contact Details",
-      icon_name: "location",
-      icon_type: "evilicon",
+      icon_name: "contacts",
+      icon_type: "antdesign",
       content: <ContactDetails />,
     },
     {

@@ -29,6 +29,7 @@ import SalonMap from "../screens/Map/SalonMap";
 
 const AppNavigator = ({ data }) => {
   const Stack = createNativeStackNavigator();
+  const navigation = useNavigation();
   const { locationInfo } = useSelector(mapSelector);
   const dispatch = useDispatch();
   const [location, setLocation] = useState(null);
@@ -57,7 +58,7 @@ const AppNavigator = ({ data }) => {
       dispatch(
         getLocationInfo({
           coordinates: location?.coords,
-          name: name[0]?.city, 
+          name: name[0]?.city,
         })
       );
     })();
@@ -71,14 +72,38 @@ const AppNavigator = ({ data }) => {
     // console.log(text)
   }
 
-  console.log(data)
+  const getToken = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user_info");
+      if (userInfo) {
+        const parsedToken = JSON.parse(userInfo);
+        if (parsedToken?.user?.user?.role === "hair_dresser") {
+          navigation.navigate("Tabs");
+        } else {
+          navigation.navigate("HomeTabs");
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useLayoutEffect(() => {
+    getToken();
+  }, []);
 
   return (
     <Stack.Navigator
       initialRouteName={
         data?.user?.role === "user"
           ? "HomeTabs"
-          : data?.user?.role === "hair_dresser" && data?.salon?._id
+          : data?.user?.role === "hair_dresser" &&
+            data?.salon?._id &&
+            data?.salon?.location?.coordinates === ""
+          ? "SalonMap"
+          : data?.user?.role === "hair_dresser" &&
+            data?.salon?._id &&
+            data?.salon?.location?.coordinates !== ""
           ? "Tabs"
           : data?.user?.role === "hair_dresser" &&
             !data?.salon?._id &&

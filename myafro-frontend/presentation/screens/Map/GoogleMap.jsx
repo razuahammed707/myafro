@@ -5,21 +5,56 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import MapView, { Circle, Marker } from "react-native-maps";
+import MapViewDirections from "react-native-maps-directions";
 import tw from "twrnc";
 import BottomBar from "../../components/BottomBar/BottomBar";
 import { Button, Icon } from "react-native-elements";
 import BottomDrawer from "../Home/components/BottomDrawer/BottomDrawer";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { mapSelector } from "../../../redux/slices/map/mapSlice";
 import { useNavigation } from "@react-navigation/native";
+import {
+  getSingleSalonInfo,
+  userHomeSelector,
+} from "../../../redux/slices/user/userHomeSlice";
 
 const GoogleMap = () => {
   const { locationInfo } = useSelector(mapSelector);
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const { salons } = useSelector(userHomeSelector);
 
-  // console.log(locationInfo);
+  const origin = {
+    latitude: locationInfo?.coordinates?.latitude,
+    longitude: locationInfo?.coordinates?.longitude,
+  };
+  const destination = { latitude: 23.8179055, longitude: 90.3602682 };
+  const GOOGLE_MAPS_APIKEY = "AIzaSyBtm4Ahlay8ohFLRwYNSMQ1JAd3Q4rqmig";
+
+  let destinationRequest = salons
+    .map((salon) => {
+      // const lat = Number(salon?.location?.coordinates?.split(",")[0]);
+      // const lng = Number(salon?.location?.coordinates?.split(",")[1]);
+      // return `${lat},${lng}`;
+      console.log(salon?.location?.name)
+      return salon?.location.name
+    })
+    // .join("|");
+
+  useEffect(() => {
+    const getDistance = async () => {
+      fetch(
+        `https://maps.googleapis.com/maps/api/distancematrix/json?origins=dhaka&destinations=${destinationRequest}&key=${GOOGLE_MAPS_APIKEY}`
+      )
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    };
+    getDistance();
+  }, [origin, destination, GOOGLE_MAPS_APIKEY]);
+
+  console.log(destinationRequest);
 
   return (
     <View style={{ flex: 1, position: "relative" }}>
@@ -41,39 +76,36 @@ const GoogleMap = () => {
         focusable={true}
         showsBuildings={true}
       >
-        {locationInfo?.geometry?.location ? (
-          <Marker
-            key={locationInfo?.place_id}
-            coordinate={{
-              latitude: locationInfo?.geometry?.location?.lat,
-              longitude: locationInfo.geometry?.location?.lng,
-            }}
-            title="My Location"
-            pinColor="tomato"
-          />
-        ) : (
-          <Marker
-            // key={locationInfo?.place_id}
-            coordinate={{
-              latitude: locationInfo?.coordinates?.latitude,
-              longitude: locationInfo?.coordinates?.longitude,
-            }}
-            title="My Location"
-            pinColor="tomato"
-          />
-        )}
-        {/* {mapMarkers()} */}
-        {locationInfo?.geometry?.location && (
-          <Circle
-            center={{
-              latitude: locationInfo?.geometry?.location?.lat,
-              longitude: locationInfo.geometry?.location?.lng,
-            }}
-            radius={100}
-            lineJoin="bevel"
-            strokeColor="#222"
-          />
-        )}
+        {salons?.map((salon) => (
+          <View key={salon?._id}>
+            <MapViewDirections
+              origin={{
+                latitude: locationInfo?.coordinates?.latitude,
+                longitude: locationInfo?.coordinates?.longitude,
+              }}
+              destination={{
+                latitude: Number(salon?.location?.coordinates?.split(",")[0]),
+                longitude: Number(salon?.location?.coordinates?.split(",")[1]),
+              }}
+              apikey={GOOGLE_MAPS_APIKEY}
+              strokeWidth={3}
+              strokeColor="black"
+            />
+            <Marker
+              key={salon?._id}
+              onPress={() => {
+                dispatch(getSingleSalonInfo(salon._id));
+                navigation.navigate("ProfileDetails");
+              }}
+              coordinate={{
+                latitude: Number(salon?.location?.coordinates?.split(",")[0]),
+                longitude: Number(salon?.location?.coordinates?.split(",")[1]),
+              }}
+              title={salon?.location?.name}
+              pinColor="tomato"
+            />
+          </View>
+        ))}
       </MapView>
       <View style={tw`absolute top-5 w-full`}>
         <View
