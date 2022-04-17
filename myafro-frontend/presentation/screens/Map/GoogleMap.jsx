@@ -33,15 +33,14 @@ const GoogleMap = () => {
   const destination = { latitude: 23.8179055, longitude: 90.3602682 };
   const GOOGLE_MAPS_APIKEY = "AIzaSyBtm4Ahlay8ohFLRwYNSMQ1JAd3Q4rqmig";
 
-  let destinationRequest = salons
-    .map((salon) => {
-      // const lat = Number(salon?.location?.coordinates?.split(",")[0]);
-      // const lng = Number(salon?.location?.coordinates?.split(",")[1]);
-      // return `${lat},${lng}`;
-      console.log(salon?.location?.name)
-      return salon?.location.name
-    })
-    // .join("|");
+  let destinationRequest = salons.map((salon) => {
+    // const lat = Number(salon?.location?.coordinates?.split(",")[0]);
+    // const lng = Number(salon?.location?.coordinates?.split(",")[1]);
+    // return `${lat},${lng}`;
+    console.log(salon?.location?.name);
+    return salon?.location.name;
+  });
+  // .join("|");
 
   useEffect(() => {
     const getDistance = async () => {

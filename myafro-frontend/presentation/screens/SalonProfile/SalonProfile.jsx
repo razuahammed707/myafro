@@ -1,11 +1,11 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import tw from "twrnc";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ProfileAccordion from "./components/ProfileAccordion";
 import { Avatar, Button, Icon, Overlay } from "react-native-elements";
-// import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createSalon,
@@ -17,51 +17,50 @@ import {
 import Loader from "../../components/Loader/Loader";
 import { authSelector, getTokenValue } from "../../../redux/slices/login/authSlice";
 import { serviceSelector } from "../../../redux/slices/salon/serviceSlice";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { getBookings } from "../../../redux/slices/booking/bookingSlice";
 
 const SalonProfile = () => {
-  // const [salonAssets, setSalonAssets] = useState({});
+  const [salonAssets, setSalonAssets] = useState({});
   const navigation = useNavigation();
+  const router = useRoute()
+
   const { userData, hairDresserData, isFetching, isSuccess, message } =
     useSelector(salonSelector);
-  const {data} = useSelector(authSelector)
   const { isFetchingService } = useSelector(serviceSelector);
+  const {data} = useSelector(authSelector)
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const toggleOverlay = () => {
     setVisible(!visible);
   };
 
-  // const getToken = async () => {
-  //   try {
-  //     const userInfo = await AsyncStorage.getItem("user_info");
-  //     if (userInfo) {
-  //       const parsedToken = JSON.parse(userInfo);
-  //       console.log(parsedToken)
-  //       setSalonAssets({
-  //         token: parsedToken?.access_token,
-  //         salonId: data?.salon?._id || hairDresserData?._id 
-  //       });
-      
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  const getToken = async () => {
+    try {
+      const userInfo = await AsyncStorage.getItem("user_info");
+      if (userInfo) {
+        const parsedToken = JSON.parse(userInfo);
+        setSalonAssets({
+          token: parsedToken?.access_token,
+          salonId: data?.salon?._id || hairDresserData?._id,
+        });
+        dispatch(getLoggedInUser(parsedToken?.user?.user));
+        dispatch(getTokenValue(parsedToken?.access_token));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useLayoutEffect(() => {
-    dispatch(getLoggedInUser(data?.user));
-    dispatch(getTokenValue(data?.access_token));
+    getToken();
   }, []);
-
-  useEffect(() => {
-    data?.access_token && dispatch(getSalon(data?.access_token));
-  }, [isSuccess, isFetchingService, data?.access_token]);
 
   console.log(data?.salon?._id)
 
-  // console.log(salonAssets)
+  useEffect(() => {
+    salonAssets.token && dispatch(getSalon(salonAssets?.token));
+  }, [isSuccess, isFetchingService, salonAssets.token]);
 
   return (
     <>
@@ -97,7 +96,7 @@ const SalonProfile = () => {
               }
               iconPosition="left"
               onPress={() => {
-                dispatch(updateSalon({token: data?.access_token, salonId: data?.salon?._id}));
+                dispatch(updateSalon(salonAssets));
                 toggleOverlay();
                
               }}
@@ -115,7 +114,7 @@ const SalonProfile = () => {
               }
               iconPosition="left"
               onPress={() => {
-                dispatch(createSalon({token: data?.access_token, salonId: data?.salon?._id}));
+                dispatch(createSalon(salonAssets));
                 toggleOverlay();
               }}
             />
@@ -143,7 +142,7 @@ const SalonProfile = () => {
                 titleStyle={{ marginLeft: 10 }}
                 onPress={() => {
                   toggleOverlay();
-                  dispatch(getBookings({token: data?.access_token, salonId: data?.salon?._id}));
+                  dispatch(getBookings(salonAssets));
                   navigation.navigate("Tabs");
                 }}
               />
@@ -172,7 +171,7 @@ const SalonProfile = () => {
               <Text style={tw` text-sm text-gray-500`}>{userData?.role}</Text>
             </View>
           </View>
-          <View >
+          <View>
             <ProfileAccordion />
           </View>
         </View>

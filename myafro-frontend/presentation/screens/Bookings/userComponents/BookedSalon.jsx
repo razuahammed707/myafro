@@ -254,56 +254,58 @@ const BookedSalon = () => {
         </>
       )}
       {/* <View style={tw`bg-green-400`}> */}
-{singleBookedSalon?.status !== "cancel" &&
-          singleBookedSalon?.status !== "complete" && (
-            <View style={tw`absolute w-full bottom-0 left-5 z-50 bg-white h-40`}>
-              <View
-                style={{
-                  backgroundColor: "lightgray",
-                  borderBottomColor: "#000000",
-                  borderRadius: 10,
-                  width: "80%",
-                }}
-              >
-                <TextInput
-                  style={styles.input}
-                  placeholder="Type a message"
-                  multiline={true}
-                  onChangeText={(text) => setCreateMessage(text)}
-                  numberOfLines={2}
-                  />
-              </View>
-              <View style={tw`absolute right--1 top--1`}>
-                {/* <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/> */}
-                <Button
-                  buttonStyle={{
-                    paddingHorizontal: 16,
-                    paddingVertical: 14,
-                  }}
-                  type="clear"
-                  icon={
-                    <Icon
-                      name="send"
-                      type="feather"
-                      size={20}
-                      color="#fff"
-                      style={tw`mr-2`}
-                    />
-                  }
-                  iconPosition="left"
-                  titleStyle={{ fontSize: 14 }}
-                  onPress={() => {
-                    dispatch(createMessageToSend(assets));
-                    assets !== null && dispatch(getMessages(assets));
-                  }}
-                />
-              </View>
+      {singleBookedSalon?.status !== "cancel" &&
+        singleBookedSalon?.status !== "complete" && (
+          <View
+            style={tw`absolute w-full bottom-0 left-5 z-50 bg-white h-40 pt-3`}
+          >
+            <View
+              style={{
+                backgroundColor: "lightgray",
+                borderBottomColor: "#000000",
+                borderRadius: 10,
+                width: "80%",
+              }}
+            >
+              <TextInput
+                style={styles.input}
+                placeholder="Type a message"
+                multiline={true}
+                onChangeText={(text) => setCreateMessage(text)}
+                numberOfLines={2}
+              />
             </View>
-          )}
-        {singleBookedSalon?.status !== "cancel" &&
-          singleBookedSalon?.status !== "complete" && (
-            <ResponsePopup bookingInfo={singleBookedSalon} />
-          )}
+            <View style={tw`absolute right--1 top--1 pt-3`}>
+              {/* <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/> */}
+              <Button
+                buttonStyle={{
+                  paddingHorizontal: 16,
+                  paddingVertical: 14,
+                }}
+                type="clear"
+                icon={
+                  <Icon
+                    name="send"
+                    type="feather"
+                    size={20}
+                    color="#fff"
+                    style={tw`mr-2`}
+                  />
+                }
+                iconPosition="left"
+                titleStyle={{ fontSize: 14 }}
+                onPress={() => {
+                  dispatch(createMessageToSend(assets));
+                  assets !== null && dispatch(getMessages(assets));
+                }}
+              />
+            </View>
+          </View>
+        )}
+      {singleBookedSalon?.status !== "cancel" &&
+        singleBookedSalon?.status !== "complete" && (
+          <ResponsePopup bookingInfo={singleBookedSalon} />
+        )}
       {/* </View> */}
     </SafeAreaView>
   );

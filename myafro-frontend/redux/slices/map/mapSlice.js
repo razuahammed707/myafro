@@ -6,6 +6,7 @@ const initialState = {
   isSuccess: false,
   isError: false,
   locationInfo: {},
+  currentLocationInfo: {},
   message: "",
 };
 
@@ -22,6 +23,9 @@ export const mapSlice = createSlice({
     },
     getLocationInfo: (state, { payload }) => {
       state.locationInfo = payload;
+    },
+    getCurrentLocationInfo: (state, { payload }) => {
+      state.currentLocationInfo = payload
     }
   },
 //   extraReducers: (builder) => {
@@ -33,6 +37,6 @@ export const mapSlice = createSlice({
 //   },
 });
 
-export const { reset,  getLocationInfo} = mapSlice.actions;
+export const { reset,  getLocationInfo, getCurrentLocationInfo} = mapSlice.actions;
 export const mapSelector = (state) => state.map;
 export default mapSlice.reducer;

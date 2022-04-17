@@ -13,6 +13,7 @@ import tw from "twrnc";
 import { Button, Icon } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getCurrentLocationInfo,
   getLocationInfo,
   mapSelector,
 } from "../../../redux/slices/map/mapSlice";
@@ -23,11 +24,15 @@ import {
   updateSalon,
 } from "../../../redux/slices/salon/salonSlice";
 import { authSelector } from "../../../redux/slices/login/authSlice";
+import { bookingSelector } from "../../../redux/slices/booking/bookingSlice";
 
 const SalonMap = () => {
-  const { locationInfo } = useSelector(mapSelector);
-  const { isSuccess, updateSalonData } = useSelector(salonSelector);
+  const { locationInfo, currentLocationInfo } = useSelector(mapSelector);
+  const { isSuccess, updateSalonData, hairDresserData } =
+    useSelector(salonSelector);
   const { data } = useSelector(authSelector);
+  const { token } = useSelector(bookingSelector);
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -55,7 +60,7 @@ const SalonMap = () => {
       });
       setLocation(location);
       dispatch(
-        getLocationInfo({
+        getCurrentLocationInfo({
           coordinates: location?.coords,
           name: name[0]?.city,
         })
@@ -72,7 +77,6 @@ const SalonMap = () => {
         })
       );
     })();
-
   }, []);
 
   let text = "Waiting..";
@@ -83,7 +87,7 @@ const SalonMap = () => {
     // console.log(text)
   }
 
-console.log(locationInfo?.geometry?.location?.lng)
+  console.log(updateSalonData);
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <MapView
@@ -91,12 +95,18 @@ console.log(locationInfo?.geometry?.location?.lng)
         loadingEnabled={true}
         // mapType="mutedStandard"
         initialRegion={{
-          latitude: locationInfo?.geometry?.location?.lat
-            ? locationInfo?.geometry?.location?.lat
-            : locationInfo?.coordinates?.latitude,
-          longitude: locationInfo.geometry?.location?.lng
-            ? locationInfo.geometry?.location?.lng
-            : locationInfo?.coordinates?.longitude,
+          latitude:
+            hairDresserData?.location?.coordinates !== ""
+              ? Number(hairDresserData?.location?.coordinates.split(",")[0])
+              : locationInfo?.geometry?.location?.lat
+              ? locationInfo?.geometry?.location?.lat
+              : currentLocationInfo?.coordinates?.latitude,
+          longitude:
+            hairDresserData?.location?.coordinates !== ""
+              ? Number(hairDresserData?.location?.coordinates.split(",")[1])
+              : locationInfo.geometry?.location?.lng
+              ? locationInfo.geometry?.location?.lng
+              : currentLocationInfo?.coordinates?.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -104,29 +114,41 @@ console.log(locationInfo?.geometry?.location?.lng)
         focusable={true}
         showsBuildings={true}
       >
-        {locationInfo?.geometry?.location ? (
+        {hairDresserData?.location?.coordinates !== "" && !locationInfo?.name ? (
           <Marker
             key={locationInfo?.place_id}
             coordinate={{
-              latitude: locationInfo?.geometry?.location?.lat,
-              longitude: locationInfo.geometry?.location?.lng,
+              latitude: Number(hairDresserData?.location?.coordinates.split(",")[0]),
+              longitude: Number(hairDresserData?.location?.coordinates.split(",")[1]),
             }}
-            title="My Location"
+            title={hairDresserData?.location?.name}
             pinColor="tomato"
           />
-        ) : (
+        ) : currentLocationInfo?.coordinates && !locationInfo.name ? (
           <Marker
             // key={locationInfo?.place_id}
             coordinate={{
-              latitude: locationInfo?.coordinates?.latitude || 37.78825,
-              longitude: locationInfo?.coordinates?.longitude || -122.4324,
+              latitude: currentLocationInfo?.coordinates?.latitude,
+              longitude: currentLocationInfo?.coordinates?.longitude,
             }}
-            title="My Location"
+            title={currentLocationInfo.name}
             pinColor="tomato"
           />
-        )}
+        ) : locationInfo?.geometry?.location &&
+          (
+            <Marker
+              // key={locationInfo?.place_id}
+              coordinate={{
+                latitude: locationInfo?.geometry?.location?.lat,
+                longitude: locationInfo?.geometry?.location?.lng,
+              }}
+              title={locationInfo?.name}
+              pinColor="tomato"
+            />
+          )
+        }
         {/* {mapMarkers()} */}
-        {locationInfo?.geometry?.location && (
+        {/* {locationInfo?.geometry?.location && (
           <Circle
             center={{
               latitude: locationInfo?.geometry?.location?.lat,
@@ -136,7 +158,7 @@ console.log(locationInfo?.geometry?.location?.lng)
             lineJoin="bevel"
             strokeColor="#222"
           />
-        )}
+        )} */}
       </MapView>
       <View style={tw`absolute top-5 w-full`}>
         <View
@@ -153,11 +175,13 @@ console.log(locationInfo?.geometry?.location?.lng)
               onPress={() => navigation.navigate("MapAutocomplete")}
               style={tw`ml-3`}
             >
-              {!locationInfo?.name ? (
+              {!locationInfo?.name && !hairDresserData?.location?.name ? (
                 <Text style={tw`text-sm font-semibold`}>Current Location</Text>
               ) : (
                 <Text style={tw`text-sm font-semibold`}>
-                  {locationInfo?.name}
+                  {locationInfo?.name
+                    ? locationInfo?.name
+                    : hairDresserData?.location?.name}
                 </Text>
               )}
               <Text style={tw`text-sm text-gray-600`}>NO</Text>
@@ -179,12 +203,12 @@ console.log(locationInfo?.geometry?.location?.lng)
             onPress={() => {
               dispatch(
                 updateSalon({
-                  token: data?.access_token,
-                  salonId: data?.salon?._id,
+                  token: token || data?.access_token,
+                  salonId: hairDresserData?._id || data?.salon?._id,
                 })
               );
-              if(isSuccess){
-                alert('Salon Location Updated Successfully')
+              if (isSuccess) {
+                alert("Salon Location Updated Successfully");
                 navigation.navigate("Tabs");
               }
             }}

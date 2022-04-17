@@ -23,14 +23,14 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { getTokenValue } from "../../redux/slices/login/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getLocationInfo, mapSelector } from "../../redux/slices/map/mapSlice";
+import { getCurrentLocationInfo, getLocationInfo, mapSelector } from "../../redux/slices/map/mapSlice";
 import MapAutocomplete from "../screens/Map/MapAutocomplete/MapAutocomplete";
 import SalonMap from "../screens/Map/SalonMap";
 
 const AppNavigator = ({ data }) => {
   const Stack = createNativeStackNavigator();
   const navigation = useNavigation();
-  const { locationInfo } = useSelector(mapSelector);
+  // const { locationInfo } = useSelector(mapSelector);
   const dispatch = useDispatch();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -56,7 +56,7 @@ const AppNavigator = ({ data }) => {
       });
       setLocation(location);
       dispatch(
-        getLocationInfo({
+        getCurrentLocationInfo({
           coordinates: location?.coords,
           name: name[0]?.city,
         })
