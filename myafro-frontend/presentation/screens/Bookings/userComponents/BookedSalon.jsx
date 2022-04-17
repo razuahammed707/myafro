@@ -5,8 +5,10 @@ import {
   ScrollView,
   TextInput,
   StyleSheet,
+  KeyboardAvoidingView,
+  SafeAreaView,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ResponsePopup from "../../../components/ResponsePopup/ResponsePopup";
 import { Button, Icon } from "react-native-elements";
@@ -25,6 +27,7 @@ import {
   getCreateReviewData,
   reviewSelector,
 } from "../../../../redux/slices/reviews/reviewSlice";
+import moment from "moment";
 
 const BookedSalon = () => {
   const [createMessage, setCreateMessage] = useState("");
@@ -35,6 +38,8 @@ const BookedSalon = () => {
     useSelector(bookingSelector);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const scrollViewRef = useRef();
 
   const getToken = async () => {
     try {
@@ -80,11 +85,11 @@ const BookedSalon = () => {
     // creds !== null && dispatch(getMessages(creds));
   }, []);
 
-  console.log(getMessagesData)
-  console.log(assets)
+  console.log(getMessagesData);
+  console.log(assets);
 
   return (
-    <View style={tw`p-5 my-5`}>
+    <SafeAreaView style={tw`p-5 relative h-full bg-white`}>
       <View style={tw`flex flex-row`}>
         <Icon
           name="arrow-left"
@@ -96,16 +101,30 @@ const BookedSalon = () => {
         <Text style={tw`font-bold text-lg ml-2`}>Booked Salon</Text>
       </View>
       {singleBookedSalon?._id && (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={tw`my-5 flex`}>
+        <>
+          <View style={tw`mb-5 flex`}>
             <Image
               style={{ width: "100%" }}
               source={require("../../../../assets/img/current.png")}
             />
-            <View style={tw`my-5 flex flex-row items-start justify-between`}>
-              <Text style={tw`text-base`}>
-                Status: {singleBookedSalon?.status}
-              </Text>
+            <View style={tw`mt-5 flex flex-row items-start justify-between`}>
+              {singleBookedSalon?.status === "pending" ? (
+                <View style={tw`px-5 py-2 border border-pink-500 rounded-lg`}>
+                  <Text style={tw`text-base text-pink-500`}>Pending</Text>
+                </View>
+              ) : singleBookedSalon?.status === "booked" ? (
+                <View style={tw`px-5 py-2 border border-green-500 rounded-lg`}>
+                  <Text style={tw`text-base text-green-500`}>Active</Text>
+                </View>
+              ) : singleBookedSalon?.status === "cancel" ? (
+                <View style={tw`px-5 py-2 border border-red-500 rounded-lg`}>
+                  <Text style={tw`text-base text-red-500`}>Canceled</Text>
+                </View>
+              ) : (
+                <View style={tw`px-5 py-2 border border-green-500 rounded-lg`}>
+                  <Text style={tw`text-base text-green-500`}>Completed</Text>
+                </View>
+              )}
               {singleBookedSalon?.status === "complete" ? (
                 <Text style={tw`text-xl text-green-800`}>
                   The booking is Completed
@@ -117,139 +136,176 @@ const BookedSalon = () => {
               ) : (
                 <View style={tw`flex flex-col justify-end items-end`}>
                   <Button
-                    title="Upload"
+                    title="Click to Upload"
                     buttonStyle={{
                       paddingHorizontal: 20,
-                      paddingVertical: 16,
-                      backgroundColor: "#4caf50",
+                      paddingVertical: 12,
+                      backgroundColor: "#fff",
                       //   width:"50%",
+                      borderColor: "#000",
+                      marginTop: -5,
                     }}
-                    type="clear"
+                    type="standard"
                     icon={
                       <Icon
                         name="upload-cloud"
                         type="feather"
                         size={20}
-                        color="#fff"
-                        style={tw`ml-2`}
+                        color="#000"
+                        style={tw`mr-2`}
                       />
                     }
-                    iconPosition="right"
-                    titleStyle={{ fontSize: 14 }}
+                    iconPosition="left"
+                    titleStyle={{ fontSize: 14, color: "#000" }}
                   />
-                  <Text style={tw`mt-2 ml-2 text-gray-400 text-sm `}>
-                    Upload your current hair images
-                  </Text>
                 </View>
               )}
             </View>
-            <View style={tw`my-5`}>
-              <Text style={tw`font-bold text-lg mb-3 `}>Uploaded Images</Text>
-            </View>
 
             {/* Message section start */}
-            <Text style={tw`font-bold text-lg mb-5`}>Message</Text>
-            {getMessagesData?.messages?.map((message) => (
-              <View key={message?._id}>
-                {message?.user_type === "hair_dresser" ? (
-                  <View style={tw`flex flex-row justify-between mt-4`}>
-                    <View style={tw`p-5 bg-black rounded-lg`}>
-                      <Text style={tw`text-white text-lg w-60 text-base`}>
-                        {message?.message}
-                      </Text>
-                    </View>
-                    <View>
-                      <Image
+            <Text style={tw`font-bold text-lg mt-2`}>Messages</Text>
+            <ScrollView
+              style={tw`h-70 `}
+              ref={scrollViewRef}
+              showsVerticalScrollIndicator={false}
+              onContentSizeChange={() =>
+                scrollViewRef.current.scrollToEnd({ animated: true })
+              }
+            >
+              {getMessagesData?.messages?.map((message) => (
+                <View key={message?._id}>
+                  {message?.user_type === "hair_dresser" ? (
+                    <View style={tw`mt-2`}>
+                      <View
                         style={{
-                          width: 36,
-                          height: 36,
+                          backgroundColor: "#f3e6e3",
+                          padding: 15,
+                          // borderRadius: 10,
+                          width: "100%",
+                          borderTopRightRadius: 15,
+                          borderBottomLeftRadius: 15,
                         }}
-                        source={require("../../../../assets/img/profile.png")}
-                        resizeMode="contain"
-                      />
-                    </View>
-                  </View>
-                ) : (
-                  <View style={tw`flex flex-row justify-between mt-6`}>
-                    <View>
-                      <Image
-                        style={{
-                          width: 36,
-                          height: 36,
-                        }}
-                        source={require("../../../../assets/img/profile.png")}
-                        resizeMode="contain"
-                      />
-                    </View>
-                    <View style={tw`p-5 bg-black rounded-lg`}>
-                      <Text style={tw`text-white text-lg w-60 text-base`}>
-                        {message?.message}
+                      >
+                        <Text style={tw`text-black text-lg w-60 text-base`}>
+                          {message?.message}
+                        </Text>
+                      </View>
+                      <Text style={tw`mt-1 text-gray-400`}>
+                        {" "}
+                        {moment(getMessagesData?.createdAt)
+                          .startOf("hour")
+                          .fromNow()}
                       </Text>
-                    </View>
-                  </View>
-                )}
-              </View>
-            ))}
-
-            {/* Message section end */}
-
-            {/* Message section start */}
-            {singleBookedSalon?.status !== "cancel" &&
-              singleBookedSalon?.status !== "complete" && (
-                <>
-                  <Text style={tw`font-bold text-lg mb-3 mt-6 `}>
-                    Write Message
-                  </Text>
-                  <View
-                    style={{
-                      backgroundColor: "lightgray",
-                      borderBottomColor: "#000000",
-                    }}
-                  >
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Type a message"
-                      multiline={true}
-                      onChangeText={(text) => setCreateMessage(text)}
-                      numberOfLines={4}
-                    />
-                  </View>
-                  <View style={tw`mt-2 flex flex-row justify-end`}>
-                    {/* <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/> */}
-                    <Button
-                      title="Send"
-                      buttonStyle={{
-                        paddingHorizontal: 20,
-                        paddingVertical: 16,
-                      }}
-                      type="clear"
-                      icon={
-                        <Icon
-                          name="send"
-                          type="feather"
-                          size={20}
-                          color="#fff"
-                          style={tw`mr-2`}
+                      {/* <Text>{message?.createdAt}</Text> */}
+                      {/* <View>
+                        <Image
+                          style={{
+                            width: 36,
+                            height: 36,
+                          }}
+                          source={require("../../../../assets/img/profile.png")}
+                          resizeMode="contain"
                         />
-                      }
-                      iconPosition="left"
-                      titleStyle={{ fontSize: 14 }}
-                      onPress={() => {
-                        dispatch(createMessageToSend(assets));
-                        assets !== null && dispatch(getMessages(assets));
-                      }}
-                    />
-                  </View>
-                </>
-              )}
-            {singleBookedSalon?.status !== "cancel" &&
-              singleBookedSalon?.status !== "complete" && (
-                <ResponsePopup bookingInfo={singleBookedSalon} />
-              )}
+                      </View> */}
+                    </View>
+                  ) : (
+                    <View style={tw` mt-2`}>
+                      {/* <View>
+                        <Image
+                          style={{
+                            width: 36,
+                            height: 36,
+                          }}
+                          source={require("../../../../assets/img/profile.png")}
+                          resizeMode="contain"
+                        />
+                      </View> */}
+                      <View
+                        style={{
+                          backgroundColor: "#DCDCDC",
+                          padding: 15,
+                          borderTopLeftRadius: 15,
+                          borderBottomRightRadius: 15,
+                          width: "100%",
+                        }}
+                      >
+                        <Text
+                          style={tw`text-black text-right text-lg text-base`}
+                        >
+                          {message?.message}
+                        </Text>
+                      </View>
+                      <Text style={tw`mt-1 text-right text-gray-400`}>
+                        {" "}
+                        {moment(getMessagesData?.createdAt)
+                          .startOf("hour")
+                          .fromNow()}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              ))}
+
+              {/* Message section end */}
+
+              {/* Message section start */}
+            </ScrollView>
           </View>
-        </ScrollView>
+        </>
       )}
-    </View>
+      {/* <View style={tw`bg-green-400`}> */}
+{singleBookedSalon?.status !== "cancel" &&
+          singleBookedSalon?.status !== "complete" && (
+            <View style={tw`absolute w-full bottom-0 left-5 z-50 bg-white h-40`}>
+              <View
+                style={{
+                  backgroundColor: "lightgray",
+                  borderBottomColor: "#000000",
+                  borderRadius: 10,
+                  width: "80%",
+                }}
+              >
+                <TextInput
+                  style={styles.input}
+                  placeholder="Type a message"
+                  multiline={true}
+                  onChangeText={(text) => setCreateMessage(text)}
+                  numberOfLines={2}
+                  />
+              </View>
+              <View style={tw`absolute right--1 top--1`}>
+                {/* <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/> */}
+                <Button
+                  buttonStyle={{
+                    paddingHorizontal: 16,
+                    paddingVertical: 14,
+                  }}
+                  type="clear"
+                  icon={
+                    <Icon
+                      name="send"
+                      type="feather"
+                      size={20}
+                      color="#fff"
+                      style={tw`mr-2`}
+                    />
+                  }
+                  iconPosition="left"
+                  titleStyle={{ fontSize: 14 }}
+                  onPress={() => {
+                    dispatch(createMessageToSend(assets));
+                    assets !== null && dispatch(getMessages(assets));
+                  }}
+                />
+              </View>
+            </View>
+          )}
+        {singleBookedSalon?.status !== "cancel" &&
+          singleBookedSalon?.status !== "complete" && (
+            <ResponsePopup bookingInfo={singleBookedSalon} />
+          )}
+      {/* </View> */}
+    </SafeAreaView>
   );
 };
 
@@ -270,8 +326,8 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    margin: 12,
-    padding: 10,
+    margin: 5,
+    padding: 5,
     borderRadius: 8,
   },
 });

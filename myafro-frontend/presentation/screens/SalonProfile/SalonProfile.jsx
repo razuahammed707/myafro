@@ -15,16 +15,17 @@ import {
   updateSalon,
 } from "../../../redux/slices/salon/salonSlice";
 import Loader from "../../components/Loader/Loader";
-import { getTokenValue } from "../../../redux/slices/login/authSlice";
+import { authSelector, getTokenValue } from "../../../redux/slices/login/authSlice";
 import { serviceSelector } from "../../../redux/slices/salon/serviceSlice";
 import { useNavigation } from "@react-navigation/native";
 import { getBookings } from "../../../redux/slices/booking/bookingSlice";
 
 const SalonProfile = () => {
-  const [salonAssets, setSalonAssets] = useState({});
+  // const [salonAssets, setSalonAssets] = useState({});
   const navigation = useNavigation();
   const { userData, hairDresserData, isFetching, isSuccess, message } =
     useSelector(salonSelector);
+  const {data} = useSelector(authSelector)
   const { isFetchingService } = useSelector(serviceSelector);
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
@@ -32,33 +33,35 @@ const SalonProfile = () => {
     setVisible(!visible);
   };
 
-  const getToken = async () => {
-    try {
-      const userInfo = await AsyncStorage.getItem("user_info");
-      if (userInfo) {
-        const parsedToken = JSON.parse(userInfo);
-        console.log(parsedToken)
-        setSalonAssets({
-          token: parsedToken?.access_token,
-          salonId: hairDresserData?._id || parsedToken?.salon?._id,
-        });
-        dispatch(getLoggedInUser(parsedToken?.user?.user));
-        dispatch(getTokenValue(parsedToken?.access_token));
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const getToken = async () => {
+  //   try {
+  //     const userInfo = await AsyncStorage.getItem("user_info");
+  //     if (userInfo) {
+  //       const parsedToken = JSON.parse(userInfo);
+  //       console.log(parsedToken)
+  //       setSalonAssets({
+  //         token: parsedToken?.access_token,
+  //         salonId: data?.salon?._id || hairDresserData?._id 
+  //       });
+      
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   useLayoutEffect(() => {
-    getToken();
+    dispatch(getLoggedInUser(data?.user));
+    dispatch(getTokenValue(data?.access_token));
   }, []);
 
   useEffect(() => {
-    salonAssets.token && dispatch(getSalon(salonAssets?.token));
-  }, [isSuccess, isFetchingService, salonAssets.token]);
+    data?.access_token && dispatch(getSalon(data?.access_token));
+  }, [isSuccess, isFetchingService, data?.access_token]);
 
-  console.log(salonAssets)
+  console.log(data?.salon?._id)
+
+  // console.log(salonAssets)
 
   return (
     <>
@@ -94,7 +97,7 @@ const SalonProfile = () => {
               }
               iconPosition="left"
               onPress={() => {
-                dispatch(updateSalon(salonAssets));
+                dispatch(updateSalon({token: data?.access_token, salonId: data?.salon?._id}));
                 toggleOverlay();
                
               }}
@@ -112,7 +115,7 @@ const SalonProfile = () => {
               }
               iconPosition="left"
               onPress={() => {
-                dispatch(createSalon(salonAssets));
+                dispatch(createSalon({token: data?.access_token, salonId: data?.salon?._id}));
                 toggleOverlay();
               }}
             />
@@ -140,7 +143,7 @@ const SalonProfile = () => {
                 titleStyle={{ marginLeft: 10 }}
                 onPress={() => {
                   toggleOverlay();
-                  dispatch(getBookings(salonAssets));
+                  dispatch(getBookings({token: data?.access_token, salonId: data?.salon?._id}));
                   navigation.navigate("Tabs");
                 }}
               />

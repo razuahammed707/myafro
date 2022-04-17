@@ -92,10 +92,10 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
   // console.log(createBookingData)
 
   return (
-    <View>
+    <View style={tw`absolute bottom--2 left-5`}>
       <View style={tw`flex flex-row items-center justify-between my-3`}>
-        <TouchableOpacity style={tw`flex flex-row items-center`}>
-          <View style={tw`mt-10  w-full`}>
+        <TouchableOpacity style={tw`flex flex-row items-center z-50`}>
+          <View style={tw`w-full`}>
             {bookingInfo?.status === "pending" ? (
               <Button
                 title="Cancel Booking"

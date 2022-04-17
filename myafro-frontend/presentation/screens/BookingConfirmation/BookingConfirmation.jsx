@@ -72,8 +72,9 @@ const BookingConfirmation = () => {
   console.log(moment("2020-11-04T00:00:00.000Z").format('lll'))
   
   return (
-    <SafeAreaView style={tw`p-5 mb-5`}>
-      <View>
+    <SafeAreaView style={tw`p-5 relative w-full z-40`}>
+      <ResponsePopup bookingConfirmation="confirmation"/>
+      <View style={tw`h-full`}>
         <View style={tw`mb-10`}>
           <View style={tw`flex flex-row`}>
             <Icon
@@ -93,33 +94,32 @@ const BookingConfirmation = () => {
               />
               <View style={tw`my-5 flex flex-col justify-end items-end`}>
                 <Button
-                  title="Upload"
+                  title="Click to Upload"
                   buttonStyle={{
                     paddingHorizontal: 20,
-                    paddingVertical: 16,
-                    backgroundColor: "#4caf50",
+                    paddingVertical: 12,
+                    backgroundColor: "transparent",
                     //   width:"50%",
+                    borderColor: "#000",
+                    
                   }}
-                  type="clear"
+                  type="solid"
                   icon={
                     <Icon
                       name="upload-cloud"
                       type="feather"
                       size={20}
-                      color="#fff"
-                      style={tw`ml-2`}
+                      color="#000"
+                      style={tw`mr-2`}
                     />
                   }
-                  iconPosition="right"
-                  titleStyle={{ fontSize: 14 }}
+                  iconPosition="left"
+                  titleStyle={{ fontSize: 14, color: "#000" }}
                 />
-                <Text style={tw`mt-2 ml-2 text-gray-400 text-sm `}>
-                  Upload your current hair images
-                </Text>
               </View>
-              <View style={tw`my-5`}>
+              {/* <View style={tw`my-5`}>
                 <Text style={tw`font-bold text-lg mb-3 `}>Uploaded Images</Text>
-              </View>
+              </View> */}
 
               {/* Message section start */}
               <Text style={tw`font-bold text-lg mb-3 mt-6 `}>
@@ -129,6 +129,7 @@ const BookingConfirmation = () => {
                 style={{
                   backgroundColor: "lightgray",
                   borderBottomColor: "#000000",
+                  marginBottom:20
                 }}
               >
                 <TextInput
@@ -161,7 +162,7 @@ const BookingConfirmation = () => {
                   onPress={() => dispatch(createMessageToSend(messageAssets))}
                 />
               </View> */}
-              <ResponsePopup bookingConfirmation="confirmation"/>
+              
             </View>
           </ScrollView>
         </View>

@@ -83,7 +83,6 @@ const CurrentHair = () => {
     );
   }, [createMessage]);
 
-console.log(getMessagesData)
   return (
     <SafeAreaView style={tw`p-5`}>
       <ScrollView showsVerticalScrollIndicator={false}>
