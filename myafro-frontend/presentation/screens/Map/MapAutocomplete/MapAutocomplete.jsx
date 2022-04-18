@@ -12,6 +12,7 @@ import { GOOGLE_MAP_APIKEY } from "@env";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getCurrentLocationInfo,
   getLocationInfo,
   mapSelector,
 } from "../../../../redux/slices/map/mapSlice";
@@ -26,7 +27,7 @@ const MapAutocomplete = () => {
   const navigation = useNavigation();
   const router = useRoute();
   const [isSearch, setIsSearch] = useState({});
-  const { locationInfo } = useSelector(mapSelector);
+  const { locationInfo, currentLocationInfo } = useSelector(mapSelector);
   const { data } = useSelector(authSelector);
   const { updateSalonData, hairDresserData } = useSelector(salonSelector);
   const dispatch = useDispatch();
@@ -46,8 +47,6 @@ const MapAutocomplete = () => {
       })
     );
   }, [locationInfo]);
-
-  console.log(updateSalonData)
 
   return (
     <SafeAreaView style={tw`p-5 flex flex-row w-full`}>
@@ -133,9 +132,10 @@ const MapAutocomplete = () => {
         <>
           <GooglePlacesAutocomplete
             disableScroll={true}
-            placeholder={hairDresserData?.location?.name}
+            placeholder={currentLocationInfo?.name}
             onPress={(data, details = null) => {
               dispatch(getLocationInfo(details));
+              dispatch(getCurrentLocationInfo(details))
               setIsSearch(details);
               navigation.navigate("Map");
             }}

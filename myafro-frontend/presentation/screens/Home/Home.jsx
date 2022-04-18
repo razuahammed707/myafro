@@ -70,7 +70,7 @@ const Home = () => {
   const [assets, setAssets] = useState(null);
   const { salons, queries, isSuccess, isFetching } =
     useSelector(userHomeSelector);
-  const { times } = useSelector(mapSelector);
+  const { times, currentLocationInfo } = useSelector(mapSelector);
 
   const getToken = async () => {
     try {
@@ -109,7 +109,7 @@ const Home = () => {
               color="black"
             />
             <TouchableOpacity onPress={() => navigation.navigate('MapAutocomplete')} style={tw`ml-3`}>
-              <Text style={tw`text-sm font-semibold`}>Current Location</Text>
+              <Text style={tw`text-sm font-semibold`}>{currentLocationInfo?.name || currentLocationInfo?.formatted_address}</Text>
               <Text style={tw`text-sm text-gray-600`}>NO</Text>
             </TouchableOpacity>
           </View>

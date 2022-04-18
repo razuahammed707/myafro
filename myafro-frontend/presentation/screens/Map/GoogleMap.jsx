@@ -21,39 +21,33 @@ import {
 } from "../../../redux/slices/user/userHomeSlice";
 
 const GoogleMap = () => {
-  const { locationInfo } = useSelector(mapSelector);
+  const { locationInfo, currentLocationInfo } = useSelector(mapSelector);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { salons } = useSelector(userHomeSelector);
 
   const origin = {
-    latitude: locationInfo?.coordinates?.latitude,
-    longitude: locationInfo?.coordinates?.longitude,
+    latitude: currentLocationInfo?.coordinates?.latitude,
+    longitude: currentLocationInfo?.coordinates?.longitude,
   };
-  const destination = { latitude: 23.8179055, longitude: 90.3602682 };
   const GOOGLE_MAPS_APIKEY = "AIzaSyBtm4Ahlay8ohFLRwYNSMQ1JAd3Q4rqmig";
 
-  let destinationRequest = salons.map((salon) => {
-    // const lat = Number(salon?.location?.coordinates?.split(",")[0]);
-    // const lng = Number(salon?.location?.coordinates?.split(",")[1]);
-    // return `${lat},${lng}`;
-    console.log(salon?.location?.name);
-    return salon?.location.name;
-  });
-  // .join("|");
+  let destinationRequest = salons
+    .map((salon) => {
+      return salon?.location.name;
+    })
+    .join("|");
 
   useEffect(() => {
     const getDistance = async () => {
       fetch(
-        `https://maps.googleapis.com/maps/api/distancematrix/json?origins=dhaka&destinations=${destinationRequest}&key=${GOOGLE_MAPS_APIKEY}`
+        `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${currentLocationInfo?.formatted_address}&destinations=${destinationRequest}&key=${GOOGLE_MAPS_APIKEY}`
       )
         .then((res) => res.json())
         .then((data) => console.log(data));
     };
     getDistance();
-  }, [origin, destination, GOOGLE_MAPS_APIKEY]);
-
-  console.log(destinationRequest);
+  }, [origin, GOOGLE_MAPS_APIKEY]);
 
   return (
     <View style={{ flex: 1, position: "relative" }}>
@@ -64,20 +58,20 @@ const GoogleMap = () => {
         initialRegion={{
           latitude: locationInfo?.geometry?.location?.lat
             ? locationInfo?.geometry?.location?.lat
-            : locationInfo?.coordinates?.latitude,
+            : currentLocationInfo?.coordinates?.latitude,
           longitude: locationInfo.geometry?.location?.lng
             ? locationInfo.geometry?.location?.lng
-            : locationInfo?.coordinates?.longitude,
+            : currentLocationInfo?.coordinates?.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        mapType="standard"
+        mapType="mutedStandard"
         focusable={true}
         showsBuildings={true}
       >
         {salons?.map((salon) => (
           <View key={salon?._id}>
-            <MapViewDirections
+            {/* <MapViewDirections
               origin={{
                 latitude: locationInfo?.coordinates?.latitude,
                 longitude: locationInfo?.coordinates?.longitude,
@@ -89,7 +83,7 @@ const GoogleMap = () => {
               apikey={GOOGLE_MAPS_APIKEY}
               strokeWidth={3}
               strokeColor="black"
-            />
+            /> */}
             <Marker
               key={salon?._id}
               onPress={() => {
