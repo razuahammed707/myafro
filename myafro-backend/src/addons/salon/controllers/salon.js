@@ -59,7 +59,6 @@ const getSalons = async (req, res, next) => {
       salon.totalReviews = reviews.length;
     });
 
-    
     res.send({
       status: true,
       salons,
@@ -82,7 +81,7 @@ const getSalon = async (req, res, next) => {
       salon,
       // review,
     });
-    return
+    return;
   } catch (error) {
     next(error);
   }

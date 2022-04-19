@@ -44,6 +44,7 @@ export const getSalon = createAsyncThunk(
           authorization: `Bearer ${token}`,
         },
       });
+      console.log("called from upload image")
       console.log(response?.data)
       return response?.data?.salon;
     } catch (e) {

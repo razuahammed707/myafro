@@ -78,6 +78,7 @@ const MapAutocomplete = () => {
                 flex: 1,
                 width: "80%",
                 marginRight: 5,
+                marginTop:20,
                 padding: 0,
               },
               textInput: {
@@ -87,7 +88,7 @@ const MapAutocomplete = () => {
           />
           <TouchableOpacity
             onPress={() => navigation.navigate("SalonMap")}
-            style={tw`flex flex-row items-center px-5 rounded-lg bg-white h-11`}
+            style={tw`flex flex-row items-center px-5 mt-5 rounded-lg bg-white h-11`}
           >
             <Icon name="my-location" type="material" size={20} color="#222" />
           </TouchableOpacity>

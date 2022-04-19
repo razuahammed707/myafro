@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/login/authSlice";
 import salonReducer from "./slices/salon/salonSlice";
 import serviceReducer from "./slices/salon/serviceSlice";
+import mediaReducer from "./slices/salon/mediaSlice";
 import userHomeReducer from "./slices/user/userHomeSlice";
 import userProfileReducer from "./slices/user/userProfileSlice";
 import bookingReducer from "./slices/booking/bookingSlice";
@@ -10,17 +11,19 @@ import mapReducer from "./slices/map/mapSlice";
 
 export const store = configureStore({
   reducer: {
-    auth:authReducer,
+    auth: authReducer,
     salon: salonReducer,
     salonService: serviceReducer,
+    salonMedia: mediaReducer,
     userHome: userHomeReducer,
     map: mapReducer,
     userProfile: userProfileReducer,
     booking: bookingReducer,
-    reviews: reviewReducer
+    reviews: reviewReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    immutableCheck: false,
-    serializableCheck: false,
-  })
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      immutableCheck: false,
+      serializableCheck: false,
+    }),
 });

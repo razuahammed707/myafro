@@ -12,6 +12,11 @@ const salonSchema = Schema(
       trim: true,
     },
     location: { 
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point'
+      },
       coordinates: String,
       name: String
      },

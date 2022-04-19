@@ -19,6 +19,7 @@ import { authSelector, getTokenValue } from "../../../redux/slices/login/authSli
 import { serviceSelector } from "../../../redux/slices/salon/serviceSlice";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { getBookings } from "../../../redux/slices/booking/bookingSlice";
+import { mediaSelector } from "../../../redux/slices/salon/mediaSlice";
 
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
@@ -28,6 +29,7 @@ const SalonProfile = () => {
   const { userData, hairDresserData, isFetching, isSuccess, message } =
     useSelector(salonSelector);
   const { isFetchingService } = useSelector(serviceSelector);
+  const { isFetchingMedia } = useSelector(mediaSelector);
   const {data} = useSelector(authSelector)
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
@@ -60,7 +62,7 @@ const SalonProfile = () => {
 
   useEffect(() => {
     salonAssets.token && dispatch(getSalon(salonAssets?.token));
-  }, [isSuccess, isFetchingService, salonAssets.token]);
+  }, [isSuccess, isFetchingService, isFetchingMedia, salonAssets.token]);
 
   return (
     <>

@@ -1,10 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createMedia,
+  getMediaInfo,
+  mediaSelector,
+} from "../../../../redux/slices/salon/mediaSlice";
+import { Button } from "react-native-elements";
+import { authSelector } from "../../../../redux/slices/login/authSlice";
+import { getSalon } from "../../../../redux/slices/salon/salonSlice";
 
 const uploadImage = () => {
-  const [profileImage, setProfileImage] = useState("");
+  const [image, setImage] = useState("");
+  const { token } = useSelector(authSelector);
+  const { isSuccessMedia, message } = useSelector(mediaSelector);
+  const dispatch = useDispatch();
 
   const openImageLibrary = async () => {
     // No permissions request is necessary for launching the image library
@@ -16,34 +28,23 @@ const uploadImage = () => {
     });
 
     if (!result.cancelled) {
-      setProfileImage(result.uri);
+      setImage(result.uri);
     }
   };
 
-  const uploadProfileImage = async () => {
-    try {
-      const formData = new FormData();
-      formData.append(
-        "profile",
-        JSON.stringify({
-          name: new Date() + "_profile",
-          uri: profileImage,
-          type: "image/jpg",
-        })
-      );
-
-      console.log(profileImage);
-
-      const res = await axios.post(
-        "https://tranquil-fjord-04022.herokuapp.com/api/v1/upload",
-        formData
-      );
-
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
+  const uploadImageMedia = () => {
+    const formData = new FormData();
+    formData.append("img_url", {
+      name: "img_url.jpg",
+      uri: image,
+      type: "image/jpg",
+    });
+    dispatch(createMedia(formData));
   };
+
+  useEffect(() => {
+    isSuccessMedia && dispatch(getSalon(token)) && setImage("");
+  }, [isSuccessMedia]);
 
   return (
     <View style={styles.container}>
@@ -52,26 +53,27 @@ const uploadImage = () => {
           onPress={openImageLibrary}
           style={styles.uploadBtnContainer}
         >
-          {profileImage ? (
+          {image ? (
             <Image
-              source={{ uri: profileImage }}
+              source={{ uri: image }}
               style={{ width: "100%", height: "100%" }}
             />
           ) : (
-            <Text style={styles.uploadBtn}>Upload Profile Image</Text>
+            <Text style={styles.uploadBtn}>Upload Media</Text>
           )}
         </TouchableOpacity>
-        <Text style={styles.skip}>Skip</Text>
-        {profileImage ? (
-          <Text
-            onPress={uploadProfileImage}
-            style={[
-              styles.skip,
-              { backgroundColor: "green", color: "white", borderRadius: 8 },
-            ]}
-          >
-            Upload
-          </Text>
+        {image ? (
+          <Button
+            onPress={uploadImageMedia}
+            type="clear"
+            buttonStyle={{
+              backgroundColor: "green",
+              color: "white",
+              borderRadius: 8,
+              marginBottom: 15,
+            }}
+            title="Upload"
+          />
         ) : null}
       </View>
     </View>
@@ -93,6 +95,7 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
     borderWidth: 1,
     overflow: "hidden",
+    marginVertical: 15,
   },
   uploadBtn: {
     textAlign: "center",
