@@ -7,7 +7,7 @@ const UserCarouselItem = ({ item }) => {
       <Image
         style={{ width: "100%", height:200 }}
         resizeMode="cover"
-        source={item.image}
+        source={{uri:item?.img_url}}
       />
     </View>
   );

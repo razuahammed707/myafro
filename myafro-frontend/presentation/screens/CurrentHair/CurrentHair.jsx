@@ -110,7 +110,7 @@ const CurrentHair = () => {
             style={{ width: "100%" }}
             source={require("../../../assets/img/current.png")}
           /> */}
-          <UserMediaCarousel />
+          <UserMediaCarousel singleBooking={singleBooking}/>
           <View style={tw`mt-5`}>
             {singleBooking?.status === "cancel" ? (
               <View style={tw`flex flex-row justify-center`}>

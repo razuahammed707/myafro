@@ -26,7 +26,7 @@ import UserCarouselItem from "./UserCarouselItem";
     },
   ];
 
-const UserMediaCarousel = () => {
+const UserMediaCarousel = ({singleBooking, singleBookedSalon}) => {
   const [show, setShow] = useState(false);
   const navigation = useNavigation();
   const renderItem = ({ item }) => {
@@ -44,7 +44,9 @@ const UserMediaCarousel = () => {
     setTimeout(() => setShow(true), 2000);
   }, []);
 
-  const keyExtractor = (item) => item.id;
+  const keyExtractor = (item) => item._id;
+
+  console.log(singleBookedSalon?.current_hair[0]._id)
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>
@@ -52,7 +54,7 @@ const UserMediaCarousel = () => {
         <AppIntroSlider
           keyExtractor={keyExtractor}
           renderItem={renderItem}
-          data={data}
+          data={singleBooking?.current_hair || singleBookedSalon?.current_hair}
           activeDotStyle={{ backgroundColor: "#fff" }}
           showDoneButton={false}
           renderNextButton={renderNextButton}
