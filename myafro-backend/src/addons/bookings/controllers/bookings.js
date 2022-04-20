@@ -12,6 +12,7 @@ const createBooking = async (req, res, next) => {
           message: req.body.message,
         },
       ],
+      current_hair: req.body.current_hair
     });
     res.status(200).send({
       status: true,

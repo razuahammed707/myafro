@@ -6,6 +6,7 @@ const initialState = {
   isSuccessMedia: false,
   isError: false,
   mediaInfo: null,
+  sharedMedia: null,
   message: "",
 };
 
@@ -28,10 +29,30 @@ export const createMedia = createAsyncThunk(
           },
         }
       );
-      if(response.data.success){
-        alert("Media uploaded successfully")
+      if (response.data.success) {
+        alert("Media uploaded successfully");
       }
       console.log(response.data);
+      return response.data;
+    } catch (e) {
+      console.log("Error", e.response.data);
+      thunkAPI.rejectWithValue(e.response.data);
+    }
+  }
+);
+
+export const uploadSharedImage = createAsyncThunk(
+  "/upload/image",
+  async (mediaInfo, thunkAPI) => {
+    try {
+      let response = await axiosClient.post(`/upload`, mediaInfo, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        transformRequest: (data, headers) => {
+          return mediaInfo;
+        },
+      });
       return response.data;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -88,6 +109,21 @@ export const mediaSlice = createSlice({
         state.isSuccessMedia = false;
         // state.createdSalon = payload;
         state.message = payload?.message;
+        return state;
+      })
+      .addCase(uploadSharedImage.pending, (state) => {
+        state.isFetchingMedia = true;
+        return state;
+      })
+      .addCase(uploadSharedImage.fulfilled, (state, { payload }) => {
+        state.isFetchingMedia = false;
+        state.sharedMedia = payload;
+        state.isSuccessMedia = true;
+        return state;
+      })
+      .addCase(uploadSharedImage.rejected, (state, { payload }) => {
+        state.isFetchingMedia = false;
+        state.isSuccessMedia = false;
         return state;
       })
       .addCase(deleteMedia.pending, (state) => {

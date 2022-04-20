@@ -1,5 +1,12 @@
-  
-import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
@@ -12,31 +19,27 @@ import { userHomeSelector } from "../../../redux/slices/user/userHomeSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   bookingSelector,
-  createMessageToSend,
-  getBookingsByUser,
   getCreateBookingData,
-  getMessageToSend,
 } from "../../../redux/slices/booking/bookingSlice";
-import BookedSalon from "../Bookings/userComponents/BookedSalon";
 import Loader from "../../components/Loader/Loader";
 import {
   getCreateReviewData,
   reviewSelector,
 } from "../../../redux/slices/reviews/reviewSlice";
 import moment from "moment";
+import CurrentHairImage from "./components/CurrentHairImage";
+import { mediaSelector } from "../../../redux/slices/salon/mediaSlice";
 
 const BookingConfirmation = () => {
   const navigation = useNavigation();
   const [sendMessage, setSendMessage] = useState("");
+  const [uploadImages, setUploadImages] = useState([]);
   const dispatch = useDispatch();
   const [assets, setAssets] = useState(null);
   // const [messageAssets, setMessageAssets] = useState(null);
-  const {singleSalonId} = useSelector(userHomeSelector)
-  const { isFetching, createdBooking, createBookingData } = useSelector(bookingSelector);
-
-  const today = new Date();
-  const tomorrow = new Date();
-
+  const {isFetchingMedia} = useSelector(mediaSelector);
+  const { singleSalonId } = useSelector(userHomeSelector);
+  const { isFetching, createBookingData } = useSelector(bookingSelector);
 
   const getToken = async () => {
     try {
@@ -61,19 +64,18 @@ const BookingConfirmation = () => {
     dispatch(
       getCreateBookingData({
         ...createBookingData,
-        starting_time: new Date('2020-12-02'),
-        ending_time: new Date('2020-12-04'),
+        starting_time: new Date("2020-12-02"),
+        ending_time: new Date("2020-12-04"),
         salon: singleSalonId,
-        message: sendMessage
+        message: sendMessage,
+        current_hair: uploadImages,
       })
     );
-  }, [sendMessage]);
+  }, [sendMessage, uploadImages]);
 
-  console.log(moment("2020-11-04T00:00:00.000Z").format('lll'))
-  
   return (
     <SafeAreaView style={tw`p-5 relative w-full z-40`}>
-      <ResponsePopup bookingConfirmation="confirmation"/>
+      <ResponsePopup bookingConfirmation="confirmation" />
       <View style={tw`h-full`}>
         <View style={tw`mb-10`}>
           <View style={tw`flex flex-row`}>
@@ -88,34 +90,35 @@ const BookingConfirmation = () => {
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={tw`my-5 flex`}>
-              <Image
-                style={{ width: "100%" }}
-                source={require("../../../assets/img/current.png")}
+              <CurrentHairImage
+                uploadImages={uploadImages}
+                setUploadImages={setUploadImages}
               />
-              <View style={tw`my-5 flex flex-col justify-end items-end`}>
-                <Button
-                  title="Click to Upload"
-                  buttonStyle={{
-                    paddingHorizontal: 20,
-                    paddingVertical: 12,
-                    backgroundColor: "transparent",
-                    //   width:"50%",
-                    borderColor: "#000",
-                    
-                  }}
-                  type="solid"
-                  icon={
-                    <Icon
-                      name="upload-cloud"
-                      type="feather"
-                      size={20}
-                      color="#000"
-                      style={tw`mr-2`}
+              <View style={tw`flex flex-row flex-wrap`}>
+                {uploadImages?.map((item, i) => (
+                  <View style={tw`relative w-1/3`} key={item.img_url}>
+                    <Image
+                      style={tw`w-full h-20 m-0`}
+                      source={{ uri: item.img_url }}
+                      resizeMode="contain"
                     />
-                  }
-                  iconPosition="left"
-                  titleStyle={{ fontSize: 14, color: "#000" }}
-                />
+                    <TouchableOpacity
+                      onPress={() => {
+                        const filterImages = [...uploadImages];
+                        filterImages.splice(i, 1);
+                        setUploadImages(filterImages);
+                      }}
+                      style={tw`absolute z-50 top-2 right-2 bg-white p-1 rounded-lg`}
+                    >
+                      <Icon
+                        name="trash-2"
+                        type="feather"
+                        size={14}
+                        color="gray"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))}
               </View>
               {/* <View style={tw`my-5`}>
                 <Text style={tw`font-bold text-lg mb-3 `}>Uploaded Images</Text>
@@ -129,7 +132,7 @@ const BookingConfirmation = () => {
                 style={{
                   backgroundColor: "lightgray",
                   borderBottomColor: "#000000",
-                  marginBottom:20
+                  marginBottom: 20,
                 }}
               >
                 <TextInput
@@ -162,12 +165,11 @@ const BookingConfirmation = () => {
                   onPress={() => dispatch(createMessageToSend(messageAssets))}
                 />
               </View> */}
-              
             </View>
           </ScrollView>
         </View>
       </View>
-      <Loader loading={isFetching} />
+      <Loader loading={isFetching || isFetchingMedia} />
     </SafeAreaView>
   );
 };
