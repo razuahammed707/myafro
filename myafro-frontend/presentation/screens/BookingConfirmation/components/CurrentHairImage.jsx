@@ -2,14 +2,18 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch, useSelector } from "react-redux";
-import { createMedia, mediaSelector, uploadSharedImage } from "../../../../redux/slices/salon/mediaSlice";
+import {
+  createMedia,
+  mediaSelector,
+  uploadSharedImage,
+} from "../../../../redux/slices/salon/mediaSlice";
 import { Button, Icon } from "react-native-elements";
 import { authSelector } from "../../../../redux/slices/login/authSlice";
 import tw from "twrnc";
 
 const CurrentHairImage = ({ uploadImages, setUploadImages }) => {
   const [image, setImage] = useState("");
-  const { sharedMedia} = useSelector(mediaSelector);
+  const { sharedMedia } = useSelector(mediaSelector);
   const dispatch = useDispatch();
 
   const openImageLibrary = async () => {
@@ -37,8 +41,22 @@ const CurrentHairImage = ({ uploadImages, setUploadImages }) => {
   };
 
   useEffect(() => {
-    if(sharedMedia !== null){
-      setUploadImages([...uploadImages, {img_url: sharedMedia?.img_url}])
+    if (image) {
+      uploadImageMedia();
+    }
+  }, [image]);
+
+  useEffect(() => {
+    if (sharedMedia !== null) {
+      const findImage = uploadImages.find(
+        (image) => image.img_url === sharedMedia.img_url
+      );
+      if (!findImage) {
+        setUploadImages([...uploadImages, { img_url: sharedMedia?.img_url }]);
+      }
+      setTimeout(() => {
+        setImage();
+      }, 2000);
     }
   }, [sharedMedia]);
 
@@ -53,7 +71,7 @@ const CurrentHairImage = ({ uploadImages, setUploadImages }) => {
           {image ? (
             <Image
               source={{ uri: image }}
-              style={{ width: "100%", height: 200 }}
+              style={{ width: "100%", height: 192, marginBottom: 15 }}
               resizeMode="cover"
             />
           ) : (
@@ -64,7 +82,7 @@ const CurrentHairImage = ({ uploadImages, setUploadImages }) => {
             </View>
           )}
         </TouchableOpacity>
-        {image ? (
+        {/* {image ? (
           <View style={tw`my-5 flex flex-col justify-end items-end`}>
             <Button
               title="Click to Upload"
@@ -90,7 +108,7 @@ const CurrentHairImage = ({ uploadImages, setUploadImages }) => {
               titleStyle={{ fontSize: 14, color: "#000" }}
             />
           </View>
-        ) : null}
+        ) : null} */}
       </View>
     </View>
   );

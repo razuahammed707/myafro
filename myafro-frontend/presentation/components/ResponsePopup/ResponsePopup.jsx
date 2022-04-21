@@ -19,7 +19,7 @@ import Loader from "../Loader/Loader";
 import ReviewPopup from "../../screens/Bookings/userComponents/ReviewPopup";
 import { useNavigation } from "@react-navigation/native";
 
-const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
+const ResponsePopup = ({ bookingInfo, bookingConfirmation, style }) => {
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
   const [assets, setAssets] = useState(null);
@@ -92,7 +92,7 @@ const ResponsePopup = ({ bookingInfo, bookingConfirmation }) => {
   // console.log(createBookingData)
 
   return (
-    <View style={tw`absolute bottom--2 left-5`}>
+    <View style={ style ? style : tw`w-50`}>
       <View style={tw`flex flex-row items-center justify-between my-3`}>
         <TouchableOpacity style={tw`flex flex-row items-center z-50`}>
           <View style={tw`w-full`}>

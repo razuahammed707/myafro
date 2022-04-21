@@ -227,8 +227,10 @@ const CurrentHair = () => {
                         padding: 15,
                         // borderRadius: 10,
                         width: "100%",
-                        borderTopRightRadius: 15,
-                        borderBottomLeftRadius: 15,
+                        borderTopRightRadius: 20,
+                          borderTopLeftRadius: 20,
+                          // borderRadius:15,
+                          borderBottomLeftRadius: 20,
                       }}
                     >
                       <Text style={tw`text-black text-lg w-60 text-base`}>
@@ -269,8 +271,10 @@ const CurrentHair = () => {
                       style={{
                         backgroundColor: "#DCDCDC",
                         padding: 15,
-                        borderTopLeftRadius: 15,
-                        borderBottomRightRadius: 15,
+                        borderTopRightRadius: 20,
+                          borderTopLeftRadius: 20,
+                          // borderRadius:15,
+                          borderBottomLeftRadius: 20,
                         width: "100%",
                       }}
                     >

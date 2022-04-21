@@ -45,8 +45,7 @@ const UserMediaCarousel = ({singleBooking, singleBookedSalon}) => {
   }, []);
 
   const keyExtractor = (item) => item._id;
-
-  console.log(singleBookedSalon?.current_hair[0]._id)
+  
   return (
       <SafeAreaView style={{ flex:1 }}>
         <StatusBar translucent backgroundColor="transparent" />

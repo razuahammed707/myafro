@@ -75,7 +75,6 @@ const BookingConfirmation = () => {
 
   return (
     <SafeAreaView style={tw`p-5 relative w-full z-40`}>
-      <ResponsePopup bookingConfirmation="confirmation" />
       <View style={tw`h-full`}>
         <View style={tw`mb-10`}>
           <View style={tw`flex flex-row`}>
@@ -168,7 +167,9 @@ const BookingConfirmation = () => {
             </View>
           </ScrollView>
         </View>
+        <ResponsePopup bookingConfirmation="confirmation" style={{position:"absolute", bottom:0}} />
       </View>
+      
       <Loader loading={isFetching || isFetchingMedia} />
     </SafeAreaView>
   );

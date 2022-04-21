@@ -62,7 +62,7 @@ const BookedSalon = () => {
     getToken();
   }, [singleBookedSalon]);
 
-  console.log(singleBookedSalon)
+  console.log(singleBookedSalon);
 
   useEffect(() => {
     dispatch(
@@ -89,7 +89,8 @@ const BookedSalon = () => {
   }, []);
 
   return (
-    <SafeAreaView style={tw`p-5 relative h-full bg-white`}>
+    <>
+    <SafeAreaView style={tw`relative h-full m-5`}>
       <View style={tw`flex flex-row`}>
         <Icon
           name="arrow-left"
@@ -102,16 +103,18 @@ const BookedSalon = () => {
       </View>
       {singleBookedSalon?._id && (
         <>
-        <View style={{height:200}}>
-        <UserMediaCarousel singleBookedSalon={singleBookedSalon}/>
-        </View>
+          <View style={{ height: 200 }}>
+            <UserMediaCarousel singleBookedSalon={singleBookedSalon} />
+          </View>
           <View style={tw`mb-5 flex`}>
             {/* <Image
               style={{ width: "100%" }}
               source={require("../../../../assets/img/current.png")}
             /> */}
-           
-            <View style={tw`mt-5 flex flex-row items-start justify-between`}>
+
+            <View
+              style={tw` flex flex-row items-start justify-between items-baseline`}
+            >
               {singleBookedSalon?.status === "pending" ? (
                 <View style={tw`px-5 py-2 border border-pink-500 rounded-lg`}>
                   <Text style={tw`text-base text-pink-500`}>Pending</Text>
@@ -139,7 +142,7 @@ const BookedSalon = () => {
                 </Text>
               ) : (
                 <View style={tw`flex flex-col justify-end items-end`}>
-                  <Button
+                  {/* <Button
                     title="Click to Upload"
                     buttonStyle={{
                       paddingHorizontal: 20,
@@ -161,15 +164,19 @@ const BookedSalon = () => {
                     }
                     iconPosition="left"
                     titleStyle={{ fontSize: 14, color: "#000" }}
-                  />
+                  /> */}
                 </View>
               )}
+              {singleBookedSalon?.status !== "cancel" &&
+                singleBookedSalon?.status !== "complete" && (
+                  <ResponsePopup bookingInfo={singleBookedSalon} />
+                )}
             </View>
 
             {/* Message section start */}
             <Text style={tw`font-bold text-lg mt-2`}>Messages</Text>
             <ScrollView
-              style={tw`h-70 `}
+              style={tw`h-80 `}
               ref={scrollViewRef}
               showsVerticalScrollIndicator={false}
               onContentSizeChange={() =>
@@ -185,8 +192,10 @@ const BookedSalon = () => {
                           backgroundColor: "#f3e6e3",
                           padding: 15,
                           width: "100%",
-                          borderTopRightRadius: 15,
-                          borderBottomLeftRadius: 15,
+                          borderTopRightRadius: 20,
+                          borderTopLeftRadius: 20,
+                          // borderRadius:15,
+                          borderBottomLeftRadius: 20,
                         }}
                       >
                         <Text style={tw`text-black text-lg w-60 text-base`}>
@@ -205,8 +214,10 @@ const BookedSalon = () => {
                         style={{
                           backgroundColor: "#DCDCDC",
                           padding: 15,
-                          borderTopLeftRadius: 15,
-                          borderBottomRightRadius: 15,
+                          borderTopRightRadius: 20,
+                          borderTopLeftRadius: 20,
+                          // borderRadius:15,
+                          borderBottomLeftRadius: 20,
                           width: "100%",
                         }}
                       >
@@ -231,75 +242,74 @@ const BookedSalon = () => {
         </>
       )}
       {/* <View style={tw`bg-green-400`}> */}
-      {singleBookedSalon?.status !== "cancel" &&
-        singleBookedSalon?.status !== "complete" && (
-          <View
-            style={tw`absolute w-full bottom-0 left-5 z-50 bg-white h-40 pt-3`}
-          >
-            <View
-              style={{
-                backgroundColor: "lightgray",
-                borderBottomColor: "#000000",
-                borderRadius: 10,
-                width: "80%",
-              }}
-            >
-              <TextInput
-                style={styles.input}
-                placeholder="Type a message"
-                multiline={true}
-                onChangeText={(text) => setCreateMessage(text)}
-                numberOfLines={2}
-              />
-            </View>
-            <View style={tw`absolute right--1 top--1 pt-3`}>
-              {/* <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/> */}
-              <Button
-                buttonStyle={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 14,
-                }}
-                type="clear"
-                icon={
-                  <Icon
-                    name="send"
-                    type="feather"
-                    size={20}
-                    color="#fff"
-                    style={tw`mr-2`}
-                  />
-                }
-                iconPosition="left"
-                titleStyle={{ fontSize: 14 }}
-                onPress={() => {
-                  dispatch(createMessageToSend(assets));
-                  assets !== null && dispatch(getMessages(assets));
-                }}
-              />
-            </View>
-          </View>
-        )}
-      {singleBookedSalon?.status !== "cancel" &&
-        singleBookedSalon?.status !== "complete" && (
-          <ResponsePopup bookingInfo={singleBookedSalon} />
-        )}
+      
+
       {/* </View> */}
     </SafeAreaView>
+    {singleBookedSalon?.status !== "cancel" &&
+    singleBookedSalon?.status !== "complete" && (
+      <View style={tw`absolute w-full bottom-0 left-0 z-50 bg-gray-100 h-25  p-5`}>
+        <View
+          style={{
+            backgroundColor: "lightgray",
+            borderBottomColor: "#000000",
+            borderRadius: 10,
+            width: "80%",
+          }}
+        >
+          <TextInput
+            style={styles.input}
+            placeholder="Type a message"
+            multiline={true}
+            value={createMessage}
+            onChangeText={(text) => setCreateMessage(text)}
+            numberOfLines={2}
+          />
+        </View>
+        <View style={tw`absolute right--1 top--1 p-5`}>
+          {/* <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/> */}
+          <Button
+            buttonStyle={{
+              paddingHorizontal: 16,
+              paddingVertical: 14,
+            }}
+            type="clear"
+            icon={
+              <Icon
+                name="send"
+                type="feather"
+                size={20}
+                color="#fff"
+                style={tw`mr-2`}
+              />
+            }
+            iconPosition="left"
+            titleStyle={{ fontSize: 14 }}
+            onPress={() => {
+              setCreateMessage("");
+              dispatch(createMessageToSend(assets));
+              assets !== null && dispatch(getMessages(assets));
+            }}
+          />
+        </View>
+      </View>
+    )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  box: {
-    width: 300,
-    height: 300,
-    backgroundColor: "red",
-    marginBottom: 30,
-  },
+  // screen: {
+  //   flex: 1,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  // box: {
+  //   width: 300,
+  //   height: 300,
+  //   backgroundColor: "red",
+  //   marginBottom: 30,
+  // },
   text: {
     fontSize: 30,
   },
