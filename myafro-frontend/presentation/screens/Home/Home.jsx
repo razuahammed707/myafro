@@ -169,7 +169,7 @@ const Home = () => {
                           height: 190,
                           resizeMode: "cover",
                         }}
-                        source={{ uri: item?.cover }}
+                        source={{ uri: item?.media[0]?.img_url ? item?.media[0]?.img_url : item?.cover }}
                       />
                       <View style={tw`flex flex-row absolute top-0 left-1`}>
                         <View

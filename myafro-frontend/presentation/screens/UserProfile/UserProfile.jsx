@@ -19,13 +19,14 @@ import {
   userProfileSelector,
 } from "../../../redux/slices/user/userProfileSlice";
 import Loader from "../../components/Loader/Loader";
-import BookingHistory from "./BookingHistory";
+import ProfileImageUploader from "../../components/ProfileImageUploader/ProfileImageUploader";
 
 const UserProfile = () => {
   const navigation = useNavigation();
   const [assets, setAssets] = useState(null);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [uploadImage, setUploadImage] = useState("")
   const { userInfo, updateUserData, isSuccess, isFetching } =
     useSelector(userProfileSelector);
   const dispatch = useDispatch();
@@ -54,9 +55,10 @@ const UserProfile = () => {
         ...updateUserData,
         full_name: name || userInfo?.full_name,
         address: address || userInfo?.address,
+        profile: uploadImage || userInfo?.profile,
       })
     );
-  }, [name, address]);
+  }, [name, address, uploadImage]);
 
   useLayoutEffect(() => {
     getToken();
@@ -66,7 +68,7 @@ const UserProfile = () => {
     assets !== null && dispatch(getUser(assets));
   }, [assets]);
 
-  // console.log(updateUserData);
+  console.log(updateUserData);
 
   return (
     <SafeAreaView>
@@ -78,16 +80,10 @@ const UserProfile = () => {
             style={tw`flex flex-row items-center`}
             onPress={() => navigation.goBack()}
           >
-           <Icon name="arrow-left" type="feather" size={20} color="black" />
+            <Icon name="arrow-left" type="feather" size={20} color="black" />
             <Text style={tw`text-base font-bold ml-2`}>Back</Text>
           </TouchableOpacity>
           <Text style={tw`text-base font-bold`}>Profile</Text>
-          {/* <TouchableOpacity
-              style={tw`text-base font-bold`}
-              onPress={() => dispatch(updateUser(assets))}
-            >
-             <Text style={tw`text-base font-bold`}>Save</Text>
-            </TouchableOpacity> */}
           <Button
             title="Save"
             type="clear"
@@ -98,35 +94,37 @@ const UserProfile = () => {
             icon={<Icon name="edit-2" type="feather" size={20} color="#fff" />}
             iconPosition="left"
             onPress={() => {
-              dispatch(updateUser(assets))
+              dispatch(updateUser(assets));
               toggleOverlay();
             }}
           />
-          {isSuccess && !isFetching && <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
-            <View style={styles.container}>
-              <Text style={styles.textPrimary}>
-                Profile is updated successful
-              </Text>
-              <Icon
-                name="check-circle"
-                type="feather"
-                size={40}
-                color="green"
+          {isSuccess && !isFetching && (
+            <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+              <View style={styles.container}>
+                <Text style={styles.textPrimary}>
+                  Profile is updated successful
+                </Text>
+                <Icon
+                  name="check-circle"
+                  type="feather"
+                  size={40}
+                  color="green"
+                />
+              </View>
+              <Button
+                title="Close"
+                type="clear"
+                buttonStyle={{
+                  backgroundColor: "green",
+                }}
+                titleStyle={{ marginLeft: 10 }}
+                onPress={() => {
+                  toggleOverlay();
+                  navigation.navigate("Home");
+                }}
               />
-            </View>
-            <Button
-              title="Close"
-              type="clear"
-              buttonStyle={{
-                backgroundColor: "green",
-              }}
-              titleStyle={{ marginLeft: 10 }}
-              onPress={() => {
-                toggleOverlay();
-                navigation.navigate("Home");
-              }}
-            />
-          </Overlay>}
+            </Overlay>
+          )}
         </View>
         <View style={tw`mb-5 h-full`}>
           <View
@@ -137,11 +135,7 @@ const UserProfile = () => {
               position: "relative",
             }}
           >
-            <Avatar
-              size={64}
-              rounded
-              source={require("../../../assets/img/1.png")}
-            />
+            <ProfileImageUploader setUploadImage={setUploadImage}/>
             <View style={tw`absolute bottom-6 z-10 left-15`}>
               <Icon name="edit-2" type="feather" size={16} color="white" />
             </View>
@@ -198,7 +192,6 @@ const UserProfile = () => {
               />
             </View>
           </View>
-          {/* <BookingHistory /> */}
         </View>
       </View>
       <Loader loading={isFetching} />

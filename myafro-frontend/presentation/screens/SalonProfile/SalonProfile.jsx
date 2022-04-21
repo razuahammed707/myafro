@@ -11,6 +11,7 @@ import {
   createSalon,
   getLoggedInUser,
   getSalon,
+  getValues,
   salonSelector,
   updateSalon,
 } from "../../../redux/slices/salon/salonSlice";
@@ -20,13 +21,14 @@ import { serviceSelector } from "../../../redux/slices/salon/serviceSlice";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { getBookings } from "../../../redux/slices/booking/bookingSlice";
 import { mediaSelector } from "../../../redux/slices/salon/mediaSlice";
+import ProfileImageUploader from "../../components/ProfileImageUploader/ProfileImageUploader";
 
 const SalonProfile = () => {
   const [salonAssets, setSalonAssets] = useState({});
   const navigation = useNavigation();
-  const router = useRoute()
+  const [uploadImage, setUploadImage] = useState("");
 
-  const { userData, hairDresserData, isFetching, isSuccess, message } =
+  const { userData, hairDresserData, isFetching, isSuccess, updateSalonData } =
     useSelector(salonSelector);
   const { isFetchingService } = useSelector(serviceSelector);
   const { isFetchingMedia } = useSelector(mediaSelector);
@@ -58,11 +60,18 @@ const SalonProfile = () => {
     getToken();
   }, []);
 
-  console.log(data?.salon?._id)
-
   useEffect(() => {
     salonAssets.token && dispatch(getSalon(salonAssets?.token));
   }, [isSuccess, isFetchingService, isFetchingMedia, salonAssets.token]);
+
+  useEffect(() => {
+    dispatch(getValues({
+      ...updateSalonData,
+      cover: uploadImage || hairDresserData?.cover,
+    }))
+  }, [uploadImage]);
+
+  console.log(uploadImage)
 
   return (
     <>
@@ -160,11 +169,7 @@ const SalonProfile = () => {
               position: "relative",
             }}
           >
-            <Avatar
-              size={64}
-              rounded
-              source={require("../../../assets/img/1.png")}
-            />
+            <ProfileImageUploader setUploadImage={setUploadImage}/>
             <View style={tw`absolute bottom-6 z-10 left-15`}>
               <Icon name="edit-2" type="feather" size={16} color="white" />
             </View>

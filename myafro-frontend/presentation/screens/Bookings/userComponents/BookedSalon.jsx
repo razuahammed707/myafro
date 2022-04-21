@@ -28,6 +28,7 @@ import {
   reviewSelector,
 } from "../../../../redux/slices/reviews/reviewSlice";
 import moment from "moment";
+import UserMediaCarousel from "../../CurrentHair/components/UserMediaCarousel";
 
 const BookedSalon = () => {
   const [createMessage, setCreateMessage] = useState("");
@@ -61,6 +62,8 @@ const BookedSalon = () => {
     getToken();
   }, [singleBookedSalon]);
 
+  console.log(singleBookedSalon)
+
   useEffect(() => {
     dispatch(
       getMessageToSend({
@@ -85,9 +88,6 @@ const BookedSalon = () => {
     // creds !== null && dispatch(getMessages(creds));
   }, []);
 
-  console.log(getMessagesData);
-  console.log(assets);
-
   return (
     <SafeAreaView style={tw`p-5 relative h-full bg-white`}>
       <View style={tw`flex flex-row`}>
@@ -102,11 +102,15 @@ const BookedSalon = () => {
       </View>
       {singleBookedSalon?._id && (
         <>
+        <View style={{height:200}}>
+        <UserMediaCarousel singleBookedSalon={singleBookedSalon}/>
+        </View>
           <View style={tw`mb-5 flex`}>
-            <Image
+            {/* <Image
               style={{ width: "100%" }}
               source={require("../../../../assets/img/current.png")}
-            />
+            /> */}
+           
             <View style={tw`mt-5 flex flex-row items-start justify-between`}>
               {singleBookedSalon?.status === "pending" ? (
                 <View style={tw`px-5 py-2 border border-pink-500 rounded-lg`}>
@@ -180,7 +184,6 @@ const BookedSalon = () => {
                         style={{
                           backgroundColor: "#f3e6e3",
                           padding: 15,
-                          // borderRadius: 10,
                           width: "100%",
                           borderTopRightRadius: 15,
                           borderBottomLeftRadius: 15,
@@ -191,35 +194,13 @@ const BookedSalon = () => {
                         </Text>
                       </View>
                       <Text style={tw`mt-1 text-gray-400`}>
-                        {" "}
                         {moment(getMessagesData?.createdAt)
                           .startOf("hour")
                           .fromNow()}
                       </Text>
-                      {/* <Text>{message?.createdAt}</Text> */}
-                      {/* <View>
-                        <Image
-                          style={{
-                            width: 36,
-                            height: 36,
-                          }}
-                          source={require("../../../../assets/img/profile.png")}
-                          resizeMode="contain"
-                        />
-                      </View> */}
                     </View>
                   ) : (
                     <View style={tw` mt-2`}>
-                      {/* <View>
-                        <Image
-                          style={{
-                            width: 36,
-                            height: 36,
-                          }}
-                          source={require("../../../../assets/img/profile.png")}
-                          resizeMode="contain"
-                        />
-                      </View> */}
                       <View
                         style={{
                           backgroundColor: "#DCDCDC",
@@ -245,10 +226,6 @@ const BookedSalon = () => {
                   )}
                 </View>
               ))}
-
-              {/* Message section end */}
-
-              {/* Message section start */}
             </ScrollView>
           </View>
         </>
