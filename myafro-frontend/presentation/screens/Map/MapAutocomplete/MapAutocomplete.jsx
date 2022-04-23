@@ -79,8 +79,10 @@ const MapAutocomplete = () => {
       );
   }
 
+  useEffect(() => {
+    getCurrentLocation();
+  }, [])
 
-  console.log(currentLocationInfo)
 
   return (
     <SafeAreaView style={tw`p-5 flex flex-row w-full`}>
@@ -155,7 +157,6 @@ const MapAutocomplete = () => {
             onPress={() => {
               getCurrentLocation()
               if(currentAddress !== ""){
-
                 navigation.navigate("SalonMap")
               }
             }}
