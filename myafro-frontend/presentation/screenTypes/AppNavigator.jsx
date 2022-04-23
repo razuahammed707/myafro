@@ -68,7 +68,7 @@ const AppNavigator = ({ data }) => {
         })
       );
     })();
-  }, []);
+  }, [currentAddress]);
 
   let text = "Waiting..";
   if (errorMsg) {

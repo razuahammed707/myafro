@@ -1,12 +1,13 @@
 import {
   Dimensions,
+  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import React, { useEffect } from "react";
-import MapView, { Circle, Marker } from "react-native-maps";
+import MapView, { Callout, Circle, Marker, Polygon, Polyline } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import tw from "twrnc";
 import BottomBar from "../../components/BottomBar/BottomBar";
@@ -19,40 +20,62 @@ import {
   getSingleSalonInfo,
   userHomeSelector,
 } from "../../../redux/slices/user/userHomeSlice";
+import HomeTabs from "../Home/components/HomeTabs/HomeTabs";
 
 const GoogleMap = () => {
   const { locationInfo, currentLocationInfo } = useSelector(mapSelector);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { salons } = useSelector(userHomeSelector);
-
-  const origin = {
-    latitude: currentLocationInfo?.coordinates?.latitude,
-    longitude: currentLocationInfo?.coordinates?.longitude,
-  };
-  const GOOGLE_MAPS_APIKEY = "AIzaSyBtm4Ahlay8ohFLRwYNSMQ1JAd3Q4rqmig";
-
-  let destinationRequest = salons
-    .map((salon) => {
-      return salon?.location.name;
-    })
-    .join("|");
+  const mapRef = React.createRef();
 
   useEffect(() => {
-    const getDistance = async () => {
-      fetch(
-        `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${currentLocationInfo?.formatted_address}&destinations=${destinationRequest}&key=${GOOGLE_MAPS_APIKEY}`
-      )
-        .then((res) => res.json())
-        .then((data) => console.log(data));
-    };
-    getDistance();
-  }, [origin, GOOGLE_MAPS_APIKEY]);
+    mapRef.current.animateCamera({
+      center: {
+        latitude: currentLocationInfo?.coordinates?.latitude,
+        longitude: currentLocationInfo?.coordinates?.longitude,
+      },
+    });
+  }, []);
+
+  // const origin = {
+  //   latitude: currentLocationInfo?.coordinates?.latitude,
+  //   longitude: currentLocationInfo?.coordinates?.longitude,
+  // };
+  // const GOOGLE_MAPS_APIKEY = "AIzaSyBtm4Ahlay8ohFLRwYNSMQ1JAd3Q4rqmig";
+
+  // let destinationRequest = salons
+  //   .map((salon) => {
+  //     return salon?.location.name;
+  //   })
+  //   .join("|");
+
+  // useEffect(() => {
+  //   const getDistance = async () => {
+  //     fetch(
+  //       `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${currentLocationInfo?.formatted_address}&destinations=${destinationRequest}&key=${GOOGLE_MAPS_APIKEY}`
+  //     )
+  //       .then((res) => res.json())
+  //       .then((data) => console.log(data));
+  //   };
+  //   getDistance();
+  // }, [origin, GOOGLE_MAPS_APIKEY]);
+  // let coordsLocation = [];
+  // const salonLocations = salons.map((salon) =>
+  //   coordsLocation.push({
+  //     latitude: Number(salon.location.coordinates?.split(",")[0]),
+  //     longitude: Number(salon.location.coordinates?.split(",")[1]),
+  //   })
+  // );
+
+  // console.log(coordsLocation);
+  console.log(currentLocationInfo)
 
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <MapView
         style={styles.map}
+        ref={mapRef}
         loadingEnabled={true}
         // mapType="mutedStandard"
         initialRegion={{
@@ -69,6 +92,7 @@ const GoogleMap = () => {
         focusable={true}
         showsBuildings={true}
       >
+        {/* <Polyline coordinates={coordsLocation} /> */}
         {salons?.map((salon) => (
           <View key={salon?._id}>
             {/* <MapViewDirections
@@ -84,6 +108,7 @@ const GoogleMap = () => {
               strokeWidth={3}
               strokeColor="black"
             /> */}
+
             <Marker
               key={salon?._id}
               onPress={() => {
@@ -94,9 +119,20 @@ const GoogleMap = () => {
                 latitude: Number(salon?.location?.coordinates?.split(",")[0]),
                 longitude: Number(salon?.location?.coordinates?.split(",")[1]),
               }}
-              title={salon?.location?.name}
+              // title={salon?.location?.name}
               pinColor="tomato"
-            />
+            >
+              <Callout>
+                <View style={tw`w-50`}>
+                  <Image
+                    style={{ width: 100, height: 100 }}
+                    resizeMode="cover"
+                    source={{ uri: salon?.media[0]?.img_url }}
+                  />
+                  <Text style={tw`mt-2`}>{salon?.location?.name}</Text>
+                </View>
+              </Callout>
+            </Marker>
           </View>
         ))}
       </MapView>
@@ -115,11 +151,11 @@ const GoogleMap = () => {
               onPress={() => navigation.navigate("MapAutocomplete")}
               style={tw`ml-3`}
             >
-              {!locationInfo?.name ? (
-                <Text style={tw`text-sm font-semibold`}>Current Location</Text>
+              {currentLocationInfo?.formatted_address ? (
+                <Text style={tw`text-sm font-semibold`}>{currentLocationInfo?.formatted_address}</Text>
               ) : (
                 <Text style={tw`text-sm font-semibold`}>
-                  {locationInfo?.name}
+                  {currentLocationInfo?.name}
                 </Text>
               )}
               <Text style={tw`text-sm text-gray-600`}>NO</Text>
@@ -136,6 +172,10 @@ const GoogleMap = () => {
         </View>
       </View>
       <BottomBar />
+      {/* <View style={tw`absolute bottom-0 left-0 right-0`}>
+
+      <HomeTabs />
+      </View> */}
       <View style={{ position: "absolute", bottom: 100, width: "100%" }}>
         <View style={tw`flex flex-row justify-center w-full`}>
           <Button

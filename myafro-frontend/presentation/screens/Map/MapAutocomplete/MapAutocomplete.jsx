@@ -5,6 +5,8 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import Constants from "expo-constants";
+import * as Location from "expo-location";
 import React, { useEffect, useState } from "react";
 import tw from "twrnc";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -27,6 +29,7 @@ const MapAutocomplete = () => {
   const navigation = useNavigation();
   const router = useRoute();
   const [isSearch, setIsSearch] = useState({});
+  const [currentAddress, setCurrentAddress] = useState("");
   const { locationInfo, currentLocationInfo } = useSelector(mapSelector);
   const { data } = useSelector(authSelector);
   const { updateSalonData, hairDresserData } = useSelector(salonSelector);
@@ -48,22 +51,48 @@ const MapAutocomplete = () => {
     );
   }, [locationInfo]);
 
+  const getCurrentLocation = async () => {
+ 
+      if (Platform.OS === "android" && !Constants.isDevice) {
+        alert(
+          "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
+        );
+        return;
+      }
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        alert("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      let response = await Location.reverseGeocodeAsync(location?.coords);
+      for (let item of response) {
+        let address = `${item.street}, ${item.streetNumber}, ${item.city}, ${item.country}`;
+        setCurrentAddress(address);
+      }
+      dispatch(
+        getCurrentLocationInfo({
+          coordinates: location?.coords,
+          name: currentAddress,
+        })
+      );
+  }
+
+
+  console.log(currentLocationInfo)
+
   return (
     <SafeAreaView style={tw`p-5 flex flex-row w-full`}>
-      {hairDresserData?.user?.role === "hair_dresser" && router.name !== "SalonProfile" ? (
+      {hairDresserData?.user?.role === "hair_dresser" &&
+      router.name !== "SalonProfile" ? (
         <>
           <GooglePlacesAutocomplete
             disableScroll={true}
-            placeholder={hairDresserData?.location?.name}
+            placeholder={currentLocationInfo?.formatted_address || currentLocationInfo?.name}
             onPress={(data, details = null) => {
-              if (locationInfo?.name) {
-                dispatch(getLocationInfo({}));
-                dispatch(getLocationInfo(details));
-                navigation.navigate("SalonMap");
-              } else {
-                dispatch(getLocationInfo(details));
-                navigation.navigate("SalonMap");
-              }
+              dispatch(getCurrentLocationInfo(details));
+              navigation.navigate("SalonMap");
             }}
             query={{
               key: "AIzaSyBtm4Ahlay8ohFLRwYNSMQ1JAd3Q4rqmig",
@@ -78,7 +107,7 @@ const MapAutocomplete = () => {
                 flex: 1,
                 width: "80%",
                 marginRight: 5,
-                marginTop:20,
+                marginTop: 20,
                 padding: 0,
               },
               textInput: {
@@ -123,7 +152,13 @@ const MapAutocomplete = () => {
             }}
           />
           <TouchableOpacity
-            onPress={() => navigation.navigate("SalonMap")}
+            onPress={() => {
+              getCurrentLocation()
+              if(currentAddress !== ""){
+
+                navigation.navigate("SalonMap")
+              }
+            }}
             style={tw`flex flex-row items-center px-5 rounded-lg bg-white h-11`}
           >
             <Icon name="my-location" type="material" size={20} color="#222" />
@@ -133,10 +168,10 @@ const MapAutocomplete = () => {
         <>
           <GooglePlacesAutocomplete
             disableScroll={true}
-            placeholder={currentLocationInfo?.name}
+            placeholder={currentLocationInfo?.formatted_address || currentLocationInfo?.name}
             onPress={(data, details = null) => {
               dispatch(getLocationInfo(details));
-              dispatch(getCurrentLocationInfo(details))
+              dispatch(getCurrentLocationInfo(details));
               setIsSearch(details);
               navigation.navigate("Map");
             }}

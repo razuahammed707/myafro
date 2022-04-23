@@ -71,7 +71,7 @@ const SalonProfile = () => {
     }))
   }, [uploadImage]);
 
-  console.log(uploadImage)
+  console.log(salonAssets)
 
   return (
     <>

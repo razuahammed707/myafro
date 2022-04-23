@@ -8,7 +8,7 @@ import {
 import Constants from "expo-constants";
 import * as Location from "expo-location";
 import React, { useEffect, useState } from "react";
-import MapView, { Circle, Marker } from "react-native-maps";
+import MapView, { Callout, Circle, Marker } from "react-native-maps";
 import tw from "twrnc";
 import { Button, Icon } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,138 +27,107 @@ import { authSelector } from "../../../redux/slices/login/authSlice";
 import { bookingSelector } from "../../../redux/slices/booking/bookingSlice";
 
 const SalonMap = () => {
-  const { locationInfo, currentLocationInfo } = useSelector(mapSelector);
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { currentLocationInfo } = useSelector(mapSelector);
   const { isSuccess, updateSalonData, hairDresserData } =
     useSelector(salonSelector);
   const { data } = useSelector(authSelector);
   const { token } = useSelector(bookingSelector);
 
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
+  const mapRef = React.createRef();
+  useEffect(() => {
+    mapRef.current.animateCamera({
+      center: {
+        latitude:
+          currentLocationInfo?.geometry?.location?.lat ||
+          currentLocationInfo?.coordinates?.latitude,
+        longitude:
+          currentLocationInfo?.geometry?.location?.lng ||
+          currentLocationInfo?.coordinates?.longitude,
+      },
+    });
+  }, [currentLocationInfo]);
 
   useEffect(() => {
-    (async () => {
-      if (Platform.OS === "android" && !Constants.isDevice) {
-        setErrorMsg(
-          "Oops, this will not work on Snack in an Android emulator. Try it on your device!"
-        );
-        return;
-      }
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
+    const latitude = String(
+      currentLocationInfo?.geometry?.location?.lat ||
+        currentLocationInfo?.coordinates?.latitude
+    );
+    const longitude = String(
+      currentLocationInfo?.geometry?.location?.lng ||
+        currentLocationInfo?.coordinates?.longitude
+    );
+    const coordinates = latitude + "," + longitude;
+    dispatch(
+      getValues({
+        location: {
+          coordinates: coordinates,
+          name:
+            currentLocationInfo?.formatted_address || currentLocationInfo?.name,
+        },
+      })
+    );
+  }, [currentLocationInfo]);
 
-      let location = await Location.getCurrentPositionAsync({});
-      let name = await Location.reverseGeocodeAsync({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
-      setLocation(location);
-      dispatch(
-        getCurrentLocationInfo({
-          coordinates: location?.coords,
-          name: name[0]?.city,
-        })
-      );
-      const latitude = String(location?.coords.latitude);
-      const longitude = String(location?.coords.longitude);
-      const coordinates = latitude + "," + longitude;
-      dispatch(
-        getValues({
-          location: {
-            coordinates: coordinates,
-            name: name[0]?.city,
-          },
-        })
-      );
-    })();
-  }, []);
+  console.log(currentLocationInfo)
 
-  let text = "Waiting..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-    // console.log(text)
-  }
-
-  console.log(updateSalonData);
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <MapView
         style={styles.map}
+        ref={mapRef}
         loadingEnabled={true}
         // mapType="mutedStandard"
         initialRegion={{
           latitude:
-            hairDresserData?.location?.coordinates !== ""
-              ? Number(hairDresserData?.location?.coordinates.split(",")[0])
-              : locationInfo?.geometry?.location?.lat
-              ? locationInfo?.geometry?.location?.lat
-              : currentLocationInfo?.coordinates?.latitude,
+            currentLocationInfo?.geometry?.location?.lat ||
+            currentLocationInfo?.coordinates?.latitude,
           longitude:
-            hairDresserData?.location?.coordinates !== ""
-              ? Number(hairDresserData?.location?.coordinates.split(",")[1])
-              : locationInfo.geometry?.location?.lng
-              ? locationInfo.geometry?.location?.lng
-              : currentLocationInfo?.coordinates?.longitude,
+            currentLocationInfo?.geometry?.location?.lng ||
+            currentLocationInfo?.coordinates?.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        mapType="standard"
+        mapType="mutedStandard"
         focusable={true}
         showsBuildings={true}
       >
-        {hairDresserData?.location?.coordinates !== "" && !locationInfo?.name ? (
-          <Marker
-            key={locationInfo?.place_id}
-            coordinate={{
-              latitude: Number(hairDresserData?.location?.coordinates.split(",")[0]),
-              longitude: Number(hairDresserData?.location?.coordinates.split(",")[1]),
-            }}
-            title={hairDresserData?.location?.name}
-            pinColor="tomato"
-          />
-        ) : currentLocationInfo?.coordinates && !locationInfo.name ? (
-          <Marker
-            // key={locationInfo?.place_id}
-            coordinate={{
-              latitude: currentLocationInfo?.coordinates?.latitude,
-              longitude: currentLocationInfo?.coordinates?.longitude,
-            }}
-            title={currentLocationInfo.name}
-            pinColor="tomato"
-          />
-        ) : locationInfo?.geometry?.location &&
-          (
-            <Marker
-              // key={locationInfo?.place_id}
-              coordinate={{
-                latitude: locationInfo?.geometry?.location?.lat,
-                longitude: locationInfo?.geometry?.location?.lng,
-              }}
-              title={locationInfo?.name}
-              pinColor="tomato"
-            />
-          )
-        }
-        {/* {mapMarkers()} */}
-        {/* {locationInfo?.geometry?.location && (
-          <Circle
-            center={{
-              latitude: locationInfo?.geometry?.location?.lat,
-              longitude: locationInfo.geometry?.location?.lng,
-            }}
-            radius={100}
-            lineJoin="bevel"
-            strokeColor="#222"
-          />
-        )} */}
+        <Marker
+          // key={locationInfo?.place_id}
+          coordinate={{
+            latitude:
+              currentLocationInfo?.geometry?.location?.lat ||
+              currentLocationInfo?.coordinates?.latitude,
+            longitude:
+              currentLocationInfo?.geometry?.location?.lng ||
+              currentLocationInfo?.coordinates?.longitude,
+          }}
+          // title={currentLocationInfo.name || currentLocationInfo.formatted_address}
+          pinColor="tomato"
+        >
+          <Callout>
+            <View style={tw`w-50 flex flex-row items-center justify-center`}>
+              <Text style={tw`mt-2`}>
+                {currentLocationInfo.name ||
+                  currentLocationInfo.formatted_address}
+              </Text>
+            </View>
+          </Callout>
+        </Marker>
+        <Circle
+          center={{
+            latitude:
+              currentLocationInfo?.geometry?.location?.lat ||
+              currentLocationInfo?.coordinates?.latitude,
+            longitude:
+              currentLocationInfo.geometry?.location?.lng ||
+              currentLocationInfo?.coordinates?.longitude,
+          }}
+          radius={100}
+          lineJoin="bevel"
+          strokeColor="#222"
+        />
       </MapView>
       <View style={tw`absolute top-5 w-full`}>
         <View
@@ -175,13 +144,13 @@ const SalonMap = () => {
               onPress={() => navigation.navigate("MapAutocomplete")}
               style={tw`ml-3`}
             >
-              {!locationInfo?.name && !hairDresserData?.location?.name ? (
-                <Text style={tw`text-sm font-semibold`}>Current Location</Text>
+              {currentLocationInfo?.formatted_address ? (
+                <Text style={tw`text-sm font-semibold`}>
+                  {currentLocationInfo?.formatted_address}
+                </Text>
               ) : (
                 <Text style={tw`text-sm font-semibold`}>
-                  {locationInfo?.name
-                    ? locationInfo?.name
-                    : hairDresserData?.location?.name}
+                  {currentLocationInfo?.name}
                 </Text>
               )}
               <Text style={tw`text-sm text-gray-600`}>NO</Text>
