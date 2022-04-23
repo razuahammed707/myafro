@@ -1,4 +1,10 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import tw from "twrnc";
@@ -16,7 +22,10 @@ import {
   updateSalon,
 } from "../../../redux/slices/salon/salonSlice";
 import Loader from "../../components/Loader/Loader";
-import { authSelector, getTokenValue } from "../../../redux/slices/login/authSlice";
+import {
+  authSelector,
+  getTokenValue,
+} from "../../../redux/slices/login/authSlice";
 import { serviceSelector } from "../../../redux/slices/salon/serviceSlice";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { getBookings } from "../../../redux/slices/booking/bookingSlice";
@@ -28,11 +37,17 @@ const SalonProfile = () => {
   const navigation = useNavigation();
   const [uploadImage, setUploadImage] = useState("");
 
-  const { userData, hairDresserData, isFetching, isSuccess, updateSalonData } =
-    useSelector(salonSelector);
+  const {
+    userData,
+    hairDresserData,
+    isFetching,
+    isSuccess,
+    updateSalonData,
+    authCredentials,
+  } = useSelector(salonSelector);
   const { isFetchingService } = useSelector(serviceSelector);
   const { isFetchingMedia } = useSelector(mediaSelector);
-  const {data} = useSelector(authSelector)
+  const { data } = useSelector(authSelector);
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const toggleOverlay = () => {
@@ -44,9 +59,13 @@ const SalonProfile = () => {
       const userInfo = await AsyncStorage.getItem("user_info");
       if (userInfo) {
         const parsedToken = JSON.parse(userInfo);
+        console.log(parsedToken?.salon?._id);
         setSalonAssets({
           token: parsedToken?.access_token,
-          salonId: data?.salon?._id || hairDresserData?._id,
+          salonId:
+            authCredentials?.salon?._id ||
+            data?.salon?._id ||
+            hairDresserData?._id,
         });
         dispatch(getLoggedInUser(parsedToken?.user?.user));
         dispatch(getTokenValue(parsedToken?.access_token));
@@ -65,13 +84,14 @@ const SalonProfile = () => {
   }, [isSuccess, isFetchingService, isFetchingMedia, salonAssets.token]);
 
   useEffect(() => {
-    dispatch(getValues({
-      ...updateSalonData,
-      cover: uploadImage || hairDresserData?.cover,
-    }))
+    dispatch(
+      getValues({
+        ...updateSalonData,
+        cover: uploadImage || hairDresserData?.cover,
+      })
+    );
   }, [uploadImage]);
-
-  console.log(salonAssets)
+  console.log(salonAssets);
 
   return (
     <>
@@ -109,7 +129,6 @@ const SalonProfile = () => {
               onPress={() => {
                 dispatch(updateSalon(salonAssets));
                 toggleOverlay();
-               
               }}
             />
           ) : (
@@ -135,7 +154,8 @@ const SalonProfile = () => {
             <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
               <View style={styles.container}>
                 <Text style={styles.textPrimary}>
-                  Profile is {hairDresserData?._id ? 'updated' : 'created'} successful
+                  Profile is {hairDresserData?._id ? "updated" : "created"}{" "}
+                  successful
                 </Text>
                 <Icon
                   name="check-circle"
@@ -169,7 +189,7 @@ const SalonProfile = () => {
               position: "relative",
             }}
           >
-            <ProfileImageUploader setUploadImage={setUploadImage}/>
+            <ProfileImageUploader setUploadImage={setUploadImage} />
             <View style={tw`absolute bottom-6 z-10 left-15`}>
               <Icon name="edit-2" type="feather" size={16} color="white" />
             </View>

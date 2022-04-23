@@ -30,6 +30,7 @@ import {
 } from "../../redux/slices/map/mapSlice";
 import MapAutocomplete from "../screens/Map/MapAutocomplete/MapAutocomplete";
 import SalonMap from "../screens/Map/SalonMap";
+import { getAuthCredentials } from "../../redux/slices/salon/salonSlice";
 
 const AppNavigator = ({ data }) => {
   const Stack = createNativeStackNavigator();
@@ -83,6 +84,7 @@ const AppNavigator = ({ data }) => {
       const userInfo = await AsyncStorage.getItem("user_info");
       if (userInfo) {
         const parsedToken = JSON.parse(userInfo);
+        dispatch(getAuthCredentials(parsedToken?.user));
         if (parsedToken?.user?.user?.role === "hair_dresser") {
           navigation.navigate("Tabs");
         } else {

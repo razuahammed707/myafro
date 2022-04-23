@@ -6,6 +6,7 @@ const initialState = {
   isSuccess: false,
   isError: false,
   message: "",
+  authCredentials: null,
   updateSalonData: {},
   hairDresserData: {},
   userData: {},
@@ -44,8 +45,8 @@ export const getSalon = createAsyncThunk(
           authorization: `Bearer ${token}`,
         },
       });
-      console.log("called from upload image")
-      console.log(response?.data)
+      console.log("called from upload image");
+      console.log(response?.data);
       return response?.data?.salon;
     } catch (e) {
       console.log("Error", e.response.data);
@@ -87,13 +88,16 @@ export const salonSlice = createSlice({
         (state.isSuccess = false),
         (state.isError = false),
         (state.message = "");
-        (state.hairDresserData = {})
+      state.hairDresserData = {};
     },
     getValues: (state, action) => {
       state.updateSalonData = action.payload;
     },
     getLoggedInUser: (state, action) => {
       state.userData = action.payload;
+    },
+    getAuthCredentials: (state, { payload }) => {
+      state.authCredentials = payload;
     },
     // getHairDresser: (state, action) => {
     //   state.hairDresserData = action.payload;
@@ -157,6 +161,7 @@ export const salonSlice = createSlice({
   },
 });
 
-export const { resetSalon, getValues, getLoggedInUser } = salonSlice.actions;
+export const { resetSalon, getValues, getLoggedInUser, getAuthCredentials } =
+  salonSlice.actions;
 export const salonSelector = (state) => state.salon;
 export default salonSlice.reducer;
