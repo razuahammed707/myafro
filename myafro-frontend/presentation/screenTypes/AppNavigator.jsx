@@ -23,13 +23,18 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { getTokenValue } from "../../redux/slices/login/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentLocationInfo, getLocationInfo, mapSelector } from "../../redux/slices/map/mapSlice";
+import {
+  getCurrentLocationInfo,
+  getLocationInfo,
+  mapSelector,
+} from "../../redux/slices/map/mapSlice";
 import MapAutocomplete from "../screens/Map/MapAutocomplete/MapAutocomplete";
 import SalonMap from "../screens/Map/SalonMap";
 
 const AppNavigator = ({ data }) => {
   const Stack = createNativeStackNavigator();
   const navigation = useNavigation();
+  const [currentAddress, setCurrentAddress] = useState("");
   // const { locationInfo } = useSelector(mapSelector);
   const dispatch = useDispatch();
   const [location, setLocation] = useState(null);
@@ -50,15 +55,16 @@ const AppNavigator = ({ data }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      let name = await Location.reverseGeocodeAsync({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
+      let response = await Location.reverseGeocodeAsync(location?.coords);
+      for (let item of response) {
+        let address = `${item.street}, ${item.streetNumber}, ${item.city}, ${item.country}`;
+        setCurrentAddress(address);
+      }
       setLocation(location);
       dispatch(
         getCurrentLocationInfo({
           coordinates: location?.coords,
-          name: name[0]?.city,
+          name: currentAddress,
         })
       );
     })();

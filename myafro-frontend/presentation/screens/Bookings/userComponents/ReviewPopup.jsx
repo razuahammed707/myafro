@@ -45,7 +45,7 @@ const ReviewPopup = ({ authToken }) => {
 
   return (
     <View>
-      <View style={tw`my-3`}>
+      <View>
         <Button
           title="Complete Booking"
           type="clear"

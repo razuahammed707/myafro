@@ -105,13 +105,13 @@ const CurrentHair = () => {
           />
           <Text style={tw`font-bold text-lg ml-2`}>Current Hair</Text>
         </View>
-        <View style={tw`mt-5`}>
+        <View style={tw`mt-2`}>
           {/* <Image
             style={{ width: "100%" }}
             source={require("../../../assets/img/current.png")}
           /> */}
           <UserMediaCarousel singleBooking={singleBooking}/>
-          <View style={tw`mt-5`}>
+          <View style={tw`mt-2`}>
             {singleBooking?.status === "cancel" ? (
               <View style={tw`flex flex-row justify-center`}>
                 <Text style={tw`text-xl text-red-800`}>
@@ -210,7 +210,7 @@ const CurrentHair = () => {
           {/* Message section start */}
           <Text style={tw`font-bold text-lg my-2`}>Messages</Text>
           <ScrollView
-            style={tw`h-70 `}
+            style={tw`h-80`}
             ref={scrollViewRef}
             showsVerticalScrollIndicator={false}
             onContentSizeChange={() =>
@@ -305,7 +305,7 @@ const CurrentHair = () => {
         {singleBooking?.status !== "cancel" &&
             singleBooking?.status !== "complete" && (
               <View
-                style={tw`absolute w-full bottom-0 left-5 z-50 bg-white h-30 pt-3`}
+                style={tw`absolute w-full bottom-0 left-5 z-50 bg-white h-20`}
               >
                 <View
                   style={{
@@ -318,12 +318,13 @@ const CurrentHair = () => {
                   <TextInput
                     style={styles.input}
                     placeholder="Type a message"
+                    value={createMessage}
                     // multiline={true}
                     onChangeText={(text) => setCreateMessage(text)}
                     // numberOfLines={2}
                   />
                 </View>
-                <View style={tw`absolute right--1 top--2 pt-3`}>
+                <View style={tw`absolute right--1 top--2`}>
                   {/* <UserMessagePopup onPress={() => dispatch(createMessageToSend(assets))} getUpdatedBookings= {() => dispatch(getBookingsByUser(assets))}/> */}
                   <Button
                     buttonStyle={{
@@ -343,6 +344,7 @@ const CurrentHair = () => {
                     iconPosition="left"
                     titleStyle={{ fontSize: 14 }}
                     onPress={() => {
+                      setCreateMessage("")
                       dispatch(createMessageToSend(assets));
                       assets !== null && dispatch(getMessages(assets));
                     }}

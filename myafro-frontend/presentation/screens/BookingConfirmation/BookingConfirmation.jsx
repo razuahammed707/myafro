@@ -1,6 +1,7 @@
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
@@ -131,7 +132,7 @@ const BookingConfirmation = () => {
                 style={{
                   backgroundColor: "lightgray",
                   borderBottomColor: "#000000",
-                  marginBottom: 20,
+                  marginBottom: 25,
                 }}
               >
                 <TextInput

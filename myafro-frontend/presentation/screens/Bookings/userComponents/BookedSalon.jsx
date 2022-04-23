@@ -91,7 +91,7 @@ const BookedSalon = () => {
   return (
     <>
     <SafeAreaView style={tw`relative h-full m-5`}>
-      <View style={tw`flex flex-row`}>
+      <View style={tw`flex flex-row my-2`}>
         <Icon
           name="arrow-left"
           type="feather"
@@ -113,7 +113,7 @@ const BookedSalon = () => {
             /> */}
 
             <View
-              style={tw` flex flex-row items-start justify-between items-baseline`}
+              style={tw` flex flex-row  justify-between items-baseline`}
             >
               {singleBookedSalon?.status === "pending" ? (
                 <View style={tw`px-5 py-2 border border-pink-500 rounded-lg`}>
@@ -141,7 +141,7 @@ const BookedSalon = () => {
                   The booking is canceled
                 </Text>
               ) : (
-                <View style={tw`flex flex-col justify-end items-end`}>
+                <>
                   {/* <Button
                     title="Click to Upload"
                     buttonStyle={{
@@ -165,7 +165,7 @@ const BookedSalon = () => {
                     iconPosition="left"
                     titleStyle={{ fontSize: 14, color: "#000" }}
                   /> */}
-                </View>
+                </>
               )}
               {singleBookedSalon?.status !== "cancel" &&
                 singleBookedSalon?.status !== "complete" && (
@@ -174,9 +174,9 @@ const BookedSalon = () => {
             </View>
 
             {/* Message section start */}
-            <Text style={tw`font-bold text-lg mt-2`}>Messages</Text>
+            <Text style={tw`font-bold text-lg`}>Messages</Text>
             <ScrollView
-              style={tw`h-80 `}
+              style={tw`h-80`}
               ref={scrollViewRef}
               showsVerticalScrollIndicator={false}
               onContentSizeChange={() =>
