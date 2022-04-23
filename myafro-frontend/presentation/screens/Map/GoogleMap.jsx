@@ -7,7 +7,13 @@ import {
   View,
 } from "react-native";
 import React, { useEffect } from "react";
-import MapView, { Callout, Circle, Marker, Polygon, Polyline } from "react-native-maps";
+import MapView, {
+  Callout,
+  Circle,
+  Marker,
+  Polygon,
+  Polyline,
+} from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import tw from "twrnc";
 import BottomBar from "../../components/BottomBar/BottomBar";
@@ -36,7 +42,7 @@ const GoogleMap = () => {
         longitude: currentLocationInfo?.coordinates?.longitude,
       },
     });
-  }, []);
+  }, [currentLocationInfo]);
 
   // const origin = {
   //   latitude: currentLocationInfo?.coordinates?.latitude,
@@ -69,7 +75,7 @@ const GoogleMap = () => {
   // );
 
   // console.log(coordsLocation);
-  console.log(currentLocationInfo)
+  console.log(currentLocationInfo);
 
   return (
     <View style={{ flex: 1, position: "relative" }}>
@@ -79,12 +85,12 @@ const GoogleMap = () => {
         loadingEnabled={true}
         // mapType="mutedStandard"
         initialRegion={{
-          latitude: locationInfo?.geometry?.location?.lat
-            ? locationInfo?.geometry?.location?.lat
-            : currentLocationInfo?.coordinates?.latitude,
-          longitude: locationInfo.geometry?.location?.lng
-            ? locationInfo.geometry?.location?.lng
-            : currentLocationInfo?.coordinates?.longitude,
+          latitude:
+            currentLocationInfo?.geometry?.location?.lat ||
+            currentLocationInfo?.coordinates?.latitude,
+          longitude:
+            currentLocationInfo?.geometry?.location?.lng ||
+            currentLocationInfo?.coordinates?.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -92,6 +98,26 @@ const GoogleMap = () => {
         focusable={true}
         showsBuildings={true}
       >
+        {currentLocationInfo?.coordinates && (
+          <Marker
+            coordinate={{
+              latitude: currentLocationInfo?.coordinates?.latitude,
+              longitude: currentLocationInfo?.coordinates?.longitude,
+            }}
+            // title={salon?.location?.name}
+            pinColor="green"
+          />
+        )}
+        {currentLocationInfo?.geometry?.location?.lng && (
+          <Marker
+            coordinate={{
+              latitude: currentLocationInfo?.geometry?.location?.lat,
+              longitude: currentLocationInfo?.geometry?.location?.lng,
+            }}
+            // title={salon?.location?.name}
+            pinColor="green"
+          />
+        )}
         {/* <Polyline coordinates={coordsLocation} /> */}
         {salons?.map((salon) => (
           <View key={salon?._id}>
@@ -152,7 +178,9 @@ const GoogleMap = () => {
               style={tw`ml-3`}
             >
               {currentLocationInfo?.formatted_address ? (
-                <Text style={tw`text-sm font-semibold`}>{currentLocationInfo?.formatted_address}</Text>
+                <Text style={tw`text-sm font-semibold`}>
+                  {currentLocationInfo?.formatted_address}
+                </Text>
               ) : (
                 <Text style={tw`text-sm font-semibold`}>
                   {currentLocationInfo?.name}

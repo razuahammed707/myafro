@@ -118,7 +118,10 @@ const MapAutocomplete = () => {
             }}
           />
           <TouchableOpacity
-            onPress={() => navigation.navigate("SalonMap")}
+            onPress={() => {
+              getCurrentLocation()
+              navigation.navigate("SalonMap")
+            }}
             style={tw`flex flex-row items-center px-5 mt-5 rounded-lg bg-white h-11`}
           >
             <Icon name="my-location" type="material" size={20} color="#222" />
@@ -197,7 +200,10 @@ const MapAutocomplete = () => {
             }}
           />
           <TouchableOpacity
-            onPress={() => navigation.navigate("Map")}
+            onPress={() => {
+              getCurrentLocation()
+              navigation.navigate("Map")
+            }}
             style={tw`flex flex-row items-center px-5 rounded-lg bg-white h-11`}
           >
             <Icon name="my-location" type="material" size={20} color="#222" />

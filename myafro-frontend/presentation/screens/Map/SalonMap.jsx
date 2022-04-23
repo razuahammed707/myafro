@@ -5,16 +5,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Constants from "expo-constants";
-import * as Location from "expo-location";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import MapView, { Callout, Circle, Marker } from "react-native-maps";
 import tw from "twrnc";
 import { Button, Icon } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getCurrentLocationInfo,
-  getLocationInfo,
   mapSelector,
 } from "../../../redux/slices/map/mapSlice";
 import { useNavigation } from "@react-navigation/native";
@@ -70,7 +66,7 @@ const SalonMap = () => {
     );
   }, [currentLocationInfo]);
 
-  console.log(currentLocationInfo)
+  console.log(currentLocationInfo);
 
   return (
     <View style={{ flex: 1, position: "relative" }}>
@@ -109,8 +105,8 @@ const SalonMap = () => {
           <Callout>
             <View style={tw`w-50 flex flex-row items-center justify-center`}>
               <Text style={tw`mt-2`}>
-                {currentLocationInfo.name ||
-                  currentLocationInfo.formatted_address}
+                {currentLocationInfo.formatted_address ||
+                  currentLocationInfo.name}
               </Text>
             </View>
           </Callout>
